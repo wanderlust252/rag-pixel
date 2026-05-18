@@ -51,6 +51,23 @@ def test_session_create_and_character_change() -> None:
     assert position_response.json()["position"] == {"x": 160, "y": 400}
 
 
+def test_character_walk_sheet_rows_match_asset_order() -> None:
+    response = client.get("/game/characters")
+
+    assert response.status_code == 200
+    for character in response.json()["characters"]:
+        rows_by_direction = {
+            animation["name"]: animation["row"]
+            for animation in character["sprite"]["animations"]
+        }
+        assert rows_by_direction == {
+            "up": 0,
+            "left": 1,
+            "down": 2,
+            "right": 3,
+        }
+
+
 def test_bookshelf_interaction_returns_document_detail() -> None:
     create_response = client.post(
         "/game/sessions",
