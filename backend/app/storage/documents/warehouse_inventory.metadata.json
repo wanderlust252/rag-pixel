@@ -1,0 +1,9 @@
+{
+  "doc_id": "INV-WH-HCM-01-2026-05-18",
+  "doc_type": "warehouse_inventory",
+  "title": "Warehouse Inventory WH-HCM-01",
+  "shipment_id": "SHP-001",
+  "customer": "ACME",
+  "warehouse": "WH-HCM-01",
+  "date": "2026-05-18"
+}

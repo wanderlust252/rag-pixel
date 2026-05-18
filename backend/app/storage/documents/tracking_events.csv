@@ -1,0 +1,5 @@
+event_id,shipment_id,timestamp,status,location,description
+EVT-001,SHP-001,2026-05-18T08:00:00+07:00,departed,WH-HCM-01,Shipment departed warehouse WH-HCM-01.
+EVT-002,SHP-001,2026-05-18T14:00:00+07:00,arrived,HCM Port,Container ABCU1234567 arrived at Ho Chi Minh City port.
+EVT-003,SHP-001,2026-05-19T10:00:00+08:00,held,Singapore Port,Container ABCU1234567 was held for customs inspection.
+EVT-004,SHP-001,2026-05-20T16:00:00+08:00,delayed,Singapore Port,Shipment SHP-001 is delayed due to customs inspection at Singapore port.

@@ -1,0 +1,10 @@
+{
+  "doc_id": "CON-MAERSK-2026",
+  "doc_type": "carrier_contract",
+  "title": "Carrier Contract Maersk HCM-Singapore",
+  "shipment_id": "SHP-001",
+  "customer": "ACME",
+  "carrier": "Maersk",
+  "route": "HCM -> Singapore",
+  "date": "2026-01-01"
+}

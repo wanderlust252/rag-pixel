@@ -1,0 +1,16 @@
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+
+# Local env
+.env
+backend/.env
+backend/.env.local
+
+# Generated RAG storage
+backend/app/storage/index/

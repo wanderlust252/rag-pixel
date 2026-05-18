@@ -1,0 +1,11 @@
+{
+  "doc_id": "BL-2026-0001",
+  "doc_type": "bill_of_lading",
+  "title": "Bill of Lading BL-2026-0001",
+  "shipment_id": "SHP-001",
+  "customer": "ACME",
+  "carrier": "Maersk",
+  "warehouse": "WH-HCM-01",
+  "route": "HCM -> Singapore",
+  "date": "2026-05-18"
+}

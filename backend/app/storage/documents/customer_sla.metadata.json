@@ -1,0 +1,9 @@
+{
+  "doc_id": "SLA-ACME-2026",
+  "doc_type": "customer_sla",
+  "title": "Customer SLA ACME",
+  "shipment_id": "SHP-001",
+  "customer": "ACME",
+  "route": "HCM -> Singapore",
+  "date": "2026-01-01"
+}
