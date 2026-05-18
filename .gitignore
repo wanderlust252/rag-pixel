@@ -1,16 +1,12 @@
-.DS_Store
-
-# Python
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.venv/
-*.egg-info/
-
-# Local env
-.env
 backend/.env
 backend/.env.local
-
-# Generated RAG storage
-backend/app/storage/index/
+backend/.venv/
+backend/**/*.egg-info/
+__pycache__/
+**/__pycache__/
+*.pyc
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.d.ts
+frontend/vite.config.js
