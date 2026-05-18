@@ -51,6 +51,16 @@ class IngestResponse(BaseModel):
     index_persisted: bool
 
 
+class ClearDocumentsResponse(BaseModel):
+    documents_removed: int
+    metadata_removed: int
+    index_cleared: bool
+
+
+class ClearIndexResponse(BaseModel):
+    index_cleared: bool
+
+
 class QueryFilters(BaseModel):
     doc_id: str | None = None
     doc_type: str | list[str] | None = None

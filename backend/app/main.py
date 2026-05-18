@@ -17,6 +17,8 @@ from app.rag.index import RagIndexService
 from app.rag.ingest import RagIngestService
 from app.rag.query import RagQueryService
 from app.rag.schemas import (
+    ClearDocumentsResponse,
+    ClearIndexResponse,
     DocumentDetail,
     DocumentListResponse,
     HealthResponse,
@@ -51,6 +53,23 @@ def ingest_documents() -> IngestResponse:
     documents = RagIngestService(settings).load_documents()
     RagIndexService(settings).build_and_persist(documents)
     return IngestResponse(ingested_documents=len(documents), index_persisted=True)
+
+
+@app.delete("/documents/index", response_model=ClearIndexResponse)
+def clear_document_index() -> ClearIndexResponse:
+    index_cleared = RagIndexService(settings).clear()
+    return ClearIndexResponse(index_cleared=index_cleared)
+
+
+@app.delete("/documents", response_model=ClearDocumentsResponse)
+def clear_documents() -> ClearDocumentsResponse:
+    documents_removed, metadata_removed = RagIngestService(settings).clear_source_documents()
+    index_cleared = RagIndexService(settings).clear()
+    return ClearDocumentsResponse(
+        documents_removed=documents_removed,
+        metadata_removed=metadata_removed,
+        index_cleared=index_cleared,
+    )
 
 
 @app.get("/documents", response_model=DocumentListResponse)

@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   changeCharacter,
@@ -20,6 +20,7 @@ import type {
 } from "./types";
 
 const DEFAULT_DIRECTION: Direction = "down";
+const MOVEMENT_INTERVAL_MS = 48;
 const PORTAL_VARIANTS = [
   "/assets/portals/simple/portal-00.png",
   "/assets/portals/simple/portal-01.png",
@@ -48,12 +49,14 @@ function App() {
   const [session, setSession] = useState<GameSession | null>(null);
   const [position, setPosition] = useState<Position>({ x: 96, y: 520 });
   const [direction, setDirection] = useState<Direction>(DEFAULT_DIRECTION);
+  const [activeDirection, setActiveDirection] = useState<Direction | null>(null);
   const [moving, setMoving] = useState(false);
   const [frame, setFrame] = useState(0);
   const [portalFrame, setPortalFrame] = useState(0);
   const [interaction, setInteraction] = useState<InteractionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const pressedDirectionsRef = useRef<Direction[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,6 +101,23 @@ function App() {
     return () => window.clearTimeout(timeout);
   }, [position, session]);
 
+  useEffect(() => {
+    if (!world || !session || !activeDirection) return undefined;
+
+    setMoving(true);
+    const interval = window.setInterval(() => {
+      setPosition((current) => movePosition(current, activeDirection, world));
+    }, MOVEMENT_INTERVAL_MS);
+
+    return () => window.clearInterval(interval);
+  }, [activeDirection, session, world]);
+
+  useEffect(() => {
+    if (activeDirection) return;
+    setMoving(false);
+    pressedDirectionsRef.current = [];
+  }, [activeDirection]);
+
   const nearestTarget = useMemo(() => {
     if (!world || !session) return null;
     return findNearestTarget(position, world);
@@ -120,10 +140,17 @@ function App() {
       const nextDirection = directionFromKey(event.key);
       if (nextDirection) {
         event.preventDefault();
+        const alreadyPressed = pressedDirectionsRef.current.includes(nextDirection);
+        pressedDirectionsRef.current = [
+          ...pressedDirectionsRef.current.filter((item) => item !== nextDirection),
+          nextDirection,
+        ];
         setDirection(nextDirection);
-        setMoving(true);
+        setActiveDirection(nextDirection);
         setInteraction(null);
-        setPosition((current) => movePosition(current, nextDirection, world));
+        if (!alreadyPressed) {
+          setPosition((current) => movePosition(current, nextDirection, world));
+        }
       }
       if (event.key.toLowerCase() === "e") {
         event.preventDefault();
@@ -131,8 +158,18 @@ function App() {
       }
     };
 
-    const onKeyUp = () => {
-      window.setTimeout(() => setMoving(false), 90);
+    const onKeyUp = (event: KeyboardEvent) => {
+      const releasedDirection = directionFromKey(event.key);
+      if (!releasedDirection) return;
+
+      pressedDirectionsRef.current = pressedDirectionsRef.current.filter(
+        (item) => item !== releasedDirection,
+      );
+      const nextDirection = pressedDirectionsRef.current.at(-1) ?? null;
+      setActiveDirection(nextDirection);
+      if (nextDirection) {
+        setDirection(nextDirection);
+      }
     };
 
     window.addEventListener("keydown", onKeyDown);

@@ -58,12 +58,20 @@ curl http://127.0.0.1:8000/health
 
 curl -X POST http://127.0.0.1:8000/documents/ingest
 
+curl -X DELETE http://127.0.0.1:8000/documents/index
+
+curl -X DELETE http://127.0.0.1:8000/documents
+
 curl -X POST http://127.0.0.1:8000/rag/query \
   -H "Content-Type: application/json" \
   -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"shipment_id":"SHP-001"}}'
 ```
 
 For a bookshelf-level chat, filter by `doc_id`. For a room-level chat, filter by `room_id` or `business_flow`.
+
+`DELETE /documents/index` removes only the persisted vector index. `DELETE /documents`
+removes supported source documents, their `*.metadata.json` sidecars, and the persisted
+index so the backend can start with a clean document store.
 
 ## Document Metadata
 
@@ -80,6 +88,8 @@ Each source file should have a matching `*.metadata.json` sidecar file. Recommen
   "source_type": "markdown"
 }
 ```
+
+Supported source suffixes are `.md`, `.txt`, `.csv`, and `.docx`.
 
 ## Notes
 

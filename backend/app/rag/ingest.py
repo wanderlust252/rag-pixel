@@ -1,11 +1,13 @@
 from pathlib import Path
+from xml.etree import ElementTree
+from zipfile import BadZipFile, ZipFile
 
 from app.config import Settings
 from app.rag.metadata import load_sidecar_metadata, metadata_to_llama
 
 
 class RagIngestService:
-    supported_suffixes = {".md", ".txt", ".csv"}
+    supported_suffixes = {".md", ".txt", ".csv", ".docx"}
 
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -23,7 +25,7 @@ class RagIngestService:
                 continue
 
             metadata = load_sidecar_metadata(path)
-            text = path.read_text(encoding="utf-8")
+            text = self._read_document_text(path)
             documents.append(
                 Document(
                     text=text,
@@ -44,3 +46,48 @@ class RagIngestService:
         if path.name.endswith(".metadata.json"):
             return False
         return path.suffix.lower() in self.supported_suffixes
+
+    def clear_source_documents(self) -> tuple[int, int]:
+        document_dir = self.settings.documents_dir
+        if not document_dir.exists():
+            return 0, 0
+
+        documents_removed = 0
+        metadata_removed = 0
+        for path in document_dir.iterdir():
+            if not path.is_file():
+                continue
+            if path.name.endswith(".metadata.json"):
+                path.unlink()
+                metadata_removed += 1
+            elif path.suffix.lower() in self.supported_suffixes:
+                path.unlink()
+                documents_removed += 1
+
+        return documents_removed, metadata_removed
+
+    def _read_document_text(self, path: Path) -> str:
+        if path.suffix.lower() == ".docx":
+            return self._read_docx_text(path)
+        return path.read_text(encoding="utf-8")
+
+    def _read_docx_text(self, path: Path) -> str:
+        try:
+            with ZipFile(path) as docx:
+                document_xml = docx.read("word/document.xml")
+        except (BadZipFile, KeyError) as exc:
+            raise ValueError(f"Unsupported or invalid DOCX file: {path}") from exc
+
+        root = ElementTree.fromstring(document_xml)
+        namespace = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+        paragraphs = []
+        for paragraph in root.findall(".//w:p", namespace):
+            text_parts = [
+                node.text
+                for node in paragraph.findall(".//w:t", namespace)
+                if node.text is not None
+            ]
+            if text_parts:
+                paragraphs.append("".join(text_parts))
+
+        return "\n".join(paragraphs)

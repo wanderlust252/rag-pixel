@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,12 @@ class RagIndexService:
             if metadata.get("doc_id") == doc_id:
                 return detail_from_metadata(metadata)
         return None
+
+    def clear(self) -> bool:
+        if not self.settings.index_dir.exists():
+            return False
+        shutil.rmtree(self.settings.index_dir)
+        return True
 
     def _configure_llama_index(self) -> None:
         from llama_index.core import Settings as LlamaSettings
