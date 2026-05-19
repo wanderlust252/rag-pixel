@@ -1,7 +1,11 @@
 import os
+import time
+import logging
 
 from llama_index.core import Settings as LlamaSettings
 from llama_index.core.llms import ChatMessage
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
 
 def main() -> int:
@@ -29,15 +33,20 @@ def main() -> int:
         is_chat_model=True,
     )
 
-    resp = LlamaSettings.llm.chat(
-        [
-            ChatMessage(role="system", content="You are a concise assistant."),
-            ChatMessage(
-                role="user",
-                content="Tell me a joke about programming.",
-            ),
-        ]
-    )
+    messages = [
+        ChatMessage(role="system", content="You are a concise assistant."),
+        ChatMessage(
+            role="user",
+            content="Tell me a joke about programming.",
+        ),
+    ]
+
+    start = time.perf_counter()
+    resp = LlamaSettings.llm.chat(messages)
+    end = time.perf_counter()
+
+    elapsed_ms = (end - start) * 1000.0
+    logging.info("Model response time: %.2f ms", elapsed_ms)
     print(resp.message.content)
     return 0
 

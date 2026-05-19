@@ -226,6 +226,21 @@ h3 {
   border-top: 2px solid #23201a;
 }
 
+.chat-hint {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 2px solid #23201a;
+}
+
+.chat-hint p {
+  margin: 0;
+  color: #5b5246;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .interaction-result p,
 .interaction-result li,
 .interaction-result dd,
@@ -356,6 +371,94 @@ h3 {
 
 .chat-history li span {
   color: #5b5246;
+}
+
+.chat-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 30;
+  display: grid;
+  gap: 2px;
+  min-width: 220px;
+  max-width: min(320px, calc(100vw - 28px));
+  padding: 12px 14px;
+  border: 2px solid #23201a;
+  background: #f7c85b;
+  color: #171512;
+  text-align: left;
+  box-shadow: 5px 5px 0 #23201a;
+}
+
+.chat-launcher span {
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.chat-launcher strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #1f3540;
+  font-size: 0.92rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(23, 21, 18, 0.54);
+  backdrop-filter: blur(2px);
+}
+
+.chat-modal {
+  display: grid;
+  gap: 16px;
+  width: min(720px, 100%);
+  max-height: min(760px, calc(100vh - 48px));
+  padding: 20px;
+  border: 2px solid #23201a;
+  background: #f9f3e5;
+  box-shadow: 8px 8px 0 #23201a;
+}
+
+.chat-modal-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chat-modal-header h2 {
+  margin-bottom: 0;
+}
+
+.chat-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #23201a;
+  background: #fffaf0;
+  color: #171512;
+  font-size: 1rem;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 #23201a;
+}
+
+.chat-modal .scoped-chat {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.chat-modal .chat-history {
+  max-height: min(420px, calc(100vh - 280px));
 }
 
 .stage-wrap {
@@ -533,5 +636,20 @@ h3 {
 
   .side-panel {
     grid-template-columns: 1fr;
+  }
+
+  .chat-modal-overlay {
+    padding: 14px;
+  }
+
+  .chat-modal {
+    max-height: calc(100vh - 28px);
+    padding: 16px;
+  }
+
+  .chat-launcher {
+    right: 14px;
+    bottom: 14px;
+    min-width: 0;
   }
 }

@@ -18,6 +18,13 @@ Default `.env.example` uses mock LLM and mock embeddings so the service can be s
 
 For real answers, configure an LLM + embeddings provider.
 
+Hugging Face local embeddings:
+
+```env
+RAG_EMBEDDING_PROVIDER=huggingface
+HUGGINGFACE_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+```
+
 OpenAI (LLM + embeddings):
 
 ```env

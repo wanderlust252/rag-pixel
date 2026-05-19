@@ -37,6 +37,7 @@ function App() {
   const [frame, setFrame] = useState(0);
   const [interaction, setInteraction] = useState<InteractionResponse | null>(null);
   const [activeTarget, setActiveTarget] = useState<InteractableTarget | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const pressedDirectionsRef = useRef<Direction[]>([]);
@@ -97,6 +98,26 @@ function App() {
     if (!world || !session) return null;
     return findNearestTarget(position, world);
   }, [position, session, world]);
+
+  const chatScope = useMemo(() => {
+    if (!world) return null;
+    return buildChatScope({ interaction, activeTarget, world });
+  }, [activeTarget, interaction, world]);
+
+  useEffect(() => {
+    if (!chatScope) {
+      setChatOpen(false);
+    }
+  }, [chatScope]);
+
+  useEffect(() => {
+    if (!chatOpen) return undefined;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [chatOpen]);
 
   useEffect(() => {
     if (!world || !session) return undefined;
@@ -231,7 +252,6 @@ function App() {
               onInteract={() => {
                 runInteraction(nearestTarget).catch(() => setError("Không tương tác được mục này."));
               }}
-              onAsk={(question, filters) => queryRag({ question, filters })}
             />
           </aside>
 
@@ -247,6 +267,25 @@ function App() {
             }}
           />
         </section>
+      )}
+
+      {chatScope && session && (
+        <>
+          <button
+            aria-controls="rag-chat-modal"
+            aria-expanded={chatOpen}
+            aria-haspopup="dialog"
+            className="chat-launcher"
+            type="button"
+            onClick={() => setChatOpen(true)}
+          >
+            <span>RAG Chat</span>
+            <strong>{chatScope.label}</strong>
+          </button>
+          {chatOpen && (
+            <ChatModal scope={chatScope} onAsk={(question, filters) => queryRag({ question, filters })} onClose={() => setChatOpen(false)} />
+          )}
+        </>
       )}
     </main>
   );
@@ -339,19 +378,18 @@ function InteractionPanel({
   interaction,
   world,
   onInteract,
-  onAsk,
 }: {
   nearestTarget: InteractableTarget | null;
   activeTarget: InteractableTarget | null;
   interaction: InteractionResponse | null;
   world: GameWorld;
   onInteract: () => void;
-  onAsk: (question: string, filters: QueryFilters) => Promise<QueryResponse>;
 }) {
-  const chatScope = useMemo(
-    () => buildChatScope({ interaction, activeTarget, world }),
-    [activeTarget, interaction, world],
-  );
+  const chatScope = useMemo(() => buildChatScope({ interaction, activeTarget, world }), [
+    activeTarget,
+    interaction,
+    world,
+  ]);
 
   return (
     <section>
@@ -382,22 +420,33 @@ function InteractionPanel({
           )}
         </div>
       )}
-      {chatScope && <ScopedChat scope={chatScope} onAsk={onAsk} />}
+      {chatScope && (
+        <div className="chat-hint">
+          <div className="scope-chip">
+            <span>Chat scope</span>
+            <strong>{chatScope.label}</strong>
+          </div>
+          <p>Mở cửa sổ chat ở góc dưới phải để hỏi trong phạm vi này.</p>
+        </div>
+      )}
     </section>
   );
 }
 
 type ChatScope = {
+  key: string;
   label: string;
   filters: QueryFilters;
 };
 
-function ScopedChat({
+function ChatModal({
   scope,
   onAsk,
+  onClose,
 }: {
   scope: ChatScope;
   onAsk: (question: string, filters: QueryFilters) => Promise<QueryResponse>;
+  onClose: () => void;
 }) {
   const [question, setQuestion] = useState("");
   const [history, setHistory] = useState<
@@ -405,6 +454,23 @@ function ScopedChat({
   >([]);
   const [asking, setAsking] = useState(false);
   const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -433,58 +499,83 @@ function ScopedChat({
   }
 
   return (
-    <div className="scoped-chat">
-      <div className="scope-chip">
-        <span>Scope</span>
-        <strong>{scope.label}</strong>
-      </div>
-      <form onSubmit={submit}>
-        <input
-          value={question}
-          onChange={(event) => setQuestion(event.target.value)}
-          placeholder="Hỏi trong phạm vi này"
-        />
-        <button className="primary-action" disabled={asking || !question.trim()} type="submit">
-          {asking ? "..." : "Hỏi"}
-        </button>
-      </form>
-      {asking && pendingQuestion && (
-        <div className="chat-status" role="status" aria-live="polite">
-          Đang truy vấn: {pendingQuestion}
+    <div className="chat-modal-overlay" role="presentation" onClick={onClose}>
+      <section
+        aria-labelledby="rag-chat-title"
+        aria-modal="true"
+        className="chat-modal"
+        id="rag-chat-modal"
+        role="dialog"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="chat-modal-header">
+          <div>
+            <p className="eyebrow">RAG chat</p>
+            <h2 id="rag-chat-title">Hỏi trong phạm vi hiện tại</h2>
+          </div>
+          <button aria-label="Đóng chat" className="chat-close" type="button" onClick={onClose}>
+            x
+          </button>
         </div>
-      )}
-      <div className="chat-history">
-        {asking && pendingQuestion && (
-          <article className="chat-history pending">
-            <h3>{pendingQuestion}</h3>
-            <p>Đang chờ RAG phản hồi...</p>
-          </article>
-        )}
-        {history.map((item, index) => (
-          <article key={`${item.question}-${index}`}>
-            <h3>{item.question}</h3>
-            {item.error ? (
-              <p>{item.error}</p>
-            ) : (
-              <>
-                <p>{item.response?.answer}</p>
-                {item.response && item.response.sources.length > 0 && (
-                  <ul>
-                    {item.response.sources.slice(0, 3).map((source, sourceIndex) => (
-                      <li key={`${source.doc_id}-${sourceIndex}`}>
-                        <strong>{source.title ?? source.doc_id}</strong>
-                        <span>{source.snippet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </>
+        <div className="scoped-chat" key={scope.key}>
+          <div className="scope-chip">
+            <span>Scope</span>
+            <strong>{scope.label}</strong>
+          </div>
+          <form onSubmit={submit}>
+            <input
+              ref={inputRef}
+              value={question}
+              onChange={(event) => setQuestion(event.target.value)}
+              placeholder="Hỏi trong phạm vi này"
+            />
+            <button className="primary-action" disabled={asking || !question.trim()} type="submit">
+              {asking ? "..." : "Hỏi"}
+            </button>
+          </form>
+          {asking && pendingQuestion && (
+            <div className="chat-status" role="status" aria-live="polite">
+              Đang truy vấn: {pendingQuestion}
+            </div>
+          )}
+          <div className="chat-history">
+            {asking && pendingQuestion && (
+              <article className="chat-history pending">
+                <h3>{pendingQuestion}</h3>
+                <p>Đang chờ RAG phản hồi...</p>
+              </article>
             )}
-          </article>
-        ))}
-      </div>
+            {history.map((item, index) => (
+              <article key={`${item.question}-${index}`}>
+                <h3>{item.question}</h3>
+                {item.error ? (
+                  <p>{item.error}</p>
+                ) : (
+                  <>
+                    <p>{item.response?.answer}</p>
+                    {item.response && item.response.sources.length > 0 && (
+                      <ul>
+                        {item.response.sources.slice(0, 3).map((source, sourceIndex) => (
+                          <li key={`${source.doc_id}-${sourceIndex}`}>
+                            <strong>{source.title ?? source.doc_id}</strong>
+                            <span>{source.snippet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
+}
+
+function buildChatScopeKey(filters: QueryFilters) {
+  return JSON.stringify(filters, Object.keys(filters).sort());
 }
 
 function buildChatScope({
@@ -497,9 +588,11 @@ function buildChatScope({
   world: GameWorld;
 }): ChatScope | null {
   if (interaction?.document) {
+    const filters = { doc_id: interaction.document.doc_id };
     return {
+      key: buildChatScopeKey(filters),
       label: interaction.document.title,
-      filters: { doc_id: interaction.document.doc_id },
+      filters,
     };
   }
 
@@ -513,6 +606,7 @@ function buildChatScope({
       ? { room_id: portal.portal_id }
       : { business_flow: portal.business_flow };
     return {
+      key: buildChatScopeKey(filters),
       label: portal.label,
       filters,
     };

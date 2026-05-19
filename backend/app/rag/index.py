@@ -1,6 +1,8 @@
 import json
+import logging
 import shutil
 from pathlib import Path
+from time import perf_counter
 from typing import Any
 
 from app.config import Settings
@@ -12,12 +14,15 @@ from app.rag.metadata import (
 )
 from app.rag.schemas import DocumentDetail, DocumentSummary
 
+logger = logging.getLogger(__name__)
+
 
 class RagIndexService:
     def __init__(self, settings: Settings):
         self.settings = settings
 
     def build_and_persist(self, documents: list[Any]) -> None:
+        started_at = perf_counter()
         self._configure_llama_index()
 
         from llama_index.core import StorageContext, VectorStoreIndex
@@ -27,8 +32,14 @@ class RagIndexService:
         index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
         index.storage_context.persist(persist_dir=str(self.settings.index_dir))
         self._write_registry(documents)
+        logger.info(
+            "RAG build_and_persist completed in %.3fs for %d document(s)",
+            perf_counter() - started_at,
+            len(documents),
+        )
 
     def load(self):
+        started_at = perf_counter()
         self._configure_llama_index()
 
         from llama_index.core import StorageContext, load_index_from_storage
@@ -37,7 +48,9 @@ class RagIndexService:
             raise FileNotFoundError("RAG index does not exist. Run POST /documents/ingest first.")
 
         storage_context = StorageContext.from_defaults(persist_dir=str(self.settings.index_dir))
-        return load_index_from_storage(storage_context)
+        index = load_index_from_storage(storage_context)
+        logger.info("RAG index load completed in %.3fs", perf_counter() - started_at)
+        return index
 
     def list_documents(self) -> list[DocumentSummary]:
         indexed = self._read_registry()
@@ -61,6 +74,7 @@ class RagIndexService:
         return True
 
     def _configure_llama_index(self) -> None:
+        started_at = perf_counter()
         from llama_index.core import Settings as LlamaSettings
 
         if self.settings.rag_llm_provider == "mock":
@@ -128,6 +142,13 @@ class RagIndexService:
             raise ValueError(
                 f"Unsupported RAG_EMBEDDING_PROVIDER: {self.settings.rag_embedding_provider}"
             )
+
+        logger.info(
+            "RAG llama settings configured in %.3fs (llm=%s, embedding=%s)",
+            perf_counter() - started_at,
+            self.settings.rag_llm_provider,
+            self.settings.rag_embedding_provider,
+        )
 
     def _registry_path(self) -> Path:
         return self.settings.index_dir / REGISTRY_FILENAME
