@@ -5,11 +5,34 @@ from app.config import Settings
 from app.rag.ingest import RagIngestService
 
 
-def test_load_sample_documents() -> None:
-    settings = Settings()
+def test_load_sample_documents(tmp_path) -> None:
+    (tmp_path / "bill_of_lading_sample.md").write_text("Bill of lading", encoding="utf-8")
+    (tmp_path / "bill_of_lading_sample.metadata.json").write_text(
+        json.dumps(
+            {
+                "doc_id": "BL-2026-0001",
+                "doc_type": "bill_of_lading",
+                "title": "Bill of Lading BL-2026-0001",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "incident_report.md").write_text("Incident report", encoding="utf-8")
+    (tmp_path / "incident_report.metadata.json").write_text(
+        json.dumps(
+            {
+                "doc_id": "INC-2026-0001",
+                "doc_type": "incident_report",
+                "title": "Incident Report INC-2026-0001",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    settings = Settings(documents_dir=tmp_path, index_dir=tmp_path / "index")
     documents = RagIngestService(settings).load_documents()
 
-    assert len(documents) >= 6
+    assert len(documents) == 2
     doc_ids = {document.metadata["doc_id"] for document in documents}
     assert "BL-2026-0001" in doc_ids
     assert "INC-2026-0001" in doc_ids
@@ -38,6 +61,7 @@ def test_load_docx_document(tmp_path) -> None:
     documents = RagIngestService(settings).load_documents()
 
     assert len(documents) == 1
+    assert documents[0].doc_id == "SRS-METFONE-SALARY-20260515"
     assert documents[0].metadata["doc_id"] == "SRS-METFONE-SALARY-20260515"
     assert "Luong khoan Metfone" in documents[0].text
 

@@ -1,0 +1,9 @@
+{
+  "doc_id": "SRS-METFONE-SALARY-20260515",
+  "doc_type": "srs",
+  "title": "SRS Luong khoan Metfone 20260515",
+  "business_flow": "salary_calculation",
+  "room_id": "cambodia_market",
+  "shelf_id": "metfone_salary_srs",
+  "source_type": "docx"
+}

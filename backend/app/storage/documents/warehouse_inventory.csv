@@ -1,4 +1,0 @@
-warehouse,shipment_id,sku,pallets,status,last_updated
-WH-HCM-01,SHP-001,ELEC-PRIORITY,12,departed,2026-05-18T08:00:00+07:00
-WH-HCM-01,SHP-002,AUTO-PARTS,8,stored,2026-05-18T09:30:00+07:00
-WH-SGN-02,SHP-003,TEXTILES,5,stored,2026-05-18T10:15:00+07:00

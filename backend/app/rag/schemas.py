@@ -51,6 +51,12 @@ class IngestResponse(BaseModel):
     index_persisted: bool
 
 
+class DocumentUploadResponse(BaseModel):
+    document: DocumentDetail
+    index_persisted: bool
+    ingested_documents: int | None = None
+
+
 class ClearDocumentsResponse(BaseModel):
     documents_removed: int
     metadata_removed: int

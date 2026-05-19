@@ -56,6 +56,17 @@ http://127.0.0.1:8000/docs
 ```bash
 curl http://127.0.0.1:8000/health
 
+curl -X POST http://127.0.0.1:8000/documents/upload \
+  -F "file=@/path/to/document.docx" \
+  -F "doc_id=SRS-METFONE-SALARY-20260515" \
+  -F "doc_type=srs" \
+  -F "title=SRS Luong khoan Metfone 20260515" \
+  -F "business_flow=salary_calculation" \
+  -F "room_id=cambodia_market" \
+  -F "shelf_id=metfone_salary_srs" \
+  -F "source_type=docx" \
+  -F "reindex=true"
+
 curl -X POST http://127.0.0.1:8000/documents/ingest
 
 curl -X DELETE http://127.0.0.1:8000/documents/index
@@ -68,6 +79,11 @@ curl -X POST http://127.0.0.1:8000/rag/query \
 ```
 
 For a bookshelf-level chat, filter by `doc_id`. For a room-level chat, filter by `room_id` or `business_flow`.
+
+`POST /documents/upload` accepts multipart form data. It writes the uploaded file
+and metadata sidecar into the document store. By default `reindex=true`, so the
+document is queryable immediately after upload. Use `overwrite=true` to replace
+an existing document with the same `doc_id`.
 
 `DELETE /documents/index` removes only the persisted vector index. `DELETE /documents`
 removes supported source documents, their `*.metadata.json` sidecars, and the persisted
@@ -91,8 +107,34 @@ Each source file should have a matching `*.metadata.json` sidecar file. Recommen
 
 Supported source suffixes are `.md`, `.txt`, `.csv`, and `.docx`.
 
+## MCP Server
+
+The MCP adapter has been split out of the backend source and now lives under
+`../mcp`. Keep the backend running, then start MCP from that package:
+
+```bash
+cd ../mcp
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+export RAG_PIXELS_API_BASE_URL=http://127.0.0.1:8000
+rag-pixels-mcp
+```
+
+`RAG_PIXELS_API_KEY` is optional. For local development, leave it unset. If the
+backend later enables auth, set it in the MCP process and it will be sent as a
+bearer token.
+
+Available MCP tools:
+
+- `health_check`: check backend availability.
+- `list_documents`: list indexed documents.
+- `get_document`: read one document metadata record by `doc_id`.
+- `rag_query`: ask a question with optional metadata filters.
+- `upload_document`: upload a local file through the REST upload API.
+- `clear_documents`: clear source documents, metadata, and index; requires `confirm=true`.
+
 ## Notes
 
-- Keep this backend in the same repository as the future UI for now.
-- Add the future UI under `frontend/` and treat this repo as a monorepo.
-- Split into separate repositories only when deployment, ownership, or release cycles become independent.
+- Keep backend business logic private if the MCP adapter is published separately.
+- Publish only `../mcp` if you want agents to integrate through MCP without exposing backend source.

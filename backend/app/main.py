@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from typing import Annotated
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
@@ -21,6 +23,7 @@ from app.rag.schemas import (
     ClearIndexResponse,
     DocumentDetail,
     DocumentListResponse,
+    DocumentUploadResponse,
     HealthResponse,
     IngestResponse,
     QueryRequest,
@@ -53,6 +56,67 @@ def ingest_documents() -> IngestResponse:
     documents = RagIngestService(settings).load_documents()
     RagIndexService(settings).build_and_persist(documents)
     return IngestResponse(ingested_documents=len(documents), index_persisted=True)
+
+
+@app.post("/documents/upload", response_model=DocumentUploadResponse)
+async def upload_document(
+    file: Annotated[UploadFile, File()],
+    doc_id: Annotated[str, Form()],
+    doc_type: Annotated[str, Form()],
+    title: Annotated[str, Form()],
+    business_flow: Annotated[str | None, Form()] = None,
+    room_id: Annotated[str | None, Form()] = None,
+    shelf_id: Annotated[str | None, Form()] = None,
+    shipment_id: Annotated[str | None, Form()] = None,
+    customer: Annotated[str | None, Form()] = None,
+    carrier: Annotated[str | None, Form()] = None,
+    warehouse: Annotated[str | None, Form()] = None,
+    route: Annotated[str | None, Form()] = None,
+    date: Annotated[str | None, Form()] = None,
+    source_type: Annotated[str | None, Form()] = None,
+    overwrite: Annotated[bool, Form()] = False,
+    reindex: Annotated[bool, Form()] = True,
+) -> DocumentUploadResponse:
+    metadata = {
+        "doc_id": doc_id,
+        "doc_type": doc_type,
+        "title": title,
+        "business_flow": business_flow,
+        "room_id": room_id,
+        "shelf_id": shelf_id,
+        "shipment_id": shipment_id,
+        "customer": customer,
+        "carrier": carrier,
+        "warehouse": warehouse,
+        "route": route,
+        "date": date,
+        "source_type": source_type,
+    }
+
+    ingest_service = RagIngestService(settings)
+    try:
+        document = ingest_service.save_uploaded_document(
+            filename=file.filename or "",
+            content=await file.read(),
+            metadata=metadata,
+            overwrite=overwrite,
+        )
+    except FileExistsError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    ingested_documents = None
+    if reindex:
+        documents = ingest_service.load_documents()
+        RagIndexService(settings).build_and_persist(documents)
+        ingested_documents = len(documents)
+
+    return DocumentUploadResponse(
+        document=document,
+        index_persisted=reindex,
+        ingested_documents=ingested_documents,
+    )
 
 
 @app.delete("/documents/index", response_model=ClearIndexResponse)

@@ -48,6 +48,47 @@ export type DocumentDetail = DocumentSummary & {
   source_path: string;
 };
 
+export type DocumentUploadResponse = {
+  document: DocumentDetail;
+  index_persisted: boolean;
+  ingested_documents?: number | null;
+};
+
+export type QueryFilters = {
+  doc_id?: string;
+  doc_type?: string | string[];
+  business_flow?: string;
+  room_id?: string;
+  shipment_id?: string;
+  customer?: string;
+  carrier?: string;
+  warehouse?: string;
+  route?: string;
+};
+
+export type SourceReference = {
+  doc_id: string;
+  doc_type: string;
+  title?: string | null;
+  snippet: string;
+  score?: number | null;
+  metadata: Record<string, unknown>;
+};
+
+export type UiDataBlock = {
+  block_id: string;
+  block_type: string;
+  label: string;
+  category: string;
+  metadata: Record<string, unknown>;
+};
+
+export type QueryResponse = {
+  answer: string;
+  sources: SourceReference[];
+  ui_blocks: UiDataBlock[];
+};
+
 export type GameSession = {
   session_id: string;
   user_name: string;

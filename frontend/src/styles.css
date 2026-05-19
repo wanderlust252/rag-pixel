@@ -251,6 +251,100 @@ h3 {
   overflow-wrap: anywhere;
 }
 
+.scoped-chat {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 2px solid #23201a;
+}
+
+.scope-chip {
+  display: grid;
+  gap: 2px;
+  padding: 9px 10px;
+  border: 2px solid #23201a;
+  background: #fffaf0;
+}
+
+.scope-chip span {
+  color: #5b5246;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.scope-chip strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #1f3540;
+  font-size: 0.86rem;
+}
+
+.scoped-chat form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 64px;
+  gap: 8px;
+}
+
+.scoped-chat input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 2px solid #23201a;
+  border-radius: 0;
+  background: #fffaf0;
+  color: #171512;
+}
+
+.chat-history {
+  display: grid;
+  gap: 10px;
+  max-height: 340px;
+  overflow: auto;
+}
+
+.chat-history article {
+  display: grid;
+  gap: 7px;
+  padding: 10px;
+  border: 2px solid #23201a;
+  background: #fffaf0;
+}
+
+.chat-history h3,
+.chat-history p {
+  margin: 0;
+}
+
+.chat-history h3 {
+  color: #1f3540;
+  font-size: 0.86rem;
+}
+
+.chat-history p,
+.chat-history li,
+.chat-history span {
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.chat-history ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.chat-history li strong,
+.chat-history li span {
+  display: block;
+}
+
+.chat-history li span {
+  color: #5b5246;
+}
+
 .stage-wrap {
   overflow: auto;
   border: 3px solid #23201a;

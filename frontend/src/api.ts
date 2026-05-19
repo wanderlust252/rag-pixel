@@ -1,11 +1,14 @@
 import axios from "axios";
 
 import type {
+  DocumentUploadResponse,
   GameCharacter,
   GameSession,
   GameWorld,
   InteractionResponse,
   Position,
+  QueryFilters,
+  QueryResponse,
 } from "./types";
 
 const api = axios.create({
@@ -24,6 +27,66 @@ export async function getCharacters(): Promise<GameCharacter[]> {
 
 export async function getWorld(): Promise<GameWorld> {
   const response = await api.get<GameWorld>("/game/world");
+  return response.data;
+}
+
+export async function uploadDocument(input: {
+  file: File;
+  docId: string;
+  docType: string;
+  title: string;
+  businessFlow?: string;
+  roomId?: string;
+  shelfId?: string;
+  shipmentId?: string;
+  customer?: string;
+  carrier?: string;
+  warehouse?: string;
+  route?: string;
+  date?: string;
+  sourceType?: string;
+  overwrite?: boolean;
+  reindex?: boolean;
+}): Promise<DocumentUploadResponse> {
+  const formData = new FormData();
+  formData.append("file", input.file);
+  formData.append("doc_id", input.docId);
+  formData.append("doc_type", input.docType);
+  formData.append("title", input.title);
+
+  const optionalFields: Record<string, string | boolean | undefined> = {
+    business_flow: input.businessFlow,
+    room_id: input.roomId,
+    shelf_id: input.shelfId,
+    shipment_id: input.shipmentId,
+    customer: input.customer,
+    carrier: input.carrier,
+    warehouse: input.warehouse,
+    route: input.route,
+    date: input.date,
+    source_type: input.sourceType,
+    overwrite: input.overwrite,
+    reindex: input.reindex,
+  };
+
+  for (const [key, value] of Object.entries(optionalFields)) {
+    if (value !== undefined) {
+      formData.append(key, String(value));
+    }
+  }
+
+  const response = await api.post<DocumentUploadResponse>("/documents/upload", formData);
+  return response.data;
+}
+
+export async function queryRag(input: {
+  question: string;
+  filters?: QueryFilters;
+}): Promise<QueryResponse> {
+  const response = await api.post<QueryResponse>("/rag/query", {
+    question: input.question,
+    filters: input.filters,
+  });
   return response.data;
 }
 

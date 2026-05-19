@@ -2,6 +2,10 @@ backend/.env
 backend/.env.local
 backend/.venv/
 backend/**/*.egg-info/
+mcp/.env
+mcp/.env.local
+mcp/.venv/
+mcp/**/*.egg-info/
 __pycache__/
 **/__pycache__/
 *.pyc

@@ -1,0 +1,2 @@
+"""RAG Pixels MCP adapter."""
+

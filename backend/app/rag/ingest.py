@@ -1,9 +1,12 @@
+import json
+import re
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import BadZipFile, ZipFile
 
 from app.config import Settings
 from app.rag.metadata import load_sidecar_metadata, metadata_to_llama
+from app.rag.schemas import DocumentDetail, DocumentMetadata
 
 
 class RagIngestService:
@@ -28,6 +31,7 @@ class RagIngestService:
             text = self._read_document_text(path)
             documents.append(
                 Document(
+                    doc_id=metadata.doc_id,
                     text=text,
                     metadata=metadata_to_llama(metadata),
                     excluded_llm_metadata_keys=["source_path"],
@@ -66,6 +70,43 @@ class RagIngestService:
 
         return documents_removed, metadata_removed
 
+    def save_uploaded_document(
+        self,
+        *,
+        filename: str,
+        content: bytes,
+        metadata: dict,
+        overwrite: bool = False,
+    ) -> DocumentDetail:
+        suffix = Path(filename).suffix.lower()
+        if suffix not in self.supported_suffixes:
+            supported = ", ".join(sorted(self.supported_suffixes))
+            raise ValueError(f"Unsupported document type {suffix}. Supported suffixes: {supported}")
+        if not content:
+            raise ValueError("Uploaded document is empty")
+
+        metadata_model = DocumentMetadata.model_validate(
+            {**metadata, "source_path": "__pending__"}
+        )
+        stem = self._safe_document_stem(metadata_model.doc_id)
+        document_path = self.settings.documents_dir / f"{stem}{suffix}"
+        metadata_path = document_path.with_suffix(".metadata.json")
+
+        if not overwrite and (document_path.exists() or metadata_path.exists()):
+            raise FileExistsError(f"Document already exists for doc_id: {metadata_model.doc_id}")
+
+        self.settings.documents_dir.mkdir(parents=True, exist_ok=True)
+        document_path.write_bytes(content)
+
+        sidecar = metadata_model.model_dump(exclude_none=True, exclude={"source_path"})
+        sidecar["source_type"] = sidecar.get("source_type") or suffix.lstrip(".")
+        metadata_path.write_text(
+            json.dumps(sidecar, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        return DocumentDetail.model_validate(load_sidecar_metadata(document_path).model_dump())
+
     def _read_document_text(self, path: Path) -> str:
         if path.suffix.lower() == ".docx":
             return self._read_docx_text(path)
@@ -91,3 +132,9 @@ class RagIngestService:
                 paragraphs.append("".join(text_parts))
 
         return "\n".join(paragraphs)
+
+    def _safe_document_stem(self, doc_id: str) -> str:
+        stem = re.sub(r"[^A-Za-z0-9_.-]+", "_", doc_id).strip("._-")
+        if not stem:
+            raise ValueError("doc_id must contain at least one filename-safe character")
+        return stem.lower()

@@ -6,6 +6,7 @@ import {
   getCharacters,
   getWorld,
   interact,
+  queryRag,
   syncPosition,
 } from "./api";
 import { findNearestTarget, movePosition } from "./gameLogic";
@@ -17,6 +18,8 @@ import type {
   InteractionResponse,
   InteractableTarget,
   Position,
+  QueryFilters,
+  QueryResponse,
 } from "./types";
 
 const DEFAULT_DIRECTION: Direction = "down";
@@ -54,6 +57,7 @@ function App() {
   const [frame, setFrame] = useState(0);
   const [portalFrame, setPortalFrame] = useState(0);
   const [interaction, setInteraction] = useState<InteractionResponse | null>(null);
+  const [activeTarget, setActiveTarget] = useState<InteractableTarget | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const pressedDirectionsRef = useRef<Direction[]>([]);
@@ -148,6 +152,7 @@ function App() {
         setDirection(nextDirection);
         setActiveDirection(nextDirection);
         setInteraction(null);
+        setActiveTarget(null);
         if (!alreadyPressed) {
           setPosition((current) => movePosition(current, nextDirection, world));
         }
@@ -201,6 +206,7 @@ function App() {
   async function runInteraction(target: InteractableTarget | null) {
     if (!session || !target) return;
     setError(null);
+    setActiveTarget(target);
     const result = await interact({
       sessionId: session.session_id,
       targetType: target.type,
@@ -257,10 +263,13 @@ function App() {
             />
             <InteractionPanel
               nearestTarget={nearestTarget}
+              activeTarget={activeTarget}
               interaction={interaction}
+              world={world}
               onInteract={() => {
                 runInteraction(nearestTarget).catch(() => setError("Không tương tác được mục này."));
               }}
+              onAsk={(question, filters) => queryRag({ question, filters })}
             />
           </aside>
 
@@ -366,13 +375,24 @@ function CharacterSwitcher({
 
 function InteractionPanel({
   nearestTarget,
+  activeTarget,
   interaction,
+  world,
   onInteract,
+  onAsk,
 }: {
   nearestTarget: InteractableTarget | null;
+  activeTarget: InteractableTarget | null;
   interaction: InteractionResponse | null;
+  world: GameWorld;
   onInteract: () => void;
+  onAsk: (question: string, filters: QueryFilters) => Promise<QueryResponse>;
 }) {
+  const chatScope = useMemo(
+    () => buildChatScope({ interaction, activeTarget, world }),
+    [activeTarget, interaction, world],
+  );
+
   return (
     <section>
       <h2>Tương tác</h2>
@@ -402,8 +422,125 @@ function InteractionPanel({
           )}
         </div>
       )}
+      {chatScope && <ScopedChat scope={chatScope} onAsk={onAsk} />}
     </section>
   );
+}
+
+type ChatScope = {
+  label: string;
+  filters: QueryFilters;
+};
+
+function ScopedChat({
+  scope,
+  onAsk,
+}: {
+  scope: ChatScope;
+  onAsk: (question: string, filters: QueryFilters) => Promise<QueryResponse>;
+}) {
+  const [question, setQuestion] = useState("");
+  const [history, setHistory] = useState<
+    { question: string; response: QueryResponse | null; error?: string }[]
+  >([]);
+  const [asking, setAsking] = useState(false);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const trimmed = question.trim();
+    if (!trimmed || asking) return;
+
+    setQuestion("");
+    setAsking(true);
+    try {
+      const response = await onAsk(trimmed, scope.filters);
+      setHistory((current) => [...current, { question: trimmed, response }]);
+    } catch {
+      setHistory((current) => [
+        ...current,
+        { question: trimmed, response: null, error: "Không truy vấn được RAG." },
+      ]);
+    } finally {
+      setAsking(false);
+    }
+  }
+
+  return (
+    <div className="scoped-chat">
+      <div className="scope-chip">
+        <span>Scope</span>
+        <strong>{scope.label}</strong>
+      </div>
+      <form onSubmit={submit}>
+        <input
+          value={question}
+          onChange={(event) => setQuestion(event.target.value)}
+          placeholder="Hỏi trong phạm vi này"
+        />
+        <button className="primary-action" disabled={asking || !question.trim()} type="submit">
+          Hỏi
+        </button>
+      </form>
+      <div className="chat-history">
+        {history.map((item, index) => (
+          <article key={`${item.question}-${index}`}>
+            <h3>{item.question}</h3>
+            {item.error ? (
+              <p>{item.error}</p>
+            ) : (
+              <>
+                <p>{item.response?.answer}</p>
+                {item.response && item.response.sources.length > 0 && (
+                  <ul>
+                    {item.response.sources.slice(0, 3).map((source, sourceIndex) => (
+                      <li key={`${source.doc_id}-${sourceIndex}`}>
+                        <strong>{source.title ?? source.doc_id}</strong>
+                        <span>{source.snippet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function buildChatScope({
+  interaction,
+  activeTarget,
+  world,
+}: {
+  interaction: InteractionResponse | null;
+  activeTarget: InteractableTarget | null;
+  world: GameWorld;
+}): ChatScope | null {
+  if (interaction?.document) {
+    return {
+      label: interaction.document.title,
+      filters: { doc_id: interaction.document.doc_id },
+    };
+  }
+
+  if (activeTarget?.type === "portal") {
+    const portal = world.portals.find((item) => item.portal_id === activeTarget.id);
+    if (!portal) return null;
+    const portalDocuments = world.shelves
+      .filter((shelf) => shelf.portal_id === portal.portal_id)
+      .map((shelf) => shelf.document);
+    const filters = portalDocuments.some((document) => document.room_id === portal.portal_id)
+      ? { room_id: portal.portal_id }
+      : { business_flow: portal.business_flow };
+    return {
+      label: portal.label,
+      filters,
+    };
+  }
+
+  return null;
 }
 
 function GameStage({
