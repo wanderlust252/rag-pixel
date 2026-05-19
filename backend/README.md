@@ -22,8 +22,15 @@ Hugging Face local embeddings:
 
 ```env
 RAG_EMBEDDING_PROVIDER=huggingface
-HUGGINGFACE_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+HUGGINGFACE_EMBEDDING_MODEL=intfloat/multilingual-e5-small
 ```
+
+`intfloat/multilingual-e5-small` is the recommended local default for mixed
+Vietnamese/English documents. The backend automatically applies E5's
+`query:`/`passage:` instructions when this model family is selected. Rebuild the
+index after changing embedding models. Keep `SIMILARITY_TOP_K=20` for
+fact-seeking questions over long Vietnamese documents, where the best exact
+chunk may sit below the first few semantic matches.
 
 OpenAI (LLM + embeddings):
 
@@ -64,14 +71,14 @@ http://127.0.0.1:8000/docs
 curl http://127.0.0.1:8000/health
 
 curl -X POST http://127.0.0.1:8000/documents/upload \
-  -F "file=@/path/to/document.docx" \
+  -F "file=@/path/to/document.pdf" \
   -F "doc_id=SRS-METFONE-SALARY-20260515" \
   -F "doc_type=srs" \
   -F "title=SRS Luong khoan Metfone 20260515" \
   -F "business_flow=salary_calculation" \
   -F "room_id=cambodia_market" \
   -F "shelf_id=metfone_salary_srs" \
-  -F "source_type=docx" \
+  -F "source_type=pdf" \
   -F "reindex=true"
 
 curl -X POST http://127.0.0.1:8000/documents/ingest
@@ -83,9 +90,17 @@ curl -X DELETE http://127.0.0.1:8000/documents
 curl -X POST http://127.0.0.1:8000/rag/query \
   -H "Content-Type: application/json" \
   -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"shipment_id":"SHP-001"}}'
+
+curl -X POST http://127.0.0.1:8000/rag/retrieve \
+  -H "Content-Type: application/json" \
+  -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"shipment_id":"SHP-001"}}'
 ```
 
 For a bookshelf-level chat, filter by `doc_id`. For a room-level chat, filter by `room_id` or `business_flow`.
+
+Use `/rag/retrieve` for agent/MCP flows. It returns source snippets and UI
+blocks only, so the calling agent can write the final answer. Use `/rag/query`
+when the backend should call its configured LLM and return an `answer` itself.
 
 `POST /documents/upload` accepts multipart form data. It writes the uploaded file
 and metadata sidecar into the document store. By default `reindex=true`, so the
@@ -112,7 +127,10 @@ Each source file should have a matching `*.metadata.json` sidecar file. Recommen
 }
 ```
 
-Supported source suffixes are `.md`, `.txt`, `.csv`, and `.docx`.
+Document conversion uses Microsoft MarkItDown and writes a canonical `.md` file
+for indexing. Supported upload suffixes include PDF, Word, PowerPoint, Excel,
+HTML, text-based formats, images, audio metadata/transcription formats, ZIP, and
+EPub files supported by MarkItDown.
 
 ## MCP Server
 
@@ -137,7 +155,8 @@ Available MCP tools:
 - `health_check`: check backend availability.
 - `list_documents`: list indexed documents.
 - `get_document`: read one document metadata record by `doc_id`.
-- `rag_query`: ask a question with optional metadata filters.
+- `rag_retrieve`: retrieve relevant context for the calling agent to answer with.
+- `rag_query`: ask a question and let the backend LLM write an answer.
 - `upload_document`: upload a local file through the REST upload API.
 - `clear_documents`: clear source documents, metadata, and index; requires `confirm=true`.
 
@@ -145,3 +164,6 @@ Available MCP tools:
 
 - Keep backend business logic private if the MCP adapter is published separately.
 - Publish only `../mcp` if you want agents to integrate through MCP without exposing backend source.
+- Prefer `rag_retrieve` for external agents. It avoids coupling the backend to
+  OpenCode Go for answer generation; the agent becomes responsible for the final
+  response.

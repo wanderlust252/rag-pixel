@@ -98,29 +98,66 @@ def test_upload_document_endpoint_stops_on_conversion_error(tmp_path) -> None:
         client = TestClient(main.app)
         response = client.post(
             "/documents/upload",
+                data={
+                    "doc_id": "BROKEN-JSON",
+                    "doc_type": "srs",
+                    "title": "Broken Json",
+                    "reindex": "false",
+                },
+                files={
+                    "file": (
+                        "broken.json",
+                        b"\xff\xfe\x00",
+                        "application/json",
+                    )
+                },
+            )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 400
+    metadata_path = tmp_path / "documents" / "broken-json.metadata.json"
+    sidecar = json.loads(metadata_path.read_text(encoding="utf-8"))
+    assert sidecar["conversion_status"] == "failed"
+    assert sidecar["conversion_error"]
+    assert not (tmp_path / "documents" / "broken-json.md").exists()
+
+
+def test_upload_pdf_document_endpoint_writes_markdown_canonical(tmp_path) -> None:
+    original_settings = main.settings
+    main.settings = Settings(documents_dir=tmp_path / "documents", index_dir=tmp_path / "index")
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
             data={
-                "doc_id": "BROKEN-DOCX",
-                "doc_type": "srs",
-                "title": "Broken Docx",
+                "doc_id": "PDF-HISTORY",
+                "doc_type": "history_textbook",
+                "title": "PDF History",
+                "source_type": "pdf",
                 "reindex": "false",
             },
             files={
                 "file": (
-                    "broken.docx",
-                    b"not a real docx",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "history.pdf",
+                    _pdf_bytes("Party history source"),
+                    "application/pdf",
                 )
             },
         )
     finally:
         main.settings = original_settings
 
-    assert response.status_code == 400
-    metadata_path = tmp_path / "documents" / "broken-docx.metadata.json"
-    sidecar = json.loads(metadata_path.read_text(encoding="utf-8"))
-    assert sidecar["conversion_status"] == "failed"
-    assert "zip file" in sidecar["conversion_error"]
-    assert not (tmp_path / "documents" / "broken-docx.md").exists()
+    assert response.status_code == 200
+    body = response.json()
+    assert body["document"]["source_format"] == "pdf"
+    assert body["document"]["canonical_format"] == "md"
+    assert body["document"]["conversion_method"] == "markitdown_v1"
+
+    canonical_path = tmp_path / "documents" / "pdf-history.md"
+    assert canonical_path.exists()
+    assert "PDF History" in canonical_path.read_text(encoding="utf-8")
 
 
 def test_document_endpoints_read_uploaded_metadata_without_reindex(tmp_path) -> None:
@@ -200,3 +237,30 @@ def _docx_bytes(paragraphs: list[str]) -> bytes:
     buffer = io.BytesIO()
     document.save(buffer)
     return buffer.getvalue()
+
+
+def _pdf_bytes(text: str) -> bytes:
+    stream = f"BT /F1 24 Tf 72 720 Td ({text}) Tj ET".encode("latin-1")
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        b"<< /Length " + str(len(stream)).encode("ascii") + b" >>\nstream\n" + stream + b"\nendstream",
+    ]
+    chunks = [b"%PDF-1.4\n"]
+    offsets = [0]
+    for index, obj in enumerate(objects, start=1):
+        offsets.append(sum(len(chunk) for chunk in chunks))
+        chunks.append(f"{index} 0 obj\n".encode("ascii") + obj + b"\nendobj\n")
+    xref_offset = sum(len(chunk) for chunk in chunks)
+    chunks.append(f"xref\n0 {len(objects) + 1}\n".encode("ascii"))
+    chunks.append(b"0000000000 65535 f \n")
+    for offset in offsets[1:]:
+        chunks.append(f"{offset:010d} 00000 n \n".encode("ascii"))
+    chunks.append(
+        f"trailer << /Size {len(objects) + 1} /Root 1 0 R >>\n"
+        f"startxref\n{xref_offset}\n%%EOF\n".encode("ascii")
+    )
+    return b"".join(chunks)

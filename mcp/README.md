@@ -41,10 +41,18 @@ export RAG_PIXELS_API_KEY=your_backend_token
 - `health_check`: check backend availability.
 - `list_documents`: list indexed documents.
 - `get_document`: read one document metadata record by `doc_id`.
-- `rag_query`: ask a question with optional metadata filters.
+- `rag_retrieve`: retrieve relevant context and sources for the calling agent
+  to write the final answer. This is the recommended tool for MCP clients.
+- `rag_query`: ask a question with optional metadata filters and let the
+  backend LLM write an answer. Keep this for legacy/backend-owned chat flows.
 - `upload_document`: upload a local file through the backend REST API.
 - `clear_documents`: clear source documents, metadata, and index; requires
   `confirm=true`.
+
+`rag_retrieve` does not require the backend to configure an answering LLM such
+as OpenCode Go. It only needs the configured embedding provider and an existing
+index. Use `rag_query` only when you explicitly want the backend, not the agent,
+to produce the final natural-language answer.
 
 ## Publishing
 

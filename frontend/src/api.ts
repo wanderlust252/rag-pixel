@@ -11,7 +11,7 @@ import type {
   QueryResponse,
 } from "./types";
 
-const QUERY_TIMEOUT_MS = 60_000 * 5; // 5 minutes
+const QUERY_TIMEOUT_MS = 60_000 * 10; // 10 minutes
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",

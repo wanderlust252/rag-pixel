@@ -72,6 +72,7 @@ export type QueryFilters = {
   carrier?: string;
   warehouse?: string;
   route?: string;
+  date?: string;
 };
 
 export type SourceReference = {

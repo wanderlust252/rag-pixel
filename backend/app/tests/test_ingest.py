@@ -72,16 +72,16 @@ def test_load_docx_document(tmp_path) -> None:
 def test_clear_source_documents_removes_supported_files_and_metadata(tmp_path) -> None:
     (tmp_path / "document.md").write_text("content", encoding="utf-8")
     (tmp_path / "document.metadata.json").write_text("{}", encoding="utf-8")
-    (tmp_path / "notes.pdf").write_text("keep me", encoding="utf-8")
+    (tmp_path / "notes.pdf").write_text("remove me", encoding="utf-8")
 
     settings = Settings(documents_dir=tmp_path, index_dir=tmp_path / "index")
     documents_removed, metadata_removed = RagIngestService(settings).clear_source_documents()
 
-    assert documents_removed == 1
+    assert documents_removed == 2
     assert metadata_removed == 1
     assert not (tmp_path / "document.md").exists()
     assert not (tmp_path / "document.metadata.json").exists()
-    assert (tmp_path / "notes.pdf").exists()
+    assert not (tmp_path / "notes.pdf").exists()
 
 
 def _write_docx(path, paragraphs: list[str]) -> None:

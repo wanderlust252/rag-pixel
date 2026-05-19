@@ -14,12 +14,12 @@ class Settings(BaseSettings):
 
     rag_llm_provider: str = Field(default="mock")
     rag_embedding_provider: str = Field(default="mock")
-    similarity_top_k: int = Field(default=4, ge=1, le=20)
+    similarity_top_k: int = Field(default=20, ge=1, le=20)
 
     openai_api_key: str | None = None
     openai_model: str = "gpt-4.1-mini"
     openai_embedding_model: str = "text-embedding-3-small"
-    huggingface_embedding_model: str = "BAAI/bge-small-en-v1.5"
+    huggingface_embedding_model: str = "intfloat/multilingual-e5-small"
 
     anthropic_api_key: str | None = None
     anthropic_model: str = "claude-3-5-sonnet-latest"

@@ -10,7 +10,7 @@ from app.rag.schemas import DocumentDetail, DocumentMetadata
 
 
 class RagIngestService:
-    supported_suffixes = {".md", ".txt", ".csv", ".docx"}
+    supported_suffixes = MarkdownConversionService.supported_suffixes
     canonical_suffix = ".md"
 
     def __init__(self, settings: Settings):

@@ -85,6 +85,7 @@ class QueryFilters(BaseModel):
     carrier: str | None = None
     warehouse: str | None = None
     route: str | None = None
+    date: str | None = None
 
 
 class QueryRequest(BaseModel):
@@ -112,4 +113,10 @@ class UiDataBlock(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
     sources: list[SourceReference]
+    ui_blocks: list[UiDataBlock]
+
+
+class RetrieveResponse(BaseModel):
+    query: str
+    matches: list[SourceReference]
     ui_blocks: list[UiDataBlock]

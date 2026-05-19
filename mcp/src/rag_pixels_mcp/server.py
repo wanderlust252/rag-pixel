@@ -45,7 +45,7 @@ async def rag_query(
     route: str | None = None,
     date: str | None = None,
 ) -> dict[str, Any]:
-    """Ask the RAG backend a question, optionally scoped by document metadata."""
+    """Ask the backend LLM for an answer. Prefer rag_retrieve for agent answers."""
     filters = _clean_filters(
         {
             "doc_id": doc_id,
@@ -63,6 +63,40 @@ async def rag_query(
         "POST",
         "/rag/query",
         json_body={"question": question, "filters": filters},
+    )
+
+
+@mcp.tool()
+async def rag_retrieve(
+    query: str,
+    doc_id: str | None = None,
+    room_id: str | None = None,
+    business_flow: str | None = None,
+    shipment_id: str | None = None,
+    customer: str | None = None,
+    carrier: str | None = None,
+    warehouse: str | None = None,
+    route: str | None = None,
+    date: str | None = None,
+) -> dict[str, Any]:
+    """Retrieve relevant backend RAG context for an agent to answer with."""
+    filters = _clean_filters(
+        {
+            "doc_id": doc_id,
+            "room_id": room_id,
+            "business_flow": business_flow,
+            "shipment_id": shipment_id,
+            "customer": customer,
+            "carrier": carrier,
+            "warehouse": warehouse,
+            "route": route,
+            "date": date,
+        }
+    )
+    return await request_json(
+        "POST",
+        "/rag/retrieve",
+        json_body={"question": query, "filters": filters},
     )
 
 

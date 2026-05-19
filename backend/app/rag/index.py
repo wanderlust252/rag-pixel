@@ -23,7 +23,7 @@ class RagIndexService:
 
     def build_and_persist(self, documents: list[Any]) -> None:
         started_at = perf_counter()
-        self._configure_llama_index()
+        self._configure_llama_index(include_llm=False)
 
         from llama_index.core import StorageContext, VectorStoreIndex
 
@@ -38,9 +38,9 @@ class RagIndexService:
             len(documents),
         )
 
-    def load(self):
+    def load(self, *, include_llm: bool = True):
         started_at = perf_counter()
-        self._configure_llama_index()
+        self._configure_llama_index(include_llm=include_llm)
 
         from llama_index.core import StorageContext, load_index_from_storage
 
@@ -73,11 +73,15 @@ class RagIndexService:
         shutil.rmtree(self.settings.index_dir)
         return True
 
-    def _configure_llama_index(self) -> None:
+    def _configure_llama_index(self, *, include_llm: bool = True) -> None:
         started_at = perf_counter()
         from llama_index.core import Settings as LlamaSettings
 
-        if self.settings.rag_llm_provider == "mock":
+        if not include_llm:
+            from llama_index.core.llms.mock import MockLLM
+
+            LlamaSettings.llm = MockLLM(max_tokens=256)
+        elif self.settings.rag_llm_provider == "mock":
             from llama_index.core.llms.mock import MockLLM
 
             LlamaSettings.llm = MockLLM(max_tokens=256)
@@ -136,7 +140,7 @@ class RagIndexService:
             from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
             LlamaSettings.embed_model = HuggingFaceEmbedding(
-                model_name=self.settings.huggingface_embedding_model,
+                **self._huggingface_embedding_kwargs()
             )
         else:
             raise ValueError(
@@ -146,9 +150,21 @@ class RagIndexService:
         logger.info(
             "RAG llama settings configured in %.3fs (llm=%s, embedding=%s)",
             perf_counter() - started_at,
-            self.settings.rag_llm_provider,
+            self.settings.rag_llm_provider if include_llm else "mock_retrieval_only",
             self.settings.rag_embedding_provider,
         )
+
+    def _huggingface_embedding_kwargs(self) -> dict[str, Any]:
+        model_name = self.settings.huggingface_embedding_model
+        kwargs: dict[str, Any] = {"model_name": model_name}
+        if "multilingual-e5" in model_name.lower():
+            kwargs.update(
+                {
+                    "query_instruction": "query: ",
+                    "text_instruction": "passage: ",
+                }
+            )
+        return kwargs
 
     def _registry_path(self) -> Path:
         return self.settings.index_dir / REGISTRY_FILENAME

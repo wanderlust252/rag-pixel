@@ -5,7 +5,12 @@ from typing import Any
 from app.config import Settings
 from app.rag.index import RagIndexService
 from app.rag.metadata import ui_block_from_metadata
-from app.rag.schemas import QueryRequest, QueryResponse, SourceReference
+from app.rag.schemas import (
+    QueryRequest,
+    QueryResponse,
+    RetrieveResponse,
+    SourceReference,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,14 +36,7 @@ class RagQueryService:
         llm_elapsed = perf_counter() - llm_started_at
 
         sources = [self._source_from_node(node) for node in response.source_nodes]
-        ui_blocks = []
-        seen_blocks = set()
-        for source in sources:
-            block = ui_block_from_metadata(source.metadata)
-            if block.block_id in seen_blocks:
-                continue
-            seen_blocks.add(block.block_id)
-            ui_blocks.append(block)
+        ui_blocks = self._ui_blocks_from_sources(sources)
 
         logger.info(
             "RAG query timing load=%.3fs engine=%.3fs answer=%.3fs total=%.3fs question=%r sources=%d",
@@ -51,6 +49,33 @@ class RagQueryService:
         )
 
         return QueryResponse(answer=str(response), sources=sources, ui_blocks=ui_blocks)
+
+    def retrieve(self, request: QueryRequest) -> RetrieveResponse:
+        total_started_at = perf_counter()
+        index = RagIndexService(self.settings).load(include_llm=False)
+        load_elapsed = perf_counter() - total_started_at
+
+        retriever_started_at = perf_counter()
+        retriever = index.as_retriever(
+            similarity_top_k=self.settings.similarity_top_k,
+            filters=self._build_filters(request),
+        )
+        nodes = retriever.retrieve(request.question)
+        retrieve_elapsed = perf_counter() - retriever_started_at
+
+        matches = [self._source_from_node(node) for node in nodes]
+        ui_blocks = self._ui_blocks_from_sources(matches)
+
+        logger.info(
+            "RAG retrieve timing load=%.3fs retrieve=%.3fs total=%.3fs query=%r matches=%d",
+            load_elapsed,
+            retrieve_elapsed,
+            perf_counter() - total_started_at,
+            request.question,
+            len(matches),
+        )
+
+        return RetrieveResponse(query=request.question, matches=matches, ui_blocks=ui_blocks)
 
     def _build_filters(self, request: QueryRequest):
         if request.filters is None:
@@ -77,12 +102,23 @@ class RagQueryService:
 
         return MetadataFilters(filters=exact_filters)
 
+    def _ui_blocks_from_sources(self, sources: list[SourceReference]):
+        ui_blocks = []
+        seen_blocks = set()
+        for source in sources:
+            block = ui_block_from_metadata(source.metadata)
+            if block.block_id in seen_blocks:
+                continue
+            seen_blocks.add(block.block_id)
+            ui_blocks.append(block)
+        return ui_blocks
+
     def _source_from_node(self, source_node: Any) -> SourceReference:
         node = source_node.node
         metadata = dict(node.metadata)
         snippet = node.get_content(metadata_mode="none").strip()
-        if len(snippet) > 500:
-            snippet = f"{snippet[:497]}..."
+        if len(snippet) > 1500:
+            snippet = f"{snippet[:1497]}..."
 
         return SourceReference(
             doc_id=metadata.get("doc_id", "unknown"),

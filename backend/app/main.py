@@ -29,6 +29,7 @@ from app.rag.schemas import (
     IngestResponse,
     QueryRequest,
     QueryResponse,
+    RetrieveResponse,
 )
 
 logging.basicConfig(
@@ -159,6 +160,11 @@ def get_document(doc_id: str) -> DocumentDetail:
 @app.post("/rag/query", response_model=QueryResponse)
 def query_rag(request: QueryRequest) -> QueryResponse:
     return RagQueryService(settings).query(request)
+
+
+@app.post("/rag/retrieve", response_model=RetrieveResponse)
+def retrieve_rag(request: QueryRequest) -> RetrieveResponse:
+    return RagQueryService(settings).retrieve(request)
 
 
 @app.get("/game/characters", response_model=GameCharacterListResponse)
