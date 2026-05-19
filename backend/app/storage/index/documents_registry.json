@@ -7,6 +7,13 @@
     "room_id": "cambodia_market",
     "shelf_id": "metfone_salary_srs",
     "source_type": "docx",
-    "source_path": "app/storage/documents/srs-metfone-salary-20260515.docx"
+    "source_format": "docx",
+    "canonical_format": "md",
+    "raw_path": "app/storage/documents/srs-metfone-salary-20260515.docx",
+    "converted_path": "app/storage/documents/srs-metfone-salary-20260515.md",
+    "conversion_status": "success",
+    "conversion_method": "docx2md_v1",
+    "updated_at": "2026-05-19T03:58:11.818681+00:00",
+    "source_path": "app/storage/documents/srs-metfone-salary-20260515.md"
   }
 ]

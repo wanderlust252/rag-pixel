@@ -24,27 +24,7 @@ import type {
 
 const DEFAULT_DIRECTION: Direction = "down";
 const MOVEMENT_INTERVAL_MS = 48;
-const PORTAL_VARIANTS = [
-  "/assets/portals/simple/portal-00.png",
-  "/assets/portals/simple/portal-01.png",
-  "/assets/portals/simple/portal-02.png",
-  "/assets/portals/simple/portal-03.png",
-  "/assets/portals/simple/portal-04.png",
-  "/assets/portals/simple/portal-05.png",
-  "/assets/portals/simple/portal-06.png",
-  "/assets/portals/simple/portal-07.png",
-  "/assets/portals/simple/portal-08.png",
-  "/assets/portals/simple/portal-09.png",
-  "/assets/portals/simple/portal-10.png",
-  "/assets/portals/simple/portal-11.png",
-  "/assets/portals/simple/portal-12.png",
-  "/assets/portals/simple/portal-13.png",
-  "/assets/portals/simple/portal-14.png",
-  "/assets/portals/simple/portal-15.png",
-  "/assets/portals/simple/portal-16.png",
-] as const;
-
-type PortalVariant = (typeof PORTAL_VARIANTS)[number];
+const PORTAL_IMAGE = "/assets/portals/simple/portal-00.png";
 
 function App() {
   const [characters, setCharacters] = useState<GameCharacter[]>([]);
@@ -55,7 +35,6 @@ function App() {
   const [activeDirection, setActiveDirection] = useState<Direction | null>(null);
   const [moving, setMoving] = useState(false);
   const [frame, setFrame] = useState(0);
-  const [portalFrame, setPortalFrame] = useState(0);
   const [interaction, setInteraction] = useState<InteractionResponse | null>(null);
   const [activeTarget, setActiveTarget] = useState<InteractableTarget | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -91,14 +70,6 @@ function App() {
 
   useEffect(() => {
     if (!session) return undefined;
-    const interval = window.setInterval(() => {
-      setPortalFrame((current) => (current + 1) % PORTAL_VARIANTS.length);
-    }, 110);
-    return () => window.clearInterval(interval);
-  }, [session]);
-
-  useEffect(() => {
-    if (!session) return undefined;
     const timeout = window.setTimeout(() => {
       syncPosition(session.session_id, position).catch(() => undefined);
     }, 250);
@@ -126,15 +97,6 @@ function App() {
     if (!world || !session) return null;
     return findNearestTarget(position, world);
   }, [position, session, world]);
-
-  const portalStartFramesById = useMemo(() => {
-    if (!world || !session) return {};
-    const assignments: Record<string, number> = {};
-    for (const portal of world.portals) {
-      assignments[portal.portal_id] = Math.floor(Math.random() * PORTAL_VARIANTS.length);
-    }
-    return assignments;
-  }, [session?.session_id, world]);
 
   useEffect(() => {
     if (!world || !session) return undefined;
@@ -280,8 +242,6 @@ function App() {
             direction={direction}
             frame={moving ? frame : 0}
             nearestTarget={nearestTarget}
-            portalFrame={portalFrame}
-            portalStartFramesById={portalStartFramesById}
             onTargetClick={(target) => {
               runInteraction(target).catch(() => setError("Không tương tác được mục này."));
             }}
@@ -444,6 +404,7 @@ function ScopedChat({
     { question: string; response: QueryResponse | null; error?: string }[]
   >([]);
   const [asking, setAsking] = useState(false);
+  const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -452,16 +413,22 @@ function ScopedChat({
 
     setQuestion("");
     setAsking(true);
+    setPendingQuestion(trimmed);
     try {
       const response = await onAsk(trimmed, scope.filters);
       setHistory((current) => [...current, { question: trimmed, response }]);
-    } catch {
+    } catch (error) {
       setHistory((current) => [
         ...current,
-        { question: trimmed, response: null, error: "Không truy vấn được RAG." },
+        {
+          question: trimmed,
+          response: null,
+          error: error instanceof Error ? error.message : "Không truy vấn được RAG.",
+        },
       ]);
     } finally {
       setAsking(false);
+      setPendingQuestion(null);
     }
   }
 
@@ -478,10 +445,21 @@ function ScopedChat({
           placeholder="Hỏi trong phạm vi này"
         />
         <button className="primary-action" disabled={asking || !question.trim()} type="submit">
-          Hỏi
+          {asking ? "..." : "Hỏi"}
         </button>
       </form>
+      {asking && pendingQuestion && (
+        <div className="chat-status" role="status" aria-live="polite">
+          Đang truy vấn: {pendingQuestion}
+        </div>
+      )}
       <div className="chat-history">
+        {asking && pendingQuestion && (
+          <article className="chat-history pending">
+            <h3>{pendingQuestion}</h3>
+            <p>Đang chờ RAG phản hồi...</p>
+          </article>
+        )}
         {history.map((item, index) => (
           <article key={`${item.question}-${index}`}>
             <h3>{item.question}</h3>
@@ -550,8 +528,6 @@ function GameStage({
   direction,
   frame,
   nearestTarget,
-  portalFrame,
-  portalStartFramesById,
   onTargetClick,
 }: {
   world: GameWorld;
@@ -560,8 +536,6 @@ function GameStage({
   direction: Direction;
   frame: number;
   nearestTarget: InteractableTarget | null;
-  portalFrame: number;
-  portalStartFramesById: Record<string, number>;
   onTargetClick: (target: InteractableTarget) => void;
 }) {
   return (
@@ -570,8 +544,6 @@ function GameStage({
         <div className="back-wall" />
         {world.portals.map((portal) => {
           const active = nearestTarget?.type === "portal" && nearestTarget.id === portal.portal_id;
-          const startFrame = portalStartFramesById[portal.portal_id] ?? 0;
-          const variant = PORTAL_VARIANTS[(startFrame + portalFrame) % PORTAL_VARIANTS.length];
           return (
             <button
               className={active ? "portal active" : "portal"}
@@ -580,7 +552,7 @@ function GameStage({
               style={{
                 left: portal.position.x,
                 top: portal.position.y,
-                backgroundImage: `url(${variant})`,
+                backgroundImage: `url(${PORTAL_IMAGE})`,
               }}
               onClick={() =>
                 onTargetClick({

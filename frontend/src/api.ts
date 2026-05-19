@@ -11,6 +11,8 @@ import type {
   QueryResponse,
 } from "./types";
 
+const QUERY_TIMEOUT_MS = 60_000 * 5; // 5 minutes
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
   timeout: 10000,
@@ -83,11 +85,24 @@ export async function queryRag(input: {
   question: string;
   filters?: QueryFilters;
 }): Promise<QueryResponse> {
-  const response = await api.post<QueryResponse>("/rag/query", {
-    question: input.question,
-    filters: input.filters,
-  });
-  return response.data;
+  try {
+    const response = await api.post<QueryResponse>(
+      "/rag/query",
+      {
+        question: input.question,
+        filters: input.filters,
+      },
+      {
+        timeout: QUERY_TIMEOUT_MS,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
+      throw new Error("RAG phản hồi quá chậm. Vui lòng thử lại sau.");
+    }
+    throw error;
+  }
 }
 
 export async function createSession(input: {

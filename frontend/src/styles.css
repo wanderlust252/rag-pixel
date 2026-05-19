@@ -297,6 +297,15 @@ h3 {
   color: #171512;
 }
 
+.chat-status {
+  padding: 8px 10px;
+  border: 2px solid #23201a;
+  background: #f7c85b;
+  color: #171512;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
 .chat-history {
   display: grid;
   gap: 10px;
@@ -310,6 +319,10 @@ h3 {
   padding: 10px;
   border: 2px solid #23201a;
   background: #fffaf0;
+}
+
+.chat-history article.pending {
+  background: #fff2c8;
 }
 
 .chat-history h3,

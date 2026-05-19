@@ -45,6 +45,14 @@ export type DocumentSummary = {
 export type DocumentDetail = DocumentSummary & {
   date?: string | null;
   source_type?: string | null;
+  source_format?: string | null;
+  canonical_format?: string | null;
+  raw_path?: string | null;
+  converted_path?: string | null;
+  conversion_status?: string | null;
+  conversion_error?: string | null;
+  conversion_method?: string | null;
+  updated_at?: string | null;
   source_path: string;
 };
 
