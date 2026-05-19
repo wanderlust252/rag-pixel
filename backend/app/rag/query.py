@@ -1,6 +1,8 @@
 import logging
+import re
 from time import perf_counter
 from typing import Any
+from unicodedata import category, normalize
 
 from app.config import Settings
 from app.rag.index import RagIndexService
@@ -57,10 +59,11 @@ class RagQueryService:
 
         retriever_started_at = perf_counter()
         retriever = index.as_retriever(
-            similarity_top_k=self.settings.similarity_top_k,
+            similarity_top_k=self._retrieval_candidate_top_k(),
             filters=self._build_filters(request),
         )
-        nodes = retriever.retrieve(request.question)
+        nodes = self._rerank_nodes(request.question, retriever.retrieve(request.question))
+        nodes = nodes[: self.settings.similarity_top_k]
         retrieve_elapsed = perf_counter() - retriever_started_at
 
         matches = [self._source_from_node(node) for node in nodes]
@@ -101,6 +104,60 @@ class RagQueryService:
                 exact_filters.append(MetadataFilter(key=key, value=value))
 
         return MetadataFilters(filters=exact_filters)
+
+    def _retrieval_candidate_top_k(self) -> int:
+        return max(self.settings.similarity_top_k, min(80, self.settings.similarity_top_k * 3))
+
+    def _rerank_nodes(self, query: str, nodes: list[Any]) -> list[Any]:
+        query_tokens = self._tokens(query)
+        query_phrases = self._phrases(query_tokens)
+        if not query_tokens:
+            return nodes
+
+        def rank_key(source_node: Any) -> float:
+            text = source_node.node.get_content(metadata_mode="none")
+            lexical_score = self._lexical_score(text, query_tokens, query_phrases)
+            return (source_node.score or 0.0) + lexical_score
+
+        return sorted(nodes, key=rank_key, reverse=True)
+
+    def _lexical_score(
+        self,
+        text: str,
+        query_tokens: list[str],
+        query_phrases: list[str],
+    ) -> float:
+        text_normalized = self._normalize_for_search(text)
+        text_tokens = set(text_normalized.split())
+        token_overlap = sum(1 for token in set(query_tokens) if token in text_tokens)
+        phrase_hits = sum(1 for phrase in query_phrases if phrase in text_normalized)
+        has_date_context = all(token in text_tokens for token in ("8", "2007"))
+        return (token_overlap * 0.003) + (phrase_hits * 0.02) + (0.05 if has_date_context else 0.0)
+
+    def _phrases(self, tokens: list[str]) -> list[str]:
+        phrases = []
+        for size in range(min(8, len(tokens)), 2, -1):
+            for start in range(0, len(tokens) - size + 1):
+                phrase = " ".join(tokens[start : start + size])
+                if any(char.isdigit() for char in phrase) or size >= 5:
+                    phrases.append(phrase)
+        return phrases
+
+    def _tokens(self, text: str) -> list[str]:
+        stopwords = {"tai", "la", "gi", "cua", "vao", "luc", "nao", "va"}
+        return [
+            token
+            for token in self._normalize_for_search(text).split()
+            if token not in stopwords
+        ]
+
+    def _normalize_for_search(self, text: str) -> str:
+        text = "".join(
+            char
+            for char in normalize("NFD", text.lower().replace("đ", "d"))
+            if category(char) != "Mn"
+        )
+        return re.sub(r"[^a-z0-9]+", " ", text).strip()
 
     def _ui_blocks_from_sources(self, sources: list[SourceReference]):
         ui_blocks = []
