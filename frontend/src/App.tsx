@@ -439,6 +439,27 @@ type ChatScope = {
   filters: QueryFilters;
 };
 
+type ChatMessage = {
+  id: string;
+  question: string;
+  response: QueryResponse | null;
+  error?: string;
+  createdAt: string;
+};
+
+type StoredChatThread = {
+  id: string;
+  scopeKey: string;
+  scopeLabel: string;
+  filters: QueryFilters;
+  title: string;
+  messages: ChatMessage[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+const CHAT_HISTORY_STORAGE_KEY = "rag-pixels.chat-history.v1";
+
 function ChatModal({
   scope,
   onAsk,
@@ -449,16 +470,24 @@ function ChatModal({
   onClose: () => void;
 }) {
   const [question, setQuestion] = useState("");
-  const [history, setHistory] = useState<
-    { question: string; response: QueryResponse | null; error?: string }[]
-  >([]);
+  const [threads, setThreads] = useState<StoredChatThread[]>(() => loadChatThreads(scope.key));
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(threads[0]?.id ?? null);
   const [asking, setAsking] = useState(false);
   const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const activeThread = threads.find((thread) => thread.id === activeThreadId) ?? null;
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    const scopedThreads = loadChatThreads(scope.key);
+    setThreads(scopedThreads);
+    setActiveThreadId(scopedThreads[0]?.id ?? null);
+    setPendingQuestion(null);
+    setAsking(false);
+  }, [scope.key]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -472,6 +501,29 @@ function ChatModal({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  function persistThreads(nextThreads: StoredChatThread[]) {
+    const sortedThreads = [...nextThreads].sort(
+      (first, second) =>
+        new Date(second.updatedAt).getTime() - new Date(first.updatedAt).getTime(),
+    );
+    setThreads(sortedThreads);
+    saveChatThreads(scope.key, sortedThreads);
+  }
+
+  function startNewThread() {
+    setActiveThreadId(null);
+    setQuestion("");
+    inputRef.current?.focus();
+  }
+
+  function deleteThread(threadId: string) {
+    const nextThreads = threads.filter((thread) => thread.id !== threadId);
+    persistThreads(nextThreads);
+    if (activeThreadId === threadId) {
+      setActiveThreadId(nextThreads[0]?.id ?? null);
+    }
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = question.trim();
@@ -482,16 +534,29 @@ function ChatModal({
     setPendingQuestion(trimmed);
     try {
       const response = await onAsk(trimmed, scope.filters);
-      setHistory((current) => [...current, { question: trimmed, response }]);
+      const message = buildChatMessage({ question: trimmed, response });
+      const nextThread = upsertChatMessage({
+        threads,
+        activeThreadId,
+        scope,
+        message,
+      });
+      setActiveThreadId(nextThread.activeThreadId);
+      persistThreads(nextThread.threads);
     } catch (error) {
-      setHistory((current) => [
-        ...current,
-        {
-          question: trimmed,
-          response: null,
-          error: error instanceof Error ? error.message : "Không truy vấn được RAG.",
-        },
-      ]);
+      const message = buildChatMessage({
+        question: trimmed,
+        response: null,
+        error: error instanceof Error ? error.message : "Không truy vấn được RAG.",
+      });
+      const nextThread = upsertChatMessage({
+        threads,
+        activeThreadId,
+        scope,
+        message,
+      });
+      setActiveThreadId(nextThread.activeThreadId);
+      persistThreads(nextThread.threads);
     } finally {
       setAsking(false);
       setPendingQuestion(null);
@@ -518,60 +583,209 @@ function ChatModal({
           </button>
         </div>
         <div className="scoped-chat" key={scope.key}>
-          <div className="scope-chip">
-            <span>Scope</span>
-            <strong>{scope.label}</strong>
-          </div>
-          <form onSubmit={submit}>
-            <input
-              ref={inputRef}
-              value={question}
-              onChange={(event) => setQuestion(event.target.value)}
-              placeholder="Hỏi trong phạm vi này"
-            />
-            <button className="primary-action" disabled={asking || !question.trim()} type="submit">
-              {asking ? "..." : "Hỏi"}
-            </button>
-          </form>
-          {asking && pendingQuestion && (
-            <div className="chat-status" role="status" aria-live="polite">
-              Đang truy vấn: {pendingQuestion}
+          <aside className="chat-thread-list" aria-label="Lịch sử chat">
+            <div className="scope-chip">
+              <span>Scope</span>
+              <strong>{scope.label}</strong>
             </div>
-          )}
-          <div className="chat-history">
+            <button className="secondary-action" type="button" onClick={startNewThread}>
+              Chat mới
+            </button>
+            <div className="chat-thread-scroll">
+              {threads.length === 0 ? (
+                <p className="empty-state">Chưa có lịch sử trong scope này.</p>
+              ) : (
+                threads.map((thread) => (
+                  <div
+                    className={thread.id === activeThreadId ? "chat-thread active" : "chat-thread"}
+                    key={thread.id}
+                  >
+                    <button type="button" onClick={() => setActiveThreadId(thread.id)}>
+                      <strong>{thread.title}</strong>
+                      <span>{formatChatDate(thread.updatedAt)}</span>
+                    </button>
+                    <button
+                      aria-label={`Xóa ${thread.title}`}
+                      className="thread-delete"
+                      type="button"
+                      onClick={() => deleteThread(thread.id)}
+                    >
+                      x
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </aside>
+
+          <div className="chat-conversation">
+            <form onSubmit={submit}>
+              <input
+                ref={inputRef}
+                value={question}
+                onChange={(event) => setQuestion(event.target.value)}
+                placeholder="Hỏi trong phạm vi này"
+              />
+              <button className="primary-action" disabled={asking || !question.trim()} type="submit">
+                {asking ? "..." : "Hỏi"}
+              </button>
+            </form>
             {asking && pendingQuestion && (
-              <article className="chat-history pending">
-                <h3>{pendingQuestion}</h3>
-                <p>Đang chờ RAG phản hồi...</p>
-              </article>
+              <div className="chat-status" role="status" aria-live="polite">
+                Đang truy vấn: {pendingQuestion}
+              </div>
             )}
-            {history.map((item, index) => (
-              <article key={`${item.question}-${index}`}>
-                <h3>{item.question}</h3>
-                {item.error ? (
-                  <p>{item.error}</p>
-                ) : (
-                  <>
-                    <p>{item.response?.answer}</p>
-                    {item.response && item.response.sources.length > 0 && (
-                      <ul>
-                        {item.response.sources.slice(0, 3).map((source, sourceIndex) => (
-                          <li key={`${source.doc_id}-${sourceIndex}`}>
-                            <strong>{source.title ?? source.doc_id}</strong>
-                            <span>{source.snippet}</span>
-                          </li>
-                        ))}
-                      </ul>
+            <div className="chat-history">
+              {asking && pendingQuestion && (
+                <article className="pending">
+                  <h3>{pendingQuestion}</h3>
+                  <p>Đang chờ RAG phản hồi...</p>
+                </article>
+              )}
+              {activeThread?.messages.length ? (
+                activeThread.messages.map((item) => (
+                  <article key={item.id}>
+                    <h3>{item.question}</h3>
+                    {item.error ? (
+                      <p>{item.error}</p>
+                    ) : (
+                      <>
+                        <p>{item.response?.answer}</p>
+                        {item.response && item.response.sources.length > 0 && (
+                          <ul>
+                            {item.response.sources.slice(0, 3).map((source, sourceIndex) => (
+                              <li key={`${source.doc_id}-${sourceIndex}`}>
+                                <strong>{source.title ?? source.doc_id}</strong>
+                                <span>{source.snippet}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </article>
-            ))}
+                  </article>
+                ))
+              ) : (
+                !asking && <p className="empty-state">Bắt đầu một câu hỏi để lưu lịch sử chat.</p>
+              )}
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
+}
+
+function buildChatMessage(input: {
+  question: string;
+  response: QueryResponse | null;
+  error?: string;
+}): ChatMessage {
+  return {
+    id: createLocalId(),
+    question: input.question,
+    response: input.response,
+    error: input.error,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function upsertChatMessage({
+  threads,
+  activeThreadId,
+  scope,
+  message,
+}: {
+  threads: StoredChatThread[];
+  activeThreadId: string | null;
+  scope: ChatScope;
+  message: ChatMessage;
+}): { threads: StoredChatThread[]; activeThreadId: string } {
+  const now = new Date().toISOString();
+  const existingThread = threads.find((thread) => thread.id === activeThreadId);
+  if (existingThread) {
+    const updatedThread = {
+      ...existingThread,
+      messages: [...existingThread.messages, message],
+      title: existingThread.title || buildThreadTitle(message.question),
+      updatedAt: now,
+    };
+    return {
+      activeThreadId: updatedThread.id,
+      threads: threads.map((thread) => (thread.id === updatedThread.id ? updatedThread : thread)),
+    };
+  }
+
+  const newThread: StoredChatThread = {
+    id: createLocalId(),
+    scopeKey: scope.key,
+    scopeLabel: scope.label,
+    filters: scope.filters,
+    title: buildThreadTitle(message.question),
+    messages: [message],
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  return {
+    activeThreadId: newThread.id,
+    threads: [newThread, ...threads],
+  };
+}
+
+function loadChatThreads(scopeKey: string): StoredChatThread[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const rawHistory = window.localStorage.getItem(CHAT_HISTORY_STORAGE_KEY);
+    if (!rawHistory) return [];
+    const parsed = JSON.parse(rawHistory) as StoredChatThread[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((thread) => thread.scopeKey === scopeKey)
+      .sort(
+        (first, second) =>
+          new Date(second.updatedAt).getTime() - new Date(first.updatedAt).getTime(),
+      );
+  } catch {
+    return [];
+  }
+}
+
+function saveChatThreads(scopeKey: string, scopedThreads: StoredChatThread[]) {
+  if (typeof window === "undefined") return;
+  try {
+    const rawHistory = window.localStorage.getItem(CHAT_HISTORY_STORAGE_KEY);
+    const allThreads = rawHistory ? (JSON.parse(rawHistory) as StoredChatThread[]) : [];
+    const otherThreads = Array.isArray(allThreads)
+      ? allThreads.filter((thread) => thread.scopeKey !== scopeKey)
+      : [];
+    window.localStorage.setItem(
+      CHAT_HISTORY_STORAGE_KEY,
+      JSON.stringify([...scopedThreads, ...otherThreads]),
+    );
+  } catch {
+    window.localStorage.setItem(CHAT_HISTORY_STORAGE_KEY, JSON.stringify(scopedThreads));
+  }
+}
+
+function buildThreadTitle(question: string) {
+  return question.length > 44 ? `${question.slice(0, 41)}...` : question;
+}
+
+function formatChatDate(value: string) {
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function createLocalId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function buildChatScopeKey(filters: QueryFilters) {

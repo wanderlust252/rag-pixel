@@ -179,6 +179,17 @@ h3 {
   font-weight: 900;
 }
 
+.secondary-action {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 2px solid #23201a;
+  border-radius: 0;
+  background: #fffaf0;
+  color: #171512;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 #23201a;
+}
+
 .primary-action:disabled {
   cursor: not-allowed;
   opacity: 0.55;
@@ -321,11 +332,20 @@ h3 {
   font-weight: 900;
 }
 
+.empty-state {
+  margin: 0;
+  color: #5b5246;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .chat-history {
   display: grid;
+  align-content: start;
   gap: 10px;
-  max-height: 340px;
+  min-height: 0;
   overflow: auto;
+  padding-right: 4px;
 }
 
 .chat-history article {
@@ -418,9 +438,11 @@ h3 {
 
 .chat-modal {
   display: grid;
-  gap: 16px;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 14px;
   width: min(720px, 100%);
   max-height: min(760px, calc(100vh - 48px));
+  min-height: min(560px, calc(100vh - 48px));
   padding: 20px;
   border: 2px solid #23201a;
   background: #f9f3e5;
@@ -452,13 +474,99 @@ h3 {
 }
 
 .chat-modal .scoped-chat {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 14px;
+  min-height: 0;
   margin-top: 0;
   padding-top: 0;
   border-top: 0;
 }
 
-.chat-modal .chat-history {
-  max-height: min(420px, calc(100vh - 280px));
+.chat-thread-list,
+.chat-conversation {
+  min-height: 0;
+}
+
+.chat-thread-list {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.chat-thread-scroll {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.chat-thread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 6px;
+}
+
+.chat-thread > button:first-child,
+.thread-delete {
+  border: 2px solid #23201a;
+  border-radius: 0;
+  background: #fffaf0;
+  color: #171512;
+  box-shadow: 2px 2px 0 #23201a;
+}
+
+.chat-thread > button:first-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px;
+  text-align: left;
+}
+
+.chat-thread.active > button:first-child {
+  background: #f7c85b;
+}
+
+.chat-thread strong,
+.chat-thread span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-thread strong {
+  color: #1f3540;
+  font-size: 0.78rem;
+}
+
+.chat-thread span {
+  color: #5b5246;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.thread-delete {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0;
+  font-weight: 900;
+}
+
+.chat-conversation {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.chat-conversation .chat-status {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .stage-wrap {
@@ -644,7 +752,25 @@ h3 {
 
   .chat-modal {
     max-height: calc(100vh - 28px);
+    min-height: calc(100vh - 28px);
     padding: 16px;
+  }
+
+  .chat-modal .scoped-chat {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .chat-thread-list {
+    grid-template-rows: auto auto auto;
+  }
+
+  .chat-thread-scroll {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(180px, 1fr);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 0 4px;
   }
 
   .chat-launcher {
