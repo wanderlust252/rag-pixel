@@ -5,15 +5,10 @@ from uuid import uuid4
 from app.config import Settings
 from app.game.schemas import (
     Bookshelf,
-    CharacterSprite,
-    GameCharacter,
     GameInteractionResponse,
-    GameSession,
-    GameSessionCreateRequest,
     GameWorldResponse,
     LibraryPortal,
     Position,
-    SpriteAnimation,
 )
 from app.rag.index import RagIndexService
 from app.rag.metadata import detail_from_metadata, summary_from_metadata
@@ -23,15 +18,6 @@ from app.rag.schemas import DocumentDetail, DocumentSummary
 class GameService:
     def __init__(self, settings: Settings):
         self.settings = settings
-
-    def list_characters(self) -> list[GameCharacter]:
-        return _CHARACTERS
-
-    def get_character(self, character_id: str) -> GameCharacter | None:
-        for character in _CHARACTERS:
-            if character.character_id == character_id:
-                return character
-        return None
 
     def get_world(self) -> GameWorldResponse:
         documents = self._load_document_summaries()
@@ -90,7 +76,6 @@ class GameService:
 
     def interact(
         self,
-        session: GameSession,
         target_type: str,
         target_id: str,
         question: str | None = None,
@@ -107,7 +92,7 @@ class GameService:
                         target_type="portal",
                         title=portal.label,
                         message=(
-                            f"{session.display_name} opened {portal.label}. "
+                            f"Opened {portal.label}. "
                             f"{portal.document_count} business file(s) are available."
                         ),
                         related_documents=related_documents,
@@ -125,7 +110,7 @@ class GameService:
                         interaction_id=str(uuid4()),
                         target_type="bookshelf",
                         title=document.title,
-                        message=f"{session.display_name} interacted with shelf: {prompt}",
+                        message=f"Opened shelf: {prompt}",
                         document=document,
                     )
         return None
@@ -144,41 +129,6 @@ class GameService:
             raw["source_path"] = str(source_path)
             metadata_items.append(raw)
         return metadata_items
-
-
-class GameSessionStore:
-    def __init__(self) -> None:
-        self._sessions: dict[str, GameSession] = {}
-
-    def create(self, request: GameSessionCreateRequest, character: GameCharacter) -> GameSession:
-        session = GameSession(
-            session_id=str(uuid4()),
-            user_name=request.user_name,
-            display_name=request.display_name,
-            character=character,
-            position=Position(x=96, y=520),
-        )
-        self._sessions[session.session_id] = session
-        return session
-
-    def get(self, session_id: str) -> GameSession | None:
-        return self._sessions.get(session_id)
-
-    def change_character(self, session_id: str, character: GameCharacter) -> GameSession | None:
-        session = self._sessions.get(session_id)
-        if session is None:
-            return None
-        updated = session.model_copy(update={"character": character})
-        self._sessions[session_id] = updated
-        return updated
-
-    def update_position(self, session_id: str, position: Position) -> GameSession | None:
-        session = self._sessions.get(session_id)
-        if session is None:
-            return None
-        updated = session.model_copy(update={"position": position})
-        self._sessions[session_id] = updated
-        return updated
 
 
 def _source_path_for_metadata(metadata_path: Path) -> Path:
@@ -219,43 +169,3 @@ def _label_for_flow(flow_id: str) -> str:
         "documents": "Document Vault",
     }
     return labels.get(flow_id, flow_id.replace("_", " ").title())
-
-
-_CHARACTERS = [
-    GameCharacter(
-        character_id="mage",
-        display_name="Mage Archivist",
-        description="Balanced library explorer with walk, spell, and fallback sheets.",
-        sprite=CharacterSprite(
-            image_url="/assets/sprites/mage-walk.png",
-            frame_width=64,
-            frame_height=64,
-            columns=9,
-            rows=4,
-            animations=[
-                SpriteAnimation(name="up", row=0, frames=9),
-                SpriteAnimation(name="left", row=1, frames=9),
-                SpriteAnimation(name="down", row=2, frames=9),
-                SpriteAnimation(name="right", row=3, frames=9),
-            ],
-        ),
-    ),
-    GameCharacter(
-        character_id="baldric",
-        display_name="Baldric Runner",
-        description="Alternative character for testing character switching.",
-        sprite=CharacterSprite(
-            image_url="/assets/sprites/baldric-walk.png",
-            frame_width=64,
-            frame_height=64,
-            columns=9,
-            rows=4,
-            animations=[
-                SpriteAnimation(name="up", row=0, frames=9),
-                SpriteAnimation(name="left", row=1, frames=9),
-                SpriteAnimation(name="down", row=2, frames=9),
-                SpriteAnimation(name="right", row=3, frames=9),
-            ],
-        ),
-    ),
-]

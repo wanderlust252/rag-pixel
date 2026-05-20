@@ -1,14 +1,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import {
-  changeCharacter,
-  createSession,
-  getCharacters,
-  getWorld,
-  interact,
-  queryRag,
-  syncPosition,
-} from "./api";
+import { getWorld, interact, queryRag } from "./api";
+import { CHARACTERS, getCharacter } from "./characters";
 import { findNearestTarget, movePosition } from "./gameLogic";
 import type {
   Direction,
@@ -24,13 +17,15 @@ import type {
 
 const DEFAULT_DIRECTION: Direction = "down";
 const MOVEMENT_INTERVAL_MS = 48;
+const WALK_ANIMATION_FRAME_MS = 300;
 const PORTAL_IMAGE = "/assets/portals/simple/portal-00.png";
+const GAME_SESSION_STORAGE_KEY = "rag-pixels.game-session.v1";
 
 function App() {
-  const [characters, setCharacters] = useState<GameCharacter[]>([]);
+  const characters = CHARACTERS;
   const [world, setWorld] = useState<GameWorld | null>(null);
-  const [session, setSession] = useState<GameSession | null>(null);
-  const [position, setPosition] = useState<Position>({ x: 96, y: 520 });
+  const [session, setSession] = useState<GameSession | null>(() => loadGameSession());
+  const [position, setPosition] = useState<Position>(() => session?.position ?? { x: 96, y: 520 });
   const [direction, setDirection] = useState<Direction>(DEFAULT_DIRECTION);
   const [activeDirection, setActiveDirection] = useState<Direction | null>(null);
   const [moving, setMoving] = useState(false);
@@ -40,16 +35,16 @@ function App() {
   const [chatOpen, setChatOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const hasInitialSessionRef = useRef(session !== null);
   const pressedDirectionsRef = useRef<Direction[]>([]);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([getCharacters(), getWorld()])
-      .then(([loadedCharacters, loadedWorld]) => {
+    getWorld()
+      .then((loadedWorld) => {
         if (cancelled) return;
-        setCharacters(loadedCharacters);
         setWorld(loadedWorld);
-        setPosition(loadedWorld.spawn);
+        setPosition((current) => (hasInitialSessionRef.current ? current : loadedWorld.spawn));
       })
       .catch(() => setError("Không tải được dữ liệu phase 2. Kiểm tra backend ở port 8000."))
       .finally(() => {
@@ -61,20 +56,35 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!moving || !session) return undefined;
+    if (!moving || !session) {
+      setFrame(0);
+      return undefined;
+    }
+
     const animation = session.character.sprite.animations.find((item) => item.name === direction);
-    const interval = window.setInterval(() => {
-      setFrame((current) => (current + 1) % (animation?.frames ?? 1));
-    }, animation?.frame_duration_ms ?? 120);
-    return () => window.clearInterval(interval);
-  }, [direction, moving, session]);
+    const frameCount = animation?.frames ?? 1;
+    const frameDuration = animation?.frame_duration_ms ?? WALK_ANIMATION_FRAME_MS;
+    const startedAt = performance.now() - frameDuration;
+    let animationFrameId = 0;
+    let lastFrame = -1;
+
+    const tick = (timestamp: number) => {
+      const nextFrame = Math.floor((timestamp - startedAt) / frameDuration) % frameCount;
+      if (nextFrame !== lastFrame) {
+        lastFrame = nextFrame;
+        setFrame(nextFrame);
+      }
+      animationFrameId = window.requestAnimationFrame(tick);
+    };
+
+    animationFrameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrameId);
+  }, [direction, moving, session?.character.character_id]);
 
   useEffect(() => {
     if (!session) return undefined;
-    const timeout = window.setTimeout(() => {
-      syncPosition(session.session_id, position).catch(() => undefined);
-    }, 250);
-    return () => window.clearTimeout(timeout);
+    saveGameSession({ ...session, position });
+    return undefined;
   }, [position, session]);
 
   useEffect(() => {
@@ -168,22 +178,35 @@ function App() {
     };
   }, [nearestTarget, session, world]);
 
-  async function handleCreateSession(input: {
+  function handleCreateSession(input: {
     userName: string;
     displayName: string;
     characterId: string;
   }) {
     setError(null);
-    const nextSession = await createSession(input);
+    const character = getCharacter(input.characterId);
+    if (!character || !isValidUserName(input.userName) || !input.displayName.trim()) {
+      setError("Không tạo được session. userName chỉ dùng chữ, số, _ hoặc -.");
+      return;
+    }
+    const nextSession: GameSession = {
+      session_id: createLocalId(),
+      user_name: input.userName,
+      display_name: input.displayName.trim(),
+      character,
+      position: world?.spawn ?? position,
+    };
     setSession(nextSession);
     setPosition(nextSession.position);
+    saveGameSession(nextSession);
   }
 
-  async function handleChangeCharacter(characterId: string) {
+  function handleChangeCharacter(characterId: string) {
     if (!session) return;
     setError(null);
-    const updated = await changeCharacter(session.session_id, characterId);
-    setSession(updated);
+    const character = getCharacter(characterId);
+    if (!character) return;
+    setSession({ ...session, character });
   }
 
   async function runInteraction(target: InteractableTarget | null) {
@@ -191,7 +214,6 @@ function App() {
     setError(null);
     setActiveTarget(target);
     const result = await interact({
-      sessionId: session.session_id,
       targetType: target.type,
       targetId: target.id,
     });
@@ -227,9 +249,7 @@ function App() {
         <SessionGate
           characters={characters}
           onSubmit={(input) => {
-            handleCreateSession(input).catch(() =>
-              setError("Không tạo được session. userName chỉ dùng chữ, số, _ hoặc -."),
-            );
+            handleCreateSession(input);
           }}
         />
       ) : (
@@ -239,9 +259,7 @@ function App() {
               characters={characters}
               activeCharacterId={session.character.character_id}
               onChange={(characterId) => {
-                handleChangeCharacter(characterId).catch(() =>
-                  setError("Không đổi được nhân vật."),
-                );
+                handleChangeCharacter(characterId);
               }}
             />
             <InteractionPanel
@@ -786,6 +804,54 @@ function createLocalId() {
     return crypto.randomUUID();
   }
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+type StoredGameSession = {
+  session_id: string;
+  user_name: string;
+  display_name: string;
+  character_id: string;
+  position: Position;
+};
+
+function loadGameSession(): GameSession | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const rawSession = window.localStorage.getItem(GAME_SESSION_STORAGE_KEY);
+    if (!rawSession) return null;
+
+    const parsed = JSON.parse(rawSession) as StoredGameSession;
+    const character = getCharacter(parsed.character_id);
+    if (!character || !parsed.session_id || !parsed.user_name || !parsed.display_name) {
+      return null;
+    }
+
+    return {
+      session_id: parsed.session_id,
+      user_name: parsed.user_name,
+      display_name: parsed.display_name,
+      character,
+      position: parsed.position ?? { x: 96, y: 520 },
+    };
+  } catch {
+    return null;
+  }
+}
+
+function saveGameSession(session: GameSession) {
+  if (typeof window === "undefined") return;
+  const storedSession: StoredGameSession = {
+    session_id: session.session_id,
+    user_name: session.user_name,
+    display_name: session.display_name,
+    character_id: session.character.character_id,
+    position: session.position,
+  };
+  window.localStorage.setItem(GAME_SESSION_STORAGE_KEY, JSON.stringify(storedSession));
+}
+
+function isValidUserName(userName: string) {
+  return /^[a-zA-Z0-9_-]{3,32}$/.test(userName);
 }
 
 function buildChatScopeKey(filters: QueryFilters) {

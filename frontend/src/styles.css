@@ -698,8 +698,10 @@ h3 {
   width: 64px;
   height: 84px;
   transform: translate(-50%, -50%);
+  transition: left 48ms linear, top 48ms linear;
   z-index: 4;
   pointer-events: none;
+  will-change: left, top;
 }
 
 .avatar > span:last-child {
