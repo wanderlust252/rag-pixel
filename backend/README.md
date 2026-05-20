@@ -74,12 +74,27 @@ Then open:
 http://127.0.0.1:8000/docs
 ```
 
+## Write API Key
+
+Document upload and full document clearing are protected write operations. Set
+`RAG_PIXELS_API_KEY` on the backend to a strong random value, then pass the same
+value to trusted MCP clients.
+
+```env
+RAG_PIXELS_API_KEY=generate_a_strong_random_value
+```
+
+If `RAG_PIXELS_API_KEY` is not configured on the backend, write operations are
+disabled. Read-only endpoints such as health checks, document listing, document
+details, retrieval, and query remain available without this key.
+
 ## Basic Flow
 
 ```bash
 curl http://127.0.0.1:8000/health
 
 curl -X POST http://127.0.0.1:8000/documents/upload \
+  -H "Authorization: Bearer $RAG_PIXELS_API_KEY" \
   -F "file=@/path/to/document.pdf" \
   -F "doc_id=SRS-METFONE-SALARY-20260515" \
   -F "doc_type=srs" \
@@ -94,7 +109,8 @@ curl -X POST http://127.0.0.1:8000/documents/ingest
 
 curl -X DELETE http://127.0.0.1:8000/documents/index
 
-curl -X DELETE http://127.0.0.1:8000/documents
+curl -X DELETE http://127.0.0.1:8000/documents \
+  -H "Authorization: Bearer $RAG_PIXELS_API_KEY"
 
 curl -X POST http://127.0.0.1:8000/rag/query \
   -H "Content-Type: application/json" \
@@ -114,11 +130,13 @@ when the backend should call its configured LLM and return an `answer` itself.
 `POST /documents/upload` accepts multipart form data. It writes the uploaded file
 and metadata sidecar into the document store. By default `reindex=true`, so the
 document is queryable immediately after upload. Use `overwrite=true` to replace
-an existing document with the same `doc_id`.
+an existing document with the same `doc_id`. This endpoint requires
+`Authorization: Bearer <RAG_PIXELS_API_KEY>`.
 
 `DELETE /documents/index` removes only the persisted vector index. `DELETE /documents`
 removes supported source documents, their `*.metadata.json` sidecars, and the persisted
-index so the backend can start with a clean document store.
+index so the backend can start with a clean document store. Full document clear
+requires `Authorization: Bearer <RAG_PIXELS_API_KEY>`.
 
 ## Document Metadata
 
@@ -152,12 +170,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 export RAG_PIXELS_API_BASE_URL=http://127.0.0.1:8000
+export RAG_PIXELS_API_KEY=the_same_write_key_configured_on_the_backend
 rag-pixels-mcp
 ```
 
-`RAG_PIXELS_API_KEY` is optional. For local development, leave it unset. If the
-backend later enables auth, set it in the MCP process and it will be sent as a
-bearer token.
+`RAG_PIXELS_API_KEY` is required only for MCP tools that write data, currently
+`upload_document` and `clear_documents`. Read-only MCP tools can run without it.
 
 Available MCP tools:
 

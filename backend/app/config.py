@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 
     documents_dir: Path = Path("app/storage/documents")
     index_dir: Path = Path("app/storage/index")
+    rag_pixels_api_key: str | None = None
 
     rag_llm_provider: str = Field(default="mock")
     rag_embedding_provider: str = Field(default="mock")

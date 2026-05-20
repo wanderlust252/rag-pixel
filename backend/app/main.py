@@ -1,7 +1,8 @@
 import logging
+import secrets
 from typing import Annotated
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
@@ -52,6 +53,29 @@ def health() -> HealthResponse:
     return HealthResponse(status="ok")
 
 
+def require_write_api_key(authorization: Annotated[str | None, Header()] = None) -> None:
+    expected_api_key = settings.rag_pixels_api_key
+    if not expected_api_key:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Write API key is not configured on the backend.",
+        )
+
+    scheme, _, token = (authorization or "").partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Bearer token is required for this operation.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if not secrets.compare_digest(token, expected_api_key):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Bearer token is not authorized for this operation.",
+        )
+
+
 @app.post("/documents/ingest", response_model=IngestResponse)
 def ingest_documents() -> IngestResponse:
     documents = RagIngestService(settings).load_documents()
@@ -61,6 +85,7 @@ def ingest_documents() -> IngestResponse:
 
 @app.post("/documents/upload", response_model=DocumentUploadResponse)
 async def upload_document(
+    _: Annotated[None, Depends(require_write_api_key)],
     file: Annotated[UploadFile, File()],
     doc_id: Annotated[str, Form()],
     doc_type: Annotated[str, Form()],
@@ -127,7 +152,7 @@ def clear_document_index() -> ClearIndexResponse:
 
 
 @app.delete("/documents", response_model=ClearDocumentsResponse)
-def clear_documents() -> ClearDocumentsResponse:
+def clear_documents(_: Annotated[None, Depends(require_write_api_key)]) -> ClearDocumentsResponse:
     documents_removed, metadata_removed = RagIngestService(settings).clear_source_documents()
     index_cleared = RagIndexService(settings).clear()
     return ClearDocumentsResponse(

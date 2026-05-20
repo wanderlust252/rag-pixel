@@ -35,16 +35,20 @@ If `RAG_PIXELS_API_BASE_URL` is not set, the adapter defaults to
 | Environment variable | Required | Description |
 | --- | --- | --- |
 | `RAG_PIXELS_API_BASE_URL` | No | Base URL of the RAG Pixels backend. Defaults to `http://127.0.0.1:8000`. |
-| `RAG_PIXELS_API_KEY` | No | Bearer token sent to the backend when your deployment requires auth. |
+| `RAG_PIXELS_API_KEY` | No | Bearer token for protected write tools such as `upload_document` and `clear_documents`. |
 | `RAG_PIXELS_MCP_PYTHON` | No | Path to a Python 3.11+ interpreter if one is not discoverable on `PATH`. |
 
-Example with backend authentication:
+Example with protected write tools enabled:
 
 ```bash
 export RAG_PIXELS_API_BASE_URL=https://your-rag-pixels-backend.example.com
-export RAG_PIXELS_API_KEY=your_backend_token
+export RAG_PIXELS_API_KEY=the_same_write_key_configured_on_the_backend
 npx rag-pixels-mcp
 ```
+
+Read-only tools such as `health_check`, `list_documents`, `get_document`,
+`rag_retrieve`, and `rag_query` do not require `RAG_PIXELS_API_KEY`. Set the key
+only when you want this MCP server to call protected backend write operations.
 
 ## Runtime Requirements
 
@@ -71,6 +75,10 @@ Prefer `rag_retrieve` for most agent workflows. It gives the agent source
 snippets and metadata while keeping final response generation in the agent
 client. Use `rag_query` when you explicitly want the backend to generate the
 natural-language answer.
+
+`upload_document` and `clear_documents` require the backend write API key. The
+MCP server sends that key as `Authorization: Bearer <RAG_PIXELS_API_KEY>` when
+the environment variable is configured.
 
 ## Local Development
 
