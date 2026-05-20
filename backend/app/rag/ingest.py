@@ -15,7 +15,7 @@ class RagIngestService:
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.converter = MarkdownConversionService()
+        self.converter = MarkdownConversionService(settings)
 
     def load_documents(self):
         from llama_index.core import Document
@@ -135,7 +135,7 @@ class RagIngestService:
         self._write_sidecar(metadata_path, sidecar)
 
         try:
-            markdown = self.converter.convert(
+            conversion = self.converter.convert(
                 filename=filename,
                 content=content,
                 title=metadata_model.title,
@@ -147,9 +147,10 @@ class RagIngestService:
             self._write_sidecar(metadata_path, sidecar)
             raise
 
-        canonical_path.write_text(markdown, encoding="utf-8")
+        canonical_path.write_text(conversion.markdown, encoding="utf-8")
         sidecar["conversion_status"] = "success"
         sidecar["conversion_error"] = None
+        sidecar["conversion_method"] = conversion.method
         sidecar["updated_at"] = self._utc_now()
         self._write_sidecar(metadata_path, sidecar)
 
@@ -175,12 +176,12 @@ class RagIngestService:
             return None
 
         metadata = load_sidecar_metadata(raw_path)
-        markdown = self.converter.convert(
+        conversion = self.converter.convert(
             filename=raw_path.name,
             content=raw_path.read_bytes(),
             title=metadata.title,
         )
-        canonical_path.write_text(markdown, encoding="utf-8")
+        canonical_path.write_text(conversion.markdown, encoding="utf-8")
 
         sidecar = metadata.model_dump(exclude_none=True, exclude={"source_path"})
         sidecar.update(
@@ -191,7 +192,7 @@ class RagIngestService:
                 "converted_path": str(canonical_path),
                 "conversion_status": "success",
                 "conversion_error": None,
-                "conversion_method": self.converter.conversion_method,
+                "conversion_method": conversion.method,
                 "updated_at": self._utc_now(),
             }
         )

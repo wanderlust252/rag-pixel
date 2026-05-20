@@ -159,6 +159,22 @@ for indexing. Supported upload suffixes include PDF, Word, PowerPoint, Excel,
 HTML, text-based formats, images, audio metadata/transcription formats, ZIP, and
 EPub files supported by MarkItDown.
 
+Optional LlamaParse pilot mode:
+
+```env
+RAG_PARSE_PROVIDER=llamaparse_fallback
+LLAMA_CLOUD_API_KEY=your_llama_cloud_key
+LLAMAPARSE_TIER=cost_effective
+LLAMAPARSE_VERSION=latest
+LLAMAPARSE_TIMEOUT_SECONDS=120
+```
+
+When enabled, uploads try LlamaParse first and silently fall back to MarkItDown
+if LlamaParse is unavailable, over quota, times out, or returns unusable output.
+The document metadata `conversion_method` records whether the canonical
+Markdown came from LlamaParse, MarkItDown, or a LlamaParse-to-MarkItDown
+fallback.
+
 ## MCP Server
 
 The MCP adapter has been split out of the backend source and now lives under

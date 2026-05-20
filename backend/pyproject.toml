@@ -16,6 +16,7 @@ dependencies = [
   "PyYAML>=6.0.2",
   "python-dotenv>=1.0.1",
   "markitdown>=0.1.5",
+  "llama-cloud>=2.4.0",
   "llama-index>=0.12.0",
   "llama-index-llms-openai>=0.3.0",
   "llama-index-llms-openai-like>=0.3.0",

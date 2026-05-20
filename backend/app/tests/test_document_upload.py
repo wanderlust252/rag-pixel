@@ -1,5 +1,7 @@
 import io
 import json
+import sys
+from types import ModuleType, SimpleNamespace
 
 from fastapi.testclient import TestClient
 from docx import Document
@@ -223,6 +225,183 @@ def test_upload_pdf_document_endpoint_writes_markdown_canonical(tmp_path) -> Non
     assert "PDF History" in canonical_path.read_text(encoding="utf-8")
 
 
+def test_upload_document_uses_llamaparse_when_configured(tmp_path, monkeypatch) -> None:
+    _install_fake_llama_cloud(
+        monkeypatch,
+        parse_result=SimpleNamespace(
+            markdown=SimpleNamespace(
+                pages=[
+                    SimpleNamespace(markdown="Parsed page one"),
+                    SimpleNamespace(markdown="Parsed page two"),
+                ]
+            )
+        ),
+    )
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-SUCCESS",
+                "doc_type": "srs",
+                "title": "LlamaParse Success",
+                "reindex": "false",
+            },
+            files={"file": ("source.txt", b"original local text", "text/plain")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["document"]["conversion_method"] == "llamaparse_cost_effective"
+
+    canonical_path = tmp_path / "documents" / "llamaparse-success.md"
+    assert canonical_path.read_text(encoding="utf-8") == (
+        "# LlamaParse Success\n\nParsed page one\n\n---\n\nParsed page two"
+    )
+
+
+def test_upload_document_falls_back_to_markitdown_when_llamaparse_fails(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _install_fake_llama_cloud(monkeypatch, parse_error=RuntimeError("quota exhausted"))
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-FALLBACK",
+                "doc_type": "srs",
+                "title": "LlamaParse Fallback",
+                "reindex": "false",
+            },
+            files={"file": ("source.txt", b"fallback local text", "text/plain")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 200
+    body = response.json()
+    assert (
+        body["document"]["conversion_method"]
+        == "llamaparse_cost_effective_fallback_markitdown_v1"
+    )
+    canonical_path = tmp_path / "documents" / "llamaparse-fallback.md"
+    assert "fallback local text" in canonical_path.read_text(encoding="utf-8")
+
+
+def test_upload_document_fails_when_llamaparse_and_markitdown_fail(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _install_fake_llama_cloud(monkeypatch, parse_error=RuntimeError("quota exhausted"))
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-BOTH-FAIL",
+                "doc_type": "srs",
+                "title": "LlamaParse Both Fail",
+                "reindex": "false",
+            },
+            files={"file": ("broken.json", b"\xff\xfe\x00", "application/json")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 400
+    metadata_path = tmp_path / "documents" / "llamaparse-both-fail.metadata.json"
+    sidecar = json.loads(metadata_path.read_text(encoding="utf-8"))
+    assert sidecar["conversion_status"] == "failed"
+    assert (
+        sidecar["conversion_method"]
+        == "llamaparse_cost_effective_fallback_markitdown_v1"
+    )
+    assert not (tmp_path / "documents" / "llamaparse-both-fail.md").exists()
+
+
+def test_fast_llamaparse_tier_requests_text_expansion_only(tmp_path, monkeypatch) -> None:
+    _install_fake_llama_cloud(
+        monkeypatch,
+        expected_tier="fast",
+        expected_expand=["text"],
+        parse_result=SimpleNamespace(
+            text=SimpleNamespace(
+                pages=[
+                    SimpleNamespace(text="Fast page one"),
+                    SimpleNamespace(text="Fast page two"),
+                ]
+            )
+        ),
+    )
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+        llamaparse_tier="fast",
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-FAST",
+                "doc_type": "srs",
+                "title": "LlamaParse Fast",
+                "reindex": "false",
+            },
+            files={"file": ("source.txt", b"original local text", "text/plain")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["document"]["conversion_method"] == "llamaparse_fast"
+    canonical_path = tmp_path / "documents" / "llamaparse-fast.md"
+    assert canonical_path.read_text(encoding="utf-8") == (
+        "# LlamaParse Fast\n\nFast page one\n\n---\n\nFast page two"
+    )
+
+
 def test_document_endpoints_read_uploaded_metadata_without_reindex(tmp_path) -> None:
     original_settings = main.settings
     main.settings = Settings(
@@ -328,7 +507,11 @@ def test_protected_document_endpoints_fail_when_backend_api_key_is_not_configure
     tmp_path,
 ) -> None:
     original_settings = main.settings
-    main.settings = Settings(documents_dir=tmp_path / "documents", index_dir=tmp_path / "index")
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=None,
+    )
 
     try:
         client = TestClient(main.app)
@@ -386,3 +569,41 @@ def _pdf_bytes(text: str) -> bytes:
         f"startxref\n{xref_offset}\n%%EOF\n".encode("ascii")
     )
     return b"".join(chunks)
+
+
+def _install_fake_llama_cloud(
+    monkeypatch,
+    *,
+    parse_result: object | None = None,
+    parse_error: Exception | None = None,
+    expected_tier: str = "cost_effective",
+    expected_expand: list[str] | None = None,
+) -> None:
+    module = ModuleType("llama_cloud")
+
+    class FakeFiles:
+        def create(self, *, file: str, purpose: str):
+            assert file
+            assert purpose == "parse"
+            return SimpleNamespace(id="fake-file-id")
+
+    class FakeParsing:
+        def parse(self, *, file_id: str, tier: str, version: str, expand: list[str], timeout: int):
+            assert file_id == "fake-file-id"
+            assert tier == expected_tier
+            assert version == "latest"
+            assert expand == (expected_expand or ["markdown", "text"])
+            assert timeout == 120
+            if parse_error is not None:
+                raise parse_error
+            return parse_result
+
+    class FakeLlamaCloud:
+        def __init__(self, *, api_key: str | None = None, timeout: int):
+            assert api_key == "test-llama-key"
+            assert timeout == 120
+            self.files = FakeFiles()
+            self.parsing = FakeParsing()
+
+    module.LlamaCloud = FakeLlamaCloud
+    monkeypatch.setitem(sys.modules, "llama_cloud", module)
