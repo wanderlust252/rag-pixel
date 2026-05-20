@@ -1,0 +1,56 @@
+id: logistics
+display_name: Logistics
+embedding:
+  provider: huggingface
+  huggingface_model: intfloat/multilingual-e5-small
+  use_e5_instructions: true
+retrieval:
+  similarity_top_k: 20
+  candidate_top_k: 60
+  rerank:
+    lexical_enabled: true
+    token_overlap_weight: 0.003
+    phrase_hit_weight: 0.02
+    numeric_token_weight: 0.01
+    max_phrase_size: 8
+    min_phrase_size: 3
+metadata:
+  primary_ids:
+    - shipment_id
+    - doc_id
+  recommended_filters:
+    - doc_type
+    - shipment_id
+    - customer
+    - carrier
+    - warehouse
+    - route
+glossary:
+  "vận đơn":
+    - bill of lading
+    - B/L
+    - BL
+  "lệnh giao hàng":
+    - delivery order
+    - D/O
+    - DO
+  "dự kiến tàu chạy":
+    - ETD
+    - estimated time of departure
+  "dự kiến tàu đến":
+    - ETA
+    - estimated time of arrival
+  "lô hàng":
+    - shipment
+    - job
+    - case
+    - booking
+stopwords:
+  - tai
+  - la
+  - gi
+  - cua
+  - vao
+  - luc
+  - nao
+  - va

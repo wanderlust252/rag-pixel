@@ -14,6 +14,8 @@ class Settings(BaseSettings):
 
     rag_llm_provider: str = Field(default="mock")
     rag_embedding_provider: str = Field(default="mock")
+    rag_domain_profile: str = Field(default="default")
+    rag_profiles_dir: Path | None = None
     similarity_top_k: int = Field(default=20, ge=1, le=20)
 
     openai_api_key: str | None = None

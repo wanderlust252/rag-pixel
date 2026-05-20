@@ -18,6 +18,16 @@ Default `.env.example` uses mock LLM and mock embeddings so the service can be s
 
 For real answers, configure an LLM + embeddings provider.
 
+Domain profile:
+
+```env
+RAG_DOMAIN_PROFILE=logistics
+```
+
+Domain profiles keep retrieval tuning, glossary terms, and metadata priorities
+outside service logic. See [`docs/domain-profiles.md`](docs/domain-profiles.md)
+for the profile format and customization workflow.
+
 Hugging Face local embeddings:
 
 ```env
@@ -28,9 +38,8 @@ HUGGINGFACE_EMBEDDING_MODEL=intfloat/multilingual-e5-small
 `intfloat/multilingual-e5-small` is the recommended local default for mixed
 Vietnamese/English documents. The backend automatically applies E5's
 `query:`/`passage:` instructions when this model family is selected. Rebuild the
-index after changing embedding models. Keep `SIMILARITY_TOP_K=20` for
-fact-seeking questions over long Vietnamese documents, where the best exact
-chunk may sit below the first few semantic matches.
+index after changing embedding models. Top-k and rerank behavior now come from
+the active domain profile.
 
 OpenAI (LLM + embeddings):
 

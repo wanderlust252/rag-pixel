@@ -12,6 +12,7 @@ from app.rag.metadata import (
     load_sidecar_metadata,
     summary_from_metadata,
 )
+from app.rag.profile import DomainProfile, DomainProfileService
 from app.rag.schemas import DocumentDetail, DocumentSummary
 
 logger = logging.getLogger(__name__)
@@ -77,6 +78,8 @@ class RagIndexService:
         started_at = perf_counter()
         from llama_index.core import Settings as LlamaSettings
 
+        profile = DomainProfileService(self.settings).load()
+
         if not include_llm:
             from llama_index.core.llms.mock import MockLLM
 
@@ -120,11 +123,12 @@ class RagIndexService:
         else:
             raise ValueError(f"Unsupported RAG_LLM_PROVIDER: {self.settings.rag_llm_provider}")
 
-        if self.settings.rag_embedding_provider == "mock":
+        embedding_provider = self._embedding_provider(profile)
+        if embedding_provider == "mock":
             from llama_index.core.embeddings.mock_embed_model import MockEmbedding
 
             LlamaSettings.embed_model = MockEmbedding(embed_dim=1536)
-        elif self.settings.rag_embedding_provider == "openai":
+        elif embedding_provider == "openai":
             if not self.settings.openai_api_key:
                 raise ValueError(
                     "OPENAI_API_KEY is required when RAG_EMBEDDING_PROVIDER=openai"
@@ -136,28 +140,42 @@ class RagIndexService:
                 model=self.settings.openai_embedding_model,
                 api_key=self.settings.openai_api_key,
             )
-        elif self.settings.rag_embedding_provider == "huggingface":
+        elif embedding_provider == "huggingface":
             from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
             LlamaSettings.embed_model = HuggingFaceEmbedding(
-                **self._huggingface_embedding_kwargs()
+                **self._huggingface_embedding_kwargs(profile)
             )
         else:
             raise ValueError(
-                f"Unsupported RAG_EMBEDDING_PROVIDER: {self.settings.rag_embedding_provider}"
+                f"Unsupported RAG embedding provider: {embedding_provider}"
             )
 
         logger.info(
             "RAG llama settings configured in %.3fs (llm=%s, embedding=%s)",
             perf_counter() - started_at,
             self.settings.rag_llm_provider if include_llm else "mock_retrieval_only",
-            self.settings.rag_embedding_provider,
+            embedding_provider,
         )
 
-    def _huggingface_embedding_kwargs(self) -> dict[str, Any]:
-        model_name = self.settings.huggingface_embedding_model
+    def _embedding_provider(self, profile: DomainProfile) -> str:
+        if self.settings.rag_embedding_provider != "mock":
+            return self.settings.rag_embedding_provider
+        return profile.embedding.provider
+
+    def _huggingface_embedding_kwargs(self, profile: DomainProfile | None = None) -> dict[str, Any]:
+        profile = profile or DomainProfileService(self.settings).load()
+        settings_default_model = Settings.model_fields["huggingface_embedding_model"].default
+        model_name = (
+            self.settings.huggingface_embedding_model
+            if self.settings.huggingface_embedding_model != settings_default_model
+            else profile.embedding.huggingface_model
+        )
+        if not model_name:
+            raise ValueError("A Hugging Face embedding model must be configured")
+
         kwargs: dict[str, Any] = {"model_name": model_name}
-        if "multilingual-e5" in model_name.lower():
+        if profile.embedding.use_e5_instructions and "e5" in model_name.lower():
             kwargs.update(
                 {
                     "query_instruction": "query: ",
