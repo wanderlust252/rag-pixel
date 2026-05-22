@@ -111,6 +111,47 @@ stopwords: []
     assert len(response.matches) == 1
 
 
+def test_retrieve_builds_tenant_metadata_filters(monkeypatch) -> None:
+    seen_filters = []
+
+    class FakeRagIndexService:
+        def __init__(self, settings):
+            self.settings = settings
+
+        def load(self, *, include_llm: bool = True):
+            return FakeIndex()
+
+    class FakeIndex:
+        def as_retriever(self, *, similarity_top_k, filters):
+            seen_filters.append(filters)
+            return FakeRetriever()
+
+    class FakeRetriever:
+        def retrieve(self, query):
+            return [_FakeSourceNode(0.9, "Tenant-specific payroll rule")]
+
+    monkeypatch.setattr("app.rag.query.RagIndexService", FakeRagIndexService)
+
+    RagQueryService(Settings()).retrieve(
+        QueryRequest(
+            question="Quy tac tinh luong la gi?",
+            filters={
+                "tenant_id": "unitel-laos",
+                "market": "laos",
+                "domain": "logistics",
+                "module": "payroll",
+            },
+        )
+    )
+
+    filters = seen_filters[0].filters
+    filter_values = {metadata_filter.key: metadata_filter.value for metadata_filter in filters}
+    assert filter_values["tenant_id"] == "unitel-laos"
+    assert filter_values["market"] == "laos"
+    assert filter_values["domain"] == "logistics"
+    assert filter_values["module"] == "payroll"
+
+
 def test_retrieve_reranks_specific_date_and_conference_context() -> None:
     service = RagQueryService(Settings())
     query = "Tại Hội nghị Trung ương 6, khóa X (8-2007), Quan điểm chỉ đạo của Trung ương là gì?"

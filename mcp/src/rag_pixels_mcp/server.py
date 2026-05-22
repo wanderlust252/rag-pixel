@@ -35,68 +35,39 @@ async def get_document(doc_id: str) -> dict[str, Any]:
 @mcp.tool()
 async def rag_query(
     question: str,
-    doc_id: str | None = None,
-    room_id: str | None = None,
-    business_flow: str | None = None,
-    shipment_id: str | None = None,
-    customer: str | None = None,
-    carrier: str | None = None,
-    warehouse: str | None = None,
-    route: str | None = None,
-    date: str | None = None,
+    filters: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    """Ask the backend LLM for an answer. Prefer rag_retrieve for agent answers."""
-    filters = _clean_filters(
-        {
-            "doc_id": doc_id,
-            "room_id": room_id,
-            "business_flow": business_flow,
-            "shipment_id": shipment_id,
-            "customer": customer,
-            "carrier": carrier,
-            "warehouse": warehouse,
-            "route": route,
-            "date": date,
-        }
-    )
+    """WARNING: This tool is extremely slow (can take >4 minutes). It asks the backend LLM to read documents and generate a full answer.
+    ALMOST ALWAYS PREFER `rag_retrieve` instead. Only use `rag_query` if the user explicitly asks to test the backend's internal LLM generation capabilities.
+    Note: You can optionally provide a 'filters' dictionary (e.g., {"doc_id": "123"}) to narrow down the search.
+    Otherwise, leave it empty and the system will automatically find matching documents based on the question.
+    """
+    clean_filters = _clean_filters(filters) if filters else None
     return await request_json(
         "POST",
         "/rag/query",
-        json_body={"question": question, "filters": filters},
+        json_body={"question": question, "filters": clean_filters},
+        timeout=300.0,
     )
 
 
 @mcp.tool()
 async def rag_retrieve(
     query: str,
-    doc_id: str | None = None,
-    room_id: str | None = None,
-    business_flow: str | None = None,
-    shipment_id: str | None = None,
-    customer: str | None = None,
-    carrier: str | None = None,
-    warehouse: str | None = None,
-    route: str | None = None,
-    date: str | None = None,
+    filters: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    """Retrieve relevant backend RAG context for an agent to answer with."""
-    filters = _clean_filters(
-        {
-            "doc_id": doc_id,
-            "room_id": room_id,
-            "business_flow": business_flow,
-            "shipment_id": shipment_id,
-            "customer": customer,
-            "carrier": carrier,
-            "warehouse": warehouse,
-            "route": route,
-            "date": date,
-        }
-    )
+    """HIGHLY RECOMMENDED: Retrieve raw text snippets from documents using ultra-fast vector search.
+    Use this tool FIRST whenever you need to search for information to answer a user's question. 
+    It is 20x faster than `rag_query` and provides the raw data so you (the Agent) can synthesize the answer yourself.
+    Note: You can optionally provide a 'filters' dictionary (e.g., {"doc_id": "123"}) to restrict retrieval.
+    The system will automatically search across all documents to find the ones matching the query.
+    """
+    clean_filters = _clean_filters(filters) if filters else None
     return await request_json(
         "POST",
         "/rag/retrieve",
-        json_body={"question": query, "filters": filters},
+        json_body={"question": query, "filters": clean_filters},
+        timeout=300.0,
     )
 
 
@@ -106,6 +77,11 @@ async def upload_document(
     doc_id: str,
     doc_type: str,
     title: str,
+    tenant_id: str | None = None,
+    market: str | None = None,
+    country: str | None = None,
+    domain: str | None = None,
+    module: str | None = None,
     business_flow: str | None = None,
     room_id: str | None = None,
     shelf_id: str | None = None,
@@ -132,6 +108,11 @@ async def upload_document(
         "reindex": str(reindex).lower(),
     }
     optional = {
+        "tenant_id": tenant_id,
+        "market": market,
+        "country": country,
+        "domain": domain,
+        "module": module,
         "business_flow": business_flow,
         "room_id": room_id,
         "shelf_id": shelf_id,

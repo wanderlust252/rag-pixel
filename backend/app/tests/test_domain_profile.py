@@ -8,6 +8,7 @@ def test_loads_default_profile(tmp_path) -> None:
     settings = Settings(
         documents_dir=tmp_path / "documents",
         index_dir=tmp_path / "index",
+        rag_domain_profile="default",
     )
 
     profile = DomainProfileService(settings).load()
@@ -15,6 +16,8 @@ def test_loads_default_profile(tmp_path) -> None:
     assert profile.id == "default"
     assert profile.retrieval.similarity_top_k == 20
     assert profile.retrieval.candidate_top_k == 60
+    assert "doc_id" in profile.metadata.recommended_filters
+    assert "doc_type" in profile.metadata.recommended_filters
 
 
 def test_loads_logistics_profile(tmp_path) -> None:
@@ -28,7 +31,9 @@ def test_loads_logistics_profile(tmp_path) -> None:
 
     assert profile.id == "logistics"
     assert profile.embedding.provider == "huggingface"
+    assert "tenant_id" in profile.metadata.primary_ids
     assert "shipment_id" in profile.metadata.primary_ids
+    assert "market" in profile.metadata.recommended_filters
     assert "vận đơn" in profile.glossary
 
 

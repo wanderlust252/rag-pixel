@@ -25,6 +25,11 @@ export async function uploadDocument(input: {
   docId: string;
   docType: string;
   title: string;
+  tenantId?: string;
+  market?: string;
+  country?: string;
+  domain?: string;
+  module?: string;
   businessFlow?: string;
   roomId?: string;
   shelfId?: string;
@@ -45,6 +50,11 @@ export async function uploadDocument(input: {
   formData.append("title", input.title);
 
   const optionalFields: Record<string, string | boolean | undefined> = {
+    tenant_id: input.tenantId,
+    market: input.market,
+    country: input.country,
+    domain: input.domain,
+    module: input.module,
     business_flow: input.businessFlow,
     room_id: input.roomId,
     shelf_id: input.shelfId,

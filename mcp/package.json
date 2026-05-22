@@ -1,6 +1,6 @@
 {
   "name": "rag-pixels-mcp",
-  "version": "0.1.2",
+  "version": "0.1.7",
   "description": "MCP server that connects AI agents to a configurable RAG Pixels HTTP backend",
   "bin": {
     "rag-pixels-mcp": "bin/rag-pixels-mcp.js"

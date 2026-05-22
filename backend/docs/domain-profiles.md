@@ -10,6 +10,11 @@ rules. It captures configuration derived from representative documents,
 metadata, real questions, glossary terms, and ranking preferences supplied by
 the business team.
 
+Tenant and market separation should live in document metadata and query
+filters, not in per-customer profiles. Use fields such as `tenant_id`, `market`,
+`country`, `domain`, and `module` to scope documents for Unitel Laos, Metfone
+Cambodia, or other deployments while keeping one reusable logistics profile.
+
 ## Select A Profile
 
 Profiles live in `app/rag/profiles` by default. Select the active profile with:
@@ -57,7 +62,7 @@ To build a useful enterprise/domain profile, collect:
 
 - representative documents, ideally 20-100 files across common doc types;
 - metadata fields for each document, such as `doc_type`, IDs, status, owner,
-  version, effective date, customer, or department;
+  version, effective date, tenant, market, customer, or department;
 - real user questions with expected source documents or expected answer phrases;
 - glossary terms, abbreviations, and internal names;
 - ranking preferences, such as whether approved/latest documents should beat
@@ -94,9 +99,15 @@ The logistics profile uses shipment-oriented IDs and filters:
 ```yaml
 metadata:
   primary_ids:
+    - tenant_id
     - shipment_id
     - doc_id
   recommended_filters:
+    - tenant_id
+    - market
+    - country
+    - domain
+    - module
     - doc_type
     - shipment_id
     - customer

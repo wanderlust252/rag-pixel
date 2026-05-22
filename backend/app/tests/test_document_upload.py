@@ -69,6 +69,11 @@ def test_upload_document_endpoint_writes_document_and_metadata(tmp_path) -> None
                 "doc_id": "SRS-METFONE-SALARY-20260515",
                 "doc_type": "srs",
                 "title": "SRS Luong khoan Metfone",
+                "tenant_id": "metfone-cambodia",
+                "market": "cambodia",
+                "country": "KH",
+                "domain": "logistics",
+                "module": "payroll",
                 "business_flow": "salary_calculation",
                 "room_id": "cambodia_market",
                 "shelf_id": "metfone_salary_srs",
@@ -93,6 +98,11 @@ def test_upload_document_endpoint_writes_document_and_metadata(tmp_path) -> None
     assert body["ingested_documents"] is None
     assert body["document"]["conversion_status"] == "success"
     assert body["document"]["canonical_format"] == "md"
+    assert body["document"]["tenant_id"] == "metfone-cambodia"
+    assert body["document"]["market"] == "cambodia"
+    assert body["document"]["country"] == "KH"
+    assert body["document"]["domain"] == "logistics"
+    assert body["document"]["module"] == "payroll"
 
     raw_path = tmp_path / "documents" / "srs-metfone-salary-20260515.docx"
     canonical_path = tmp_path / "documents" / "srs-metfone-salary-20260515.md"
@@ -102,6 +112,11 @@ def test_upload_document_endpoint_writes_document_and_metadata(tmp_path) -> None
 
     sidecar = json.loads(metadata_path.read_text(encoding="utf-8"))
     assert sidecar["doc_id"] == "SRS-METFONE-SALARY-20260515"
+    assert sidecar["tenant_id"] == "metfone-cambodia"
+    assert sidecar["market"] == "cambodia"
+    assert sidecar["country"] == "KH"
+    assert sidecar["domain"] == "logistics"
+    assert sidecar["module"] == "payroll"
     assert sidecar["source_type"] == "docx"
     assert sidecar["source_format"] == "docx"
     assert sidecar["canonical_format"] == "md"

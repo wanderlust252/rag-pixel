@@ -43,14 +43,19 @@ class RagQueryService:
         sources = [self._source_from_node(node) for node in response.source_nodes]
         ui_blocks = self._ui_blocks_from_sources(sources)
 
+        total_chars = sum(len(s.snippet) for s in sources)
+        approx_tokens = total_chars // 4
+
         logger.info(
-            "RAG query timing load=%.3fs engine=%.3fs answer=%.3fs total=%.3fs question=%r sources=%d",
+            "RAG query timing load=%.3fs engine=%.3fs answer=%.3fs total=%.3fs question=%r sources=%d chars=%d approx_tokens=%d",
             load_elapsed,
             engine_elapsed,
             llm_elapsed,
             perf_counter() - total_started_at,
             request.question,
             len(sources),
+            total_chars,
+            approx_tokens,
         )
 
         return QueryResponse(answer=str(response), sources=sources, ui_blocks=ui_blocks)

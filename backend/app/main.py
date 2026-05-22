@@ -1,4 +1,4 @@
-import logging
+import logging  # reload triggered for timeout change
 import secrets
 from typing import Annotated
 
@@ -90,6 +90,11 @@ async def upload_document(
     doc_id: Annotated[str, Form()],
     doc_type: Annotated[str, Form()],
     title: Annotated[str, Form()],
+    tenant_id: Annotated[str | None, Form()] = None,
+    market: Annotated[str | None, Form()] = None,
+    country: Annotated[str | None, Form()] = None,
+    domain: Annotated[str | None, Form()] = None,
+    module: Annotated[str | None, Form()] = None,
     business_flow: Annotated[str | None, Form()] = None,
     room_id: Annotated[str | None, Form()] = None,
     shelf_id: Annotated[str | None, Form()] = None,
@@ -107,6 +112,11 @@ async def upload_document(
         "doc_id": doc_id,
         "doc_type": doc_type,
         "title": title,
+        "tenant_id": tenant_id,
+        "market": market,
+        "country": country,
+        "domain": domain,
+        "module": module,
         "business_flow": business_flow,
         "room_id": room_id,
         "shelf_id": shelf_id,

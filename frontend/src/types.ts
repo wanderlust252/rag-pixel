@@ -32,6 +32,11 @@ export type DocumentSummary = {
   doc_id: string;
   doc_type: string;
   title: string;
+  tenant_id?: string | null;
+  market?: string | null;
+  country?: string | null;
+  domain?: string | null;
+  module?: string | null;
   business_flow?: string | null;
   room_id?: string | null;
   shelf_id?: string | null;
@@ -65,6 +70,11 @@ export type DocumentUploadResponse = {
 export type QueryFilters = {
   doc_id?: string;
   doc_type?: string | string[];
+  tenant_id?: string;
+  market?: string;
+  country?: string;
+  domain?: string;
+  module?: string;
   business_flow?: string;
   room_id?: string;
   shipment_id?: string;

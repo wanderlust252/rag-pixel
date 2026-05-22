@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rag-pixels-mcp"
-version = "0.1.2"
+version = "0.1.7"
 description = "MCP server that connects AI agents to a configurable RAG Pixels HTTP backend"
 requires-python = ">=3.11,<3.15"
 dependencies = [

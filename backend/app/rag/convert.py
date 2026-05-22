@@ -68,8 +68,10 @@ class MarkdownConversionService:
                     content=content,
                     title=title,
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                import traceback
+                print(f"LlamaParse conversion failed for {filename}: {e}")
+                traceback.print_exc()
 
         if suffix == ".md":
             return ConversionResult(

@@ -80,8 +80,22 @@ Document upload and full document clearing are protected write operations. Set
 `RAG_PIXELS_API_KEY` on the backend to a strong random value, then pass the same
 value to trusted MCP clients.
 
+You can generate a secure random key using one of the following commands:
+
+**Using OpenSSL:**
+```bash
+openssl rand -hex 32
+```
+
+**Using Python:**
+```bash
+python3 -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Configure the generated key in your `.env` file:
+
 ```env
-RAG_PIXELS_API_KEY=generate_a_strong_random_value
+RAG_PIXELS_API_KEY=your_generated_secure_value
 ```
 
 If `RAG_PIXELS_API_KEY` is not configured on the backend, write operations are
@@ -99,6 +113,11 @@ curl -X POST http://127.0.0.1:8000/documents/upload \
   -F "doc_id=SRS-METFONE-SALARY-20260515" \
   -F "doc_type=srs" \
   -F "title=SRS Luong khoan Metfone 20260515" \
+  -F "tenant_id=metfone-cambodia" \
+  -F "market=cambodia" \
+  -F "country=KH" \
+  -F "domain=logistics" \
+  -F "module=payroll" \
   -F "business_flow=salary_calculation" \
   -F "room_id=cambodia_market" \
   -F "shelf_id=metfone_salary_srs" \
@@ -114,14 +133,17 @@ curl -X DELETE http://127.0.0.1:8000/documents \
 
 curl -X POST http://127.0.0.1:8000/rag/query \
   -H "Content-Type: application/json" \
-  -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"shipment_id":"SHP-001"}}'
+  -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"tenant_id":"unitel-laos","shipment_id":"SHP-001"}}'
 
 curl -X POST http://127.0.0.1:8000/rag/retrieve \
   -H "Content-Type: application/json" \
-  -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"shipment_id":"SHP-001"}}'
+  -d '{"question":"Why is shipment SHP-001 delayed?","filters":{"tenant_id":"unitel-laos","shipment_id":"SHP-001"}}'
 ```
 
-For a bookshelf-level chat, filter by `doc_id`. For a room-level chat, filter by `room_id` or `business_flow`.
+For multi-market deployments, pass `tenant_id` and/or `market` filters so
+retrieval stays scoped to one customer or market. For a bookshelf-level chat,
+filter by `doc_id`. For a room-level chat, filter by `room_id` or
+`business_flow`.
 
 Use `/rag/retrieve` for agent/MCP flows. It returns source snippets and UI
 blocks only, so the calling agent can write the final answer. Use `/rag/query`
@@ -147,6 +169,11 @@ Each source file should have a matching `*.metadata.json` sidecar file. Recommen
   "doc_id": "BL-2026-0001",
   "doc_type": "bill_of_lading",
   "title": "Bill of Lading BL-2026-0001",
+  "tenant_id": "unitel-laos",
+  "market": "laos",
+  "country": "LA",
+  "domain": "logistics",
+  "module": "shipment_ops",
   "business_flow": "shipment_ops",
   "room_id": "shipment_room",
   "shelf_id": "BL-2026-0001",
@@ -166,7 +193,7 @@ RAG_PARSE_PROVIDER=llamaparse_fallback
 LLAMA_CLOUD_API_KEY=your_llama_cloud_key
 LLAMAPARSE_TIER=cost_effective
 LLAMAPARSE_VERSION=latest
-LLAMAPARSE_TIMEOUT_SECONDS=120
+LLAMAPARSE_TIMEOUT_SECONDS=600
 ```
 
 When enabled, uploads try LlamaParse first and silently fall back to MarkItDown

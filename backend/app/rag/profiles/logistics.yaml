@@ -16,9 +16,15 @@ retrieval:
     min_phrase_size: 3
 metadata:
   primary_ids:
+    - tenant_id
     - shipment_id
     - doc_id
   recommended_filters:
+    - tenant_id
+    - market
+    - country
+    - domain
+    - module
     - doc_type
     - shipment_id
     - customer

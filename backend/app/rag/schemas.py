@@ -11,6 +11,11 @@ class DocumentMetadata(BaseModel):
     doc_id: str
     doc_type: str
     title: str
+    tenant_id: str | None = None
+    market: str | None = None
+    country: str | None = None
+    domain: str | None = None
+    module: str | None = None
     business_flow: str | None = None
     room_id: str | None = None
     shelf_id: str | None = None
@@ -36,6 +41,11 @@ class DocumentSummary(BaseModel):
     doc_id: str
     doc_type: str
     title: str
+    tenant_id: str | None = None
+    market: str | None = None
+    country: str | None = None
+    domain: str | None = None
+    module: str | None = None
     business_flow: str | None = None
     room_id: str | None = None
     shelf_id: str | None = None
@@ -78,6 +88,11 @@ class ClearIndexResponse(BaseModel):
 class QueryFilters(BaseModel):
     doc_id: str | None = None
     doc_type: str | list[str] | None = None
+    tenant_id: str | None = None
+    market: str | None = None
+    country: str | None = None
+    domain: str | None = None
+    module: str | None = None
     business_flow: str | None = None
     room_id: str | None = None
     shipment_id: str | None = None
