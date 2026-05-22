@@ -66,6 +66,8 @@ OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 
 ```bash
 uvicorn app.main:app --reload
+OR
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 # for external access
 ```
 
 Then open:
