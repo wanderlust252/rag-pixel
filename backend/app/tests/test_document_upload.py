@@ -1,6 +1,8 @@
 import io
 import json
+import subprocess
 import sys
+from pathlib import Path
 from types import ModuleType, SimpleNamespace
 
 from fastapi.testclient import TestClient
@@ -325,6 +327,105 @@ def test_upload_document_falls_back_to_markitdown_when_llamaparse_fails(
     )
     canonical_path = tmp_path / "documents" / "llamaparse-fallback.md"
     assert "fallback local text" in canonical_path.read_text(encoding="utf-8")
+
+
+def test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _install_fake_llama_cloud(monkeypatch, parse_error=RuntimeError("quota exhausted"))
+    ocr_binary_path = tmp_path / "ocr-bin"
+    ocr_binary_path.write_text("fake binary", encoding="utf-8")
+
+    def fake_run(command, *, capture_output: bool, text: bool, check: bool):
+        assert command[0] == str(ocr_binary_path)
+        assert command[1].endswith("source.pdf")
+        assert command[2].endswith("ocr.txt")
+        assert capture_output is True
+        assert text is True
+        assert check is True
+        (tmp_path / "seen-command.txt").write_text("\n".join(command), encoding="utf-8")
+        Path(command[2]).write_text("macOS OCR extracted text", encoding="utf-8")
+        return subprocess.CompletedProcess(command, 0, stdout="ok", stderr="")
+
+    monkeypatch.setattr("app.rag.convert.subprocess.run", fake_run)
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+        macos_pdf_ocr_binary_path=ocr_binary_path,
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-MACOS-OCR",
+                "doc_type": "srs",
+                "title": "LlamaParse macOS OCR",
+                "reindex": "false",
+            },
+            files={"file": ("source.pdf", _pdf_bytes("fallback pdf"), "application/pdf")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 200
+    body = response.json()
+    assert (
+        body["document"]["conversion_method"]
+        == "llamaparse_cost_effective_fallback_macos_pdf_ocr_v1"
+    )
+    canonical_path = tmp_path / "documents" / "llamaparse-macos-ocr.md"
+    assert canonical_path.read_text(encoding="utf-8") == (
+        "# LlamaParse macOS OCR\n\nmacOS OCR extracted text"
+    )
+
+
+def test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _install_fake_llama_cloud(monkeypatch, parse_error=RuntimeError("quota exhausted"))
+    original_settings = main.settings
+    main.settings = Settings(
+        documents_dir=tmp_path / "documents",
+        index_dir=tmp_path / "index",
+        rag_pixels_api_key=AUTH_API_KEY,
+        rag_parse_provider="llamaparse_fallback",
+        llama_cloud_api_key="test-llama-key",
+        macos_pdf_ocr_binary_path=tmp_path / "missing-ocr-bin",
+    )
+
+    try:
+        client = TestClient(main.app)
+        response = client.post(
+            "/documents/upload",
+            headers=AUTH_HEADERS,
+            data={
+                "doc_id": "LLAMAPARSE-MARKITDOWN-PDF",
+                "doc_type": "srs",
+                "title": "LlamaParse MarkItDown PDF",
+                "reindex": "false",
+            },
+            files={"file": ("source.pdf", _pdf_bytes("fallback pdf"), "application/pdf")},
+        )
+    finally:
+        main.settings = original_settings
+
+    assert response.status_code == 200
+    body = response.json()
+    assert (
+        body["document"]["conversion_method"]
+        == "llamaparse_cost_effective_fallback_macos_pdf_ocr_v1_fallback_markitdown_v1"
+    )
+    canonical_path = tmp_path / "documents" / "llamaparse-markitdown-pdf.md"
+    assert "LlamaParse MarkItDown PDF" in canonical_path.read_text(encoding="utf-8")
 
 
 def test_upload_document_fails_when_llamaparse_and_markitdown_fail(

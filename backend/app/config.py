@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     llamaparse_tier: str = "cost_effective"
     llamaparse_version: str = "latest"
     llamaparse_timeout_seconds: int = Field(default=600, ge=1)
+    macos_pdf_ocr_binary_path: Path | None = Path("bin/ocr-bin")
 
     anthropic_api_key: str | None = None
     anthropic_model: str = "claude-3-5-sonnet-latest"
