@@ -1,0 +1,3749 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "RAG Pixels",
+    "languages": [
+      "unknown",
+      "markdown",
+      "config",
+      "python",
+      "yaml",
+      "toml",
+      "html",
+      "json",
+      "typescript",
+      "css",
+      "javascript"
+    ],
+    "frameworks": [
+      "FastAPI",
+      "React",
+      "Vite",
+      "LlamaIndex",
+      "MCP"
+    ],
+    "description": "Prototype connecting a logistics-focused RAG backend with a playable 2D pixel-library frontend and standalone MCP adapter.",
+    "analyzedAt": "2026-05-25T11:01:36.777Z",
+    "gitCommitHash": "95cfe9bc0b24663c07390809b30b7f6b1c32074b"
+  },
+  "nodes": [
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "filePath": "AGENTS.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "moderate",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "document:PHASE_1_PLAN.md",
+      "type": "document",
+      "name": "PHASE_1_PLAN.md",
+      "filePath": "PHASE_1_PLAN.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "complex",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "document:PHASE_2_ASSET_REQUIREMENTS.md",
+      "type": "document",
+      "name": "PHASE_2_ASSET_REQUIREMENTS.md",
+      "filePath": "PHASE_2_ASSET_REQUIREMENTS.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "simple",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "document:Parse.md",
+      "type": "document",
+      "name": "Parse.md",
+      "filePath": "Parse.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "moderate",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "config:backend/.env.example",
+      "type": "config",
+      "name": ".env.example",
+      "filePath": "backend/.env.example",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "config"
+    },
+    {
+      "id": "document:backend/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "backend/README.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "moderate",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "config:backend/pyproject.toml",
+      "type": "config",
+      "name": "pyproject.toml",
+      "filePath": "backend/pyproject.toml",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "toml"
+    },
+    {
+      "id": "file:frontend/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "frontend/index.html",
+      "summary": "index.html participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "simple",
+      "tags": [
+        "rag"
+      ],
+      "language": "html"
+    },
+    {
+      "id": "config:frontend/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "frontend/package.json",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "json"
+    },
+    {
+      "id": "config:frontend/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "frontend/tsconfig.json",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "json"
+    },
+    {
+      "id": "config:mcp/.env.example",
+      "type": "config",
+      "name": ".env.example",
+      "filePath": "mcp/.env.example",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration",
+        "mcp-adapter"
+      ],
+      "language": "config"
+    },
+    {
+      "id": "document:mcp/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "mcp/README.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "moderate",
+      "tags": [
+        "mcp-adapter",
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "config:mcp/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "mcp/package.json",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration",
+        "mcp-adapter"
+      ],
+      "language": "json"
+    },
+    {
+      "id": "config:mcp/pyproject.toml",
+      "type": "config",
+      "name": "pyproject.toml",
+      "filePath": "mcp/pyproject.toml",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration",
+        "mcp-adapter"
+      ],
+      "language": "toml"
+    },
+    {
+      "id": "file:.understand-anything/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": ".understandignore participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "simple",
+      "tags": [
+        "source"
+      ],
+      "language": "unknown"
+    },
+    {
+      "id": "file:backend/app/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "backend/app/__init__.py",
+      "summary": "__init__.py participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "simple",
+      "tags": [
+        "source"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "file:backend/app/config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "backend/app/config.py",
+      "summary": "config.py participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "moderate",
+      "tags": [
+        "configuration"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/config.py:Settings",
+      "type": "class",
+      "name": "Settings",
+      "filePath": "backend/app/config.py",
+      "summary": "Class Settings defined in backend/app/config.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/game/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "backend/app/game/__init__.py",
+      "summary": "Defines game-world schemas and services that map document metadata into rooms, shelves, portals, and interactions.",
+      "complexity": "simple",
+      "tags": [
+        "game-ui"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "file:backend/app/game/schemas.py",
+      "type": "file",
+      "name": "schemas.py",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Defines game-world schemas and services that map document metadata into rooms, shelves, portals, and interactions.",
+      "complexity": "simple",
+      "tags": [
+        "type-definition",
+        "game-ui"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:Position",
+      "type": "class",
+      "name": "Position",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class Position defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:LibraryPortal",
+      "type": "class",
+      "name": "LibraryPortal",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class LibraryPortal defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:Bookshelf",
+      "type": "class",
+      "name": "Bookshelf",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class Bookshelf defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:GameWorldResponse",
+      "type": "class",
+      "name": "GameWorldResponse",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class GameWorldResponse defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:GameInteractionRequest",
+      "type": "class",
+      "name": "GameInteractionRequest",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class GameInteractionRequest defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/schemas.py:GameInteractionResponse",
+      "type": "class",
+      "name": "GameInteractionResponse",
+      "filePath": "backend/app/game/schemas.py",
+      "summary": "Class GameInteractionResponse defined in backend/app/game/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/game/service.py",
+      "type": "file",
+      "name": "service.py",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Defines game-world schemas and services that map document metadata into rooms, shelves, portals, and interactions.",
+      "complexity": "moderate",
+      "tags": [
+        "game-ui"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/game/service.py:_source_path_for_metadata",
+      "type": "function",
+      "name": "_source_path_for_metadata",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Function _source_path_for_metadata in backend/app/game/service.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/game/service.py:_group_documents_by_flow",
+      "type": "function",
+      "name": "_group_documents_by_flow",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Function _group_documents_by_flow in backend/app/game/service.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/game/service.py:_flow_for_doc_type",
+      "type": "function",
+      "name": "_flow_for_doc_type",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Function _flow_for_doc_type in backend/app/game/service.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/game/service.py:_label_for_flow",
+      "type": "function",
+      "name": "_label_for_flow",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Function _label_for_flow in backend/app/game/service.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "class:backend/app/game/service.py:GameService",
+      "type": "class",
+      "name": "GameService",
+      "filePath": "backend/app/game/service.py",
+      "summary": "Class GameService defined in backend/app/game/service.py.",
+      "complexity": "moderate",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/main.py",
+      "type": "file",
+      "name": "main.py",
+      "filePath": "backend/app/main.py",
+      "summary": "FastAPI application entry point wiring health, document, RAG, and game-world endpoints with authentication for protected writes.",
+      "complexity": "moderate",
+      "tags": [
+        "api-handler"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/main.py:require_write_api_key",
+      "type": "function",
+      "name": "require_write_api_key",
+      "filePath": "backend/app/main.py",
+      "summary": "Function require_write_api_key in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:ingest_documents",
+      "type": "function",
+      "name": "ingest_documents",
+      "filePath": "backend/app/main.py",
+      "summary": "Function ingest_documents in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:upload_document",
+      "type": "function",
+      "name": "upload_document",
+      "filePath": "backend/app/main.py",
+      "summary": "Function upload_document in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:clear_document_index",
+      "type": "function",
+      "name": "clear_document_index",
+      "filePath": "backend/app/main.py",
+      "summary": "Function clear_document_index in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:clear_documents",
+      "type": "function",
+      "name": "clear_documents",
+      "filePath": "backend/app/main.py",
+      "summary": "Function clear_documents in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:list_documents",
+      "type": "function",
+      "name": "list_documents",
+      "filePath": "backend/app/main.py",
+      "summary": "Function list_documents in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:get_document",
+      "type": "function",
+      "name": "get_document",
+      "filePath": "backend/app/main.py",
+      "summary": "Function get_document in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/main.py:interact_with_game_target",
+      "type": "function",
+      "name": "interact_with_game_target",
+      "filePath": "backend/app/main.py",
+      "summary": "Function interact_with_game_target in backend/app/main.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "backend/app/rag/__init__.py",
+      "summary": "Implements the backend RAG __init__ module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "simple",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "file:backend/app/rag/convert.py",
+      "type": "file",
+      "name": "convert.py",
+      "filePath": "backend/app/rag/convert.py",
+      "summary": "Implements the backend RAG convert module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "complex",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/rag/convert.py:ConversionResult",
+      "type": "class",
+      "name": "ConversionResult",
+      "filePath": "backend/app/rag/convert.py",
+      "summary": "Class ConversionResult defined in backend/app/rag/convert.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/convert.py:MarkdownConversionService",
+      "type": "class",
+      "name": "MarkdownConversionService",
+      "filePath": "backend/app/rag/convert.py",
+      "summary": "Class MarkdownConversionService defined in backend/app/rag/convert.py.",
+      "complexity": "complex",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/index.py",
+      "type": "file",
+      "name": "index.py",
+      "filePath": "backend/app/rag/index.py",
+      "summary": "Implements the backend RAG index module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/rag/index.py:RagIndexService",
+      "type": "class",
+      "name": "RagIndexService",
+      "filePath": "backend/app/rag/index.py",
+      "summary": "Class RagIndexService defined in backend/app/rag/index.py.",
+      "complexity": "complex",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/ingest.py",
+      "type": "file",
+      "name": "ingest.py",
+      "filePath": "backend/app/rag/ingest.py",
+      "summary": "Implements the backend RAG ingest module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/rag/ingest.py:RagIngestService",
+      "type": "class",
+      "name": "RagIngestService",
+      "filePath": "backend/app/rag/ingest.py",
+      "summary": "Class RagIngestService defined in backend/app/rag/ingest.py.",
+      "complexity": "complex",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/metadata.py",
+      "type": "file",
+      "name": "metadata.py",
+      "filePath": "backend/app/rag/metadata.py",
+      "summary": "Implements the backend RAG metadata module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/rag/metadata.py:load_sidecar_metadata",
+      "type": "function",
+      "name": "load_sidecar_metadata",
+      "filePath": "backend/app/rag/metadata.py",
+      "summary": "Function load_sidecar_metadata in backend/app/rag/metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/rag/metadata.py:summary_from_metadata",
+      "type": "function",
+      "name": "summary_from_metadata",
+      "filePath": "backend/app/rag/metadata.py",
+      "summary": "Function summary_from_metadata in backend/app/rag/metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/rag/metadata.py:ui_block_from_metadata",
+      "type": "function",
+      "name": "ui_block_from_metadata",
+      "filePath": "backend/app/rag/metadata.py",
+      "summary": "Function ui_block_from_metadata in backend/app/rag/metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/rag/metadata.py:_category_for_doc_type",
+      "type": "function",
+      "name": "_category_for_doc_type",
+      "filePath": "backend/app/rag/metadata.py",
+      "summary": "Function _category_for_doc_type in backend/app/rag/metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/profile.py",
+      "type": "file",
+      "name": "profile.py",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Implements the backend RAG profile module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/rag/profile.py:load_domain_profile",
+      "type": "function",
+      "name": "load_domain_profile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Function load_domain_profile in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/rag/profile.py:expand_query_with_glossary",
+      "type": "function",
+      "name": "expand_query_with_glossary",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Function expand_query_with_glossary in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:EmbeddingProfile",
+      "type": "class",
+      "name": "EmbeddingProfile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class EmbeddingProfile defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:RerankProfile",
+      "type": "class",
+      "name": "RerankProfile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class RerankProfile defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:RetrievalProfile",
+      "type": "class",
+      "name": "RetrievalProfile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class RetrievalProfile defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:MetadataProfile",
+      "type": "class",
+      "name": "MetadataProfile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class MetadataProfile defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:DomainProfile",
+      "type": "class",
+      "name": "DomainProfile",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class DomainProfile defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/profile.py:DomainProfileService",
+      "type": "class",
+      "name": "DomainProfileService",
+      "filePath": "backend/app/rag/profile.py",
+      "summary": "Class DomainProfileService defined in backend/app/rag/profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "config:backend/app/rag/profiles/default.yaml",
+      "type": "config",
+      "name": "default.yaml",
+      "filePath": "backend/app/rag/profiles/default.yaml",
+      "summary": "Implements the backend RAG default module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "simple",
+      "tags": [
+        "rag"
+      ],
+      "language": "yaml"
+    },
+    {
+      "id": "config:backend/app/rag/profiles/logistics.yaml",
+      "type": "config",
+      "name": "logistics.yaml",
+      "filePath": "backend/app/rag/profiles/logistics.yaml",
+      "summary": "Implements the backend RAG logistics module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "yaml"
+    },
+    {
+      "id": "file:backend/app/rag/query.py",
+      "type": "file",
+      "name": "query.py",
+      "filePath": "backend/app/rag/query.py",
+      "summary": "Implements the backend RAG query module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/rag/query.py:RagQueryService",
+      "type": "class",
+      "name": "RagQueryService",
+      "filePath": "backend/app/rag/query.py",
+      "summary": "Class RagQueryService defined in backend/app/rag/query.py.",
+      "complexity": "moderate",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/rag/schemas.py",
+      "type": "file",
+      "name": "schemas.py",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Implements the backend RAG schemas module for document conversion, metadata, indexing, retrieval, or query orchestration.",
+      "complexity": "moderate",
+      "tags": [
+        "type-definition",
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:HealthResponse",
+      "type": "class",
+      "name": "HealthResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class HealthResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:DocumentMetadata",
+      "type": "class",
+      "name": "DocumentMetadata",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class DocumentMetadata defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:DocumentSummary",
+      "type": "class",
+      "name": "DocumentSummary",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class DocumentSummary defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:DocumentDetail",
+      "type": "class",
+      "name": "DocumentDetail",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class DocumentDetail defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:DocumentListResponse",
+      "type": "class",
+      "name": "DocumentListResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class DocumentListResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:IngestResponse",
+      "type": "class",
+      "name": "IngestResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class IngestResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:DocumentUploadResponse",
+      "type": "class",
+      "name": "DocumentUploadResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class DocumentUploadResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:ClearDocumentsResponse",
+      "type": "class",
+      "name": "ClearDocumentsResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class ClearDocumentsResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:ClearIndexResponse",
+      "type": "class",
+      "name": "ClearIndexResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class ClearIndexResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:QueryFilters",
+      "type": "class",
+      "name": "QueryFilters",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class QueryFilters defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:QueryRequest",
+      "type": "class",
+      "name": "QueryRequest",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class QueryRequest defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:SourceReference",
+      "type": "class",
+      "name": "SourceReference",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class SourceReference defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:UiDataBlock",
+      "type": "class",
+      "name": "UiDataBlock",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class UiDataBlock defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:QueryResponse",
+      "type": "class",
+      "name": "QueryResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class QueryResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/rag/schemas.py:RetrieveResponse",
+      "type": "class",
+      "name": "RetrieveResponse",
+      "filePath": "backend/app/rag/schemas.py",
+      "summary": "Class RetrieveResponse defined in backend/app/rag/schemas.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/app/scripts/opencode_go_smoketest.py",
+      "type": "file",
+      "name": "opencode_go_smoketest.py",
+      "filePath": "backend/app/scripts/opencode_go_smoketest.py",
+      "summary": "opencode_go_smoketest.py participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "simple",
+      "tags": [
+        "source"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/scripts/opencode_go_smoketest.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "backend/app/scripts/opencode_go_smoketest.py",
+      "summary": "Function main in backend/app/scripts/opencode_go_smoketest.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/conftest.py",
+      "type": "file",
+      "name": "conftest.py",
+      "filePath": "backend/app/tests/conftest.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/conftest.py:default_to_local_parser",
+      "type": "function",
+      "name": "default_to_local_parser",
+      "filePath": "backend/app/tests/conftest.py",
+      "summary": "Function default_to_local_parser in backend/app/tests/conftest.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_document_upload.py",
+      "type": "file",
+      "name": "test_document_upload.py",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "complex",
+      "tags": [
+        "test"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_requires_api_key",
+      "type": "function",
+      "name": "test_upload_document_endpoint_requires_api_key",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_endpoint_requires_api_key in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_writes_document_and_metadata",
+      "type": "function",
+      "name": "test_upload_document_endpoint_writes_document_and_metadata",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_endpoint_writes_document_and_metadata in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_rejects_duplicate_doc_id",
+      "type": "function",
+      "name": "test_upload_document_endpoint_rejects_duplicate_doc_id",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_endpoint_rejects_duplicate_doc_id in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_stops_on_conversion_error",
+      "type": "function",
+      "name": "test_upload_document_endpoint_stops_on_conversion_error",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_endpoint_stops_on_conversion_error in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_endpoint_writes_markdown_canonical",
+      "type": "function",
+      "name": "test_upload_pdf_document_endpoint_writes_markdown_canonical",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_pdf_document_endpoint_writes_markdown_canonical in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_uses_llamaparse_when_configured",
+      "type": "function",
+      "name": "test_upload_document_uses_llamaparse_when_configured",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_uses_llamaparse_when_configured in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_falls_back_to_markitdown_when_llamaparse_fails",
+      "type": "function",
+      "name": "test_upload_document_falls_back_to_markitdown_when_llamaparse_fails",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_falls_back_to_markitdown_when_llamaparse_fails in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails",
+      "type": "function",
+      "name": "test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable",
+      "type": "function",
+      "name": "test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_upload_document_fails_when_llamaparse_and_markitdown_fail",
+      "type": "function",
+      "name": "test_upload_document_fails_when_llamaparse_and_markitdown_fail",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_upload_document_fails_when_llamaparse_and_markitdown_fail in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_fast_llamaparse_tier_requests_text_expansion_only",
+      "type": "function",
+      "name": "test_fast_llamaparse_tier_requests_text_expansion_only",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_fast_llamaparse_tier_requests_text_expansion_only in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_document_endpoints_read_uploaded_metadata_without_reindex",
+      "type": "function",
+      "name": "test_document_endpoints_read_uploaded_metadata_without_reindex",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_document_endpoints_read_uploaded_metadata_without_reindex in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_clear_documents_endpoint_counts_logical_documents",
+      "type": "function",
+      "name": "test_clear_documents_endpoint_counts_logical_documents",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_clear_documents_endpoint_counts_logical_documents in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_clear_documents_endpoint_requires_api_key",
+      "type": "function",
+      "name": "test_clear_documents_endpoint_requires_api_key",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_clear_documents_endpoint_requires_api_key in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured",
+      "type": "function",
+      "name": "test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:_docx_bytes",
+      "type": "function",
+      "name": "_docx_bytes",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function _docx_bytes in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:_pdf_bytes",
+      "type": "function",
+      "name": "_pdf_bytes",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function _pdf_bytes in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_document_upload.py:_install_fake_llama_cloud",
+      "type": "function",
+      "name": "_install_fake_llama_cloud",
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "summary": "Function _install_fake_llama_cloud in backend/app/tests/test_document_upload.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_domain_profile.py",
+      "type": "file",
+      "name": "test_domain_profile.py",
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "moderate",
+      "tags": [
+        "test"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_domain_profile.py:test_loads_default_profile",
+      "type": "function",
+      "name": "test_loads_default_profile",
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "summary": "Function test_loads_default_profile in backend/app/tests/test_domain_profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_domain_profile.py:test_loads_logistics_profile",
+      "type": "function",
+      "name": "test_loads_logistics_profile",
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "summary": "Function test_loads_logistics_profile in backend/app/tests/test_domain_profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_domain_profile.py:test_unknown_profile_falls_back_to_default",
+      "type": "function",
+      "name": "test_unknown_profile_falls_back_to_default",
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "summary": "Function test_unknown_profile_falls_back_to_default in backend/app/tests/test_domain_profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_domain_profile.py:test_invalid_profile_fails_fast",
+      "type": "function",
+      "name": "test_invalid_profile_fails_fast",
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "summary": "Function test_invalid_profile_fails_fast in backend/app/tests/test_domain_profile.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_game.py",
+      "type": "file",
+      "name": "test_game.py",
+      "filePath": "backend/app/tests/test_game.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "moderate",
+      "tags": [
+        "test",
+        "game-ui"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_game.py:test_game_world_builds_from_document_metadata",
+      "type": "function",
+      "name": "test_game_world_builds_from_document_metadata",
+      "filePath": "backend/app/tests/test_game.py",
+      "summary": "Function test_game_world_builds_from_document_metadata in backend/app/tests/test_game.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_game.py:test_game_session_routes_are_client_owned",
+      "type": "function",
+      "name": "test_game_session_routes_are_client_owned",
+      "filePath": "backend/app/tests/test_game.py",
+      "summary": "Function test_game_session_routes_are_client_owned in backend/app/tests/test_game.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_game.py:test_bookshelf_interaction_returns_document_detail",
+      "type": "function",
+      "name": "test_bookshelf_interaction_returns_document_detail",
+      "filePath": "backend/app/tests/test_game.py",
+      "summary": "Function test_bookshelf_interaction_returns_document_detail in backend/app/tests/test_game.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_game.py:_write_document_fixture",
+      "type": "function",
+      "name": "_write_document_fixture",
+      "filePath": "backend/app/tests/test_game.py",
+      "summary": "Function _write_document_fixture in backend/app/tests/test_game.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_index.py",
+      "type": "file",
+      "name": "test_index.py",
+      "filePath": "backend/app/tests/test_index.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "moderate",
+      "tags": [
+        "test",
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_index.py:test_huggingface_e5_embeddings_use_required_instructions",
+      "type": "function",
+      "name": "test_huggingface_e5_embeddings_use_required_instructions",
+      "filePath": "backend/app/tests/test_index.py",
+      "summary": "Function test_huggingface_e5_embeddings_use_required_instructions in backend/app/tests/test_index.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_index.py:test_huggingface_e5_instructions_can_be_disabled_by_profile",
+      "type": "function",
+      "name": "test_huggingface_e5_instructions_can_be_disabled_by_profile",
+      "filePath": "backend/app/tests/test_index.py",
+      "summary": "Function test_huggingface_e5_instructions_can_be_disabled_by_profile in backend/app/tests/test_index.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_index.py:test_huggingface_non_e5_embeddings_do_not_get_e5_instructions",
+      "type": "function",
+      "name": "test_huggingface_non_e5_embeddings_do_not_get_e5_instructions",
+      "filePath": "backend/app/tests/test_index.py",
+      "summary": "Function test_huggingface_non_e5_embeddings_do_not_get_e5_instructions in backend/app/tests/test_index.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_ingest.py",
+      "type": "file",
+      "name": "test_ingest.py",
+      "filePath": "backend/app/tests/test_ingest.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "moderate",
+      "tags": [
+        "test",
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_ingest.py:test_load_sample_documents",
+      "type": "function",
+      "name": "test_load_sample_documents",
+      "filePath": "backend/app/tests/test_ingest.py",
+      "summary": "Function test_load_sample_documents in backend/app/tests/test_ingest.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_ingest.py:test_load_docx_document",
+      "type": "function",
+      "name": "test_load_docx_document",
+      "filePath": "backend/app/tests/test_ingest.py",
+      "summary": "Function test_load_docx_document in backend/app/tests/test_ingest.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_ingest.py:test_clear_source_documents_removes_supported_files_and_metadata",
+      "type": "function",
+      "name": "test_clear_source_documents_removes_supported_files_and_metadata",
+      "filePath": "backend/app/tests/test_ingest.py",
+      "summary": "Function test_clear_source_documents_removes_supported_files_and_metadata in backend/app/tests/test_ingest.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_ingest.py:_write_docx",
+      "type": "function",
+      "name": "_write_docx",
+      "filePath": "backend/app/tests/test_ingest.py",
+      "summary": "Function _write_docx in backend/app/tests/test_ingest.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_metadata.py",
+      "type": "file",
+      "name": "test_metadata.py",
+      "filePath": "backend/app/tests/test_metadata.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_metadata.py:test_load_sidecar_metadata",
+      "type": "function",
+      "name": "test_load_sidecar_metadata",
+      "filePath": "backend/app/tests/test_metadata.py",
+      "summary": "Function test_load_sidecar_metadata in backend/app/tests/test_metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_metadata.py:test_ui_block_from_metadata",
+      "type": "function",
+      "name": "test_ui_block_from_metadata",
+      "filePath": "backend/app/tests/test_metadata.py",
+      "summary": "Function test_ui_block_from_metadata in backend/app/tests/test_metadata.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "file:backend/app/tests/test_rag_retrieve.py",
+      "type": "file",
+      "name": "test_rag_retrieve.py",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Pytest coverage for backend ingestion, indexing, retrieval, upload, metadata, domain profiles, and game interaction contracts.",
+      "complexity": "moderate",
+      "tags": [
+        "test",
+        "rag"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_uses_retriever_without_llm",
+      "type": "function",
+      "name": "test_retrieve_uses_retriever_without_llm",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Function test_retrieve_uses_retriever_without_llm in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_uses_profile_candidate_top_k",
+      "type": "function",
+      "name": "test_retrieve_uses_profile_candidate_top_k",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Function test_retrieve_uses_profile_candidate_top_k in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_builds_tenant_metadata_filters",
+      "type": "function",
+      "name": "test_retrieve_builds_tenant_metadata_filters",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Function test_retrieve_builds_tenant_metadata_filters in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_reranks_specific_date_and_conference_context",
+      "type": "function",
+      "name": "test_retrieve_reranks_specific_date_and_conference_context",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Function test_retrieve_reranks_specific_date_and_conference_context in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "function:backend/app/tests/test_rag_retrieve.py:test_rerank_has_no_hardcoded_august_2007_boost",
+      "type": "function",
+      "name": "test_rerank_has_no_hardcoded_august_2007_boost",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Function test_rerank_has_no_hardcoded_august_2007_boost in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "id": "class:backend/app/tests/test_rag_retrieve.py:_FakeSourceNode",
+      "type": "class",
+      "name": "_FakeSourceNode",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Class _FakeSourceNode defined in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "class:backend/app/tests/test_rag_retrieve.py:_FakeNode",
+      "type": "class",
+      "name": "_FakeNode",
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "summary": "Class _FakeNode defined in backend/app/tests/test_rag_retrieve.py.",
+      "complexity": "simple",
+      "tags": [
+        "class"
+      ]
+    },
+    {
+      "id": "file:backend/bin/ocr-bin",
+      "type": "file",
+      "name": "ocr-bin",
+      "filePath": "backend/bin/ocr-bin",
+      "summary": "ocr-bin participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "moderate",
+      "tags": [
+        "source"
+      ],
+      "language": "unknown"
+    },
+    {
+      "id": "document:backend/docs/domain-profiles.md",
+      "type": "document",
+      "name": "domain-profiles.md",
+      "filePath": "backend/docs/domain-profiles.md",
+      "summary": "Project documentation describing product goals, setup, architecture, parsing notes, or asset requirements.",
+      "complexity": "moderate",
+      "tags": [
+        "documentation"
+      ],
+      "language": "markdown"
+    },
+    {
+      "id": "file:frontend/public/assets/.DS_Store",
+      "type": "file",
+      "name": ".DS_Store",
+      "filePath": "frontend/public/assets/.DS_Store",
+      "summary": ".DS_Store participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "simple",
+      "tags": [
+        "source"
+      ],
+      "language": "unknown"
+    },
+    {
+      "id": "file:frontend/src/api.ts",
+      "type": "file",
+      "name": "api.ts",
+      "filePath": "frontend/src/api.ts",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "moderate",
+      "tags": [
+        "api-handler"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "function:frontend/src/api.ts:getWorld",
+      "type": "function",
+      "name": "getWorld",
+      "filePath": "frontend/src/api.ts",
+      "summary": "Function getWorld in frontend/src/api.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/api.ts:uploadDocument",
+      "type": "function",
+      "name": "uploadDocument",
+      "filePath": "frontend/src/api.ts",
+      "summary": "Function uploadDocument in frontend/src/api.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/api.ts:queryRag",
+      "type": "function",
+      "name": "queryRag",
+      "filePath": "frontend/src/api.ts",
+      "summary": "Function queryRag in frontend/src/api.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/api.ts:interact",
+      "type": "function",
+      "name": "interact",
+      "filePath": "frontend/src/api.ts",
+      "summary": "Function interact in frontend/src/api.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:frontend/src/App.tsx",
+      "type": "file",
+      "name": "App.tsx",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "complex",
+      "tags": [
+        "component"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "function:frontend/src/App.tsx:App",
+      "type": "function",
+      "name": "App",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function App in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:SessionGate",
+      "type": "function",
+      "name": "SessionGate",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function SessionGate in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:CharacterSwitcher",
+      "type": "function",
+      "name": "CharacterSwitcher",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function CharacterSwitcher in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:InteractionPanel",
+      "type": "function",
+      "name": "InteractionPanel",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function InteractionPanel in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:ChatModal",
+      "type": "function",
+      "name": "ChatModal",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function ChatModal in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:buildChatMessage",
+      "type": "function",
+      "name": "buildChatMessage",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function buildChatMessage in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:upsertChatMessage",
+      "type": "function",
+      "name": "upsertChatMessage",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function upsertChatMessage in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:loadChatThreads",
+      "type": "function",
+      "name": "loadChatThreads",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function loadChatThreads in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:saveChatThreads",
+      "type": "function",
+      "name": "saveChatThreads",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function saveChatThreads in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:buildThreadTitle",
+      "type": "function",
+      "name": "buildThreadTitle",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function buildThreadTitle in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:formatChatDate",
+      "type": "function",
+      "name": "formatChatDate",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function formatChatDate in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:createLocalId",
+      "type": "function",
+      "name": "createLocalId",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function createLocalId in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:loadGameSession",
+      "type": "function",
+      "name": "loadGameSession",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function loadGameSession in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:saveGameSession",
+      "type": "function",
+      "name": "saveGameSession",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function saveGameSession in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:isValidUserName",
+      "type": "function",
+      "name": "isValidUserName",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function isValidUserName in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:buildChatScopeKey",
+      "type": "function",
+      "name": "buildChatScopeKey",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function buildChatScopeKey in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:buildChatScope",
+      "type": "function",
+      "name": "buildChatScope",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function buildChatScope in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:GameStage",
+      "type": "function",
+      "name": "GameStage",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function GameStage in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:Sprite",
+      "type": "function",
+      "name": "Sprite",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function Sprite in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/App.tsx:directionFromKey",
+      "type": "function",
+      "name": "directionFromKey",
+      "filePath": "frontend/src/App.tsx",
+      "summary": "Function directionFromKey in frontend/src/App.tsx.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:frontend/src/characters.ts",
+      "type": "file",
+      "name": "characters.ts",
+      "filePath": "frontend/src/characters.ts",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "simple",
+      "tags": [
+        "game-ui"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "function:frontend/src/characters.ts:walkSprite",
+      "type": "function",
+      "name": "walkSprite",
+      "filePath": "frontend/src/characters.ts",
+      "summary": "Function walkSprite in frontend/src/characters.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/characters.ts:getCharacter",
+      "type": "function",
+      "name": "getCharacter",
+      "filePath": "frontend/src/characters.ts",
+      "summary": "Function getCharacter in frontend/src/characters.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:frontend/src/gameLogic.ts",
+      "type": "file",
+      "name": "gameLogic.ts",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "moderate",
+      "tags": [
+        "game-ui"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "function:frontend/src/gameLogic.ts:movePosition",
+      "type": "function",
+      "name": "movePosition",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "Function movePosition in frontend/src/gameLogic.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/gameLogic.ts:findNearestTarget",
+      "type": "function",
+      "name": "findNearestTarget",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "Function findNearestTarget in frontend/src/gameLogic.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/gameLogic.ts:portalToTarget",
+      "type": "function",
+      "name": "portalToTarget",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "Function portalToTarget in frontend/src/gameLogic.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/gameLogic.ts:shelfToTarget",
+      "type": "function",
+      "name": "shelfToTarget",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "Function shelfToTarget in frontend/src/gameLogic.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:frontend/src/gameLogic.ts:clamp",
+      "type": "function",
+      "name": "clamp",
+      "filePath": "frontend/src/gameLogic.ts",
+      "summary": "Function clamp in frontend/src/gameLogic.ts.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:frontend/src/main.tsx",
+      "type": "file",
+      "name": "main.tsx",
+      "filePath": "frontend/src/main.tsx",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "simple",
+      "tags": [
+        "component"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "file:frontend/src/styles.css",
+      "type": "file",
+      "name": "styles.css",
+      "filePath": "frontend/src/styles.css",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "complex",
+      "tags": [
+        "markup"
+      ],
+      "language": "css"
+    },
+    {
+      "id": "file:frontend/src/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "frontend/src/types.ts",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "moderate",
+      "tags": [
+        "type-definition"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "file:frontend/src/vite-env.d.ts",
+      "type": "file",
+      "name": "vite-env.d.ts",
+      "filePath": "frontend/src/vite-env.d.ts",
+      "summary": "React pixel-library frontend code for API access, character state, movement logic, rendering, and scoped RAG chat.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "file:frontend/vite.config.ts",
+      "type": "file",
+      "name": "vite.config.ts",
+      "filePath": "frontend/vite.config.ts",
+      "summary": "Project configuration or manifest controlling dependencies, runtime settings, build tooling, or environment variables.",
+      "complexity": "simple",
+      "tags": [
+        "configuration"
+      ],
+      "language": "typescript"
+    },
+    {
+      "id": "file:mcp/bin/rag-pixels-mcp.js",
+      "type": "file",
+      "name": "rag-pixels-mcp.js",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "rag-pixels-mcp.js participates in the RAG Pixels backend, frontend, or MCP adapter implementation.",
+      "complexity": "moderate",
+      "tags": [
+        "rag",
+        "mcp-adapter"
+      ],
+      "language": "javascript"
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:isWindows",
+      "type": "function",
+      "name": "isWindows",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function isWindows in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:venvPythonPath",
+      "type": "function",
+      "name": "venvPythonPath",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function venvPythonPath in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:versionTuple",
+      "type": "function",
+      "name": "versionTuple",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function versionTuple in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:isCompatiblePython",
+      "type": "function",
+      "name": "isCompatiblePython",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function isCompatiblePython in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:runOrThrow",
+      "type": "function",
+      "name": "runOrThrow",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function runOrThrow in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:capture",
+      "type": "function",
+      "name": "capture",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function capture in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:findPython",
+      "type": "function",
+      "name": "findPython",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function findPython in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:ensureVenv",
+      "type": "function",
+      "name": "ensureVenv",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function ensureVenv in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:ensureInstalled",
+      "type": "function",
+      "name": "ensureInstalled",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function ensureInstalled in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/bin/rag-pixels-mcp.js:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "summary": "Function main in mcp/bin/rag-pixels-mcp.js.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:mcp/src/rag_pixels_mcp/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "mcp/src/rag_pixels_mcp/__init__.py",
+      "summary": "Standalone MCP adapter code that forwards tool calls to the configured RAG Pixels backend HTTP API.",
+      "complexity": "simple",
+      "tags": [
+        "rag",
+        "mcp-adapter"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "file:mcp/src/rag_pixels_mcp/client.py",
+      "type": "file",
+      "name": "client.py",
+      "filePath": "mcp/src/rag_pixels_mcp/client.py",
+      "summary": "Standalone MCP adapter code that forwards tool calls to the configured RAG Pixels backend HTTP API.",
+      "complexity": "simple",
+      "tags": [
+        "rag",
+        "mcp-adapter"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/client.py:request_json",
+      "type": "function",
+      "name": "request_json",
+      "filePath": "mcp/src/rag_pixels_mcp/client.py",
+      "summary": "Function request_json in mcp/src/rag_pixels_mcp/client.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/client.py:upload_file",
+      "type": "function",
+      "name": "upload_file",
+      "filePath": "mcp/src/rag_pixels_mcp/client.py",
+      "summary": "Function upload_file in mcp/src/rag_pixels_mcp/client.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:mcp/src/rag_pixels_mcp/config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "mcp/src/rag_pixels_mcp/config.py",
+      "summary": "Standalone MCP adapter code that forwards tool calls to the configured RAG Pixels backend HTTP API.",
+      "complexity": "simple",
+      "tags": [
+        "configuration",
+        "rag",
+        "mcp-adapter"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/config.py:auth_headers",
+      "type": "function",
+      "name": "auth_headers",
+      "filePath": "mcp/src/rag_pixels_mcp/config.py",
+      "summary": "Function auth_headers in mcp/src/rag_pixels_mcp/config.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "file:mcp/src/rag_pixels_mcp/server.py",
+      "type": "file",
+      "name": "server.py",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Standalone MCP adapter code that forwards tool calls to the configured RAG Pixels backend HTTP API.",
+      "complexity": "moderate",
+      "tags": [
+        "api-handler",
+        "rag",
+        "mcp-adapter"
+      ],
+      "language": "python"
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:_clean_filters",
+      "type": "function",
+      "name": "_clean_filters",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function _clean_filters in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:health_check",
+      "type": "function",
+      "name": "health_check",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function health_check in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:list_documents",
+      "type": "function",
+      "name": "list_documents",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function list_documents in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:get_document",
+      "type": "function",
+      "name": "get_document",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function get_document in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:rag_query",
+      "type": "function",
+      "name": "rag_query",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function rag_query in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:rag_retrieve",
+      "type": "function",
+      "name": "rag_retrieve",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function rag_retrieve in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:upload_document",
+      "type": "function",
+      "name": "upload_document",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function upload_document in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    },
+    {
+      "id": "function:mcp/src/rag_pixels_mcp/server.py:clear_documents",
+      "type": "function",
+      "name": "clear_documents",
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "summary": "Function clear_documents in mcp/src/rag_pixels_mcp/server.py.",
+      "complexity": "simple",
+      "tags": [
+        "function"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "weight": 1,
+      "source": "file:backend/app/config.py",
+      "target": "class:backend/app/config.py:Settings",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:Position",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:LibraryPortal",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:Bookshelf",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:GameWorldResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:GameInteractionRequest",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "class:backend/app/game/schemas.py:GameInteractionResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/service.py",
+      "target": "function:backend/app/game/service.py:_source_path_for_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/service.py",
+      "target": "function:backend/app/game/service.py:_group_documents_by_flow",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/service.py",
+      "target": "function:backend/app/game/service.py:_flow_for_doc_type",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/service.py",
+      "target": "function:backend/app/game/service.py:_label_for_flow",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/game/service.py",
+      "target": "class:backend/app/game/service.py:GameService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:require_write_api_key",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:ingest_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:upload_document",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:clear_document_index",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:clear_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:list_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:get_document",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/main.py",
+      "target": "function:backend/app/main.py:interact_with_game_target",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/convert.py",
+      "target": "class:backend/app/rag/convert.py:ConversionResult",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/convert.py",
+      "target": "class:backend/app/rag/convert.py:MarkdownConversionService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/index.py",
+      "target": "class:backend/app/rag/index.py:RagIndexService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/ingest.py",
+      "target": "class:backend/app/rag/ingest.py:RagIngestService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/metadata.py",
+      "target": "function:backend/app/rag/metadata.py:load_sidecar_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/metadata.py",
+      "target": "function:backend/app/rag/metadata.py:summary_from_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/metadata.py",
+      "target": "function:backend/app/rag/metadata.py:ui_block_from_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/metadata.py",
+      "target": "function:backend/app/rag/metadata.py:_category_for_doc_type",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "function:backend/app/rag/profile.py:load_domain_profile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "function:backend/app/rag/profile.py:expand_query_with_glossary",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:EmbeddingProfile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:RerankProfile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:RetrievalProfile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:MetadataProfile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:DomainProfile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "class:backend/app/rag/profile.py:DomainProfileService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/query.py",
+      "target": "class:backend/app/rag/query.py:RagQueryService",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:HealthResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:DocumentMetadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:DocumentSummary",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:DocumentDetail",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:DocumentListResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:IngestResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:DocumentUploadResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:ClearDocumentsResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:ClearIndexResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:QueryFilters",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:QueryRequest",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:SourceReference",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:UiDataBlock",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:QueryResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/rag/schemas.py",
+      "target": "class:backend/app/rag/schemas.py:RetrieveResponse",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/scripts/opencode_go_smoketest.py",
+      "target": "function:backend/app/scripts/opencode_go_smoketest.py:main",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/conftest.py",
+      "target": "function:backend/app/tests/conftest.py:default_to_local_parser",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_requires_api_key",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_writes_document_and_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_rejects_duplicate_doc_id",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_endpoint_stops_on_conversion_error",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_endpoint_writes_markdown_canonical",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_uses_llamaparse_when_configured",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_falls_back_to_markitdown_when_llamaparse_fails",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_upload_document_fails_when_llamaparse_and_markitdown_fail",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_fast_llamaparse_tier_requests_text_expansion_only",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_document_endpoints_read_uploaded_metadata_without_reindex",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_clear_documents_endpoint_counts_logical_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_clear_documents_endpoint_requires_api_key",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:_docx_bytes",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:_pdf_bytes",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "function:backend/app/tests/test_document_upload.py:_install_fake_llama_cloud",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "function:backend/app/tests/test_domain_profile.py:test_loads_default_profile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "function:backend/app/tests/test_domain_profile.py:test_loads_logistics_profile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "function:backend/app/tests/test_domain_profile.py:test_unknown_profile_falls_back_to_default",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "function:backend/app/tests/test_domain_profile.py:test_invalid_profile_fails_fast",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "function:backend/app/tests/test_game.py:test_game_world_builds_from_document_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "function:backend/app/tests/test_game.py:test_game_session_routes_are_client_owned",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "function:backend/app/tests/test_game.py:test_bookshelf_interaction_returns_document_detail",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "function:backend/app/tests/test_game.py:_write_document_fixture",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "function:backend/app/tests/test_index.py:test_huggingface_e5_embeddings_use_required_instructions",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "function:backend/app/tests/test_index.py:test_huggingface_e5_instructions_can_be_disabled_by_profile",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "function:backend/app/tests/test_index.py:test_huggingface_non_e5_embeddings_do_not_get_e5_instructions",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "function:backend/app/tests/test_ingest.py:test_load_sample_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "function:backend/app/tests/test_ingest.py:test_load_docx_document",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "function:backend/app/tests/test_ingest.py:test_clear_source_documents_removes_supported_files_and_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "function:backend/app/tests/test_ingest.py:_write_docx",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_metadata.py",
+      "target": "function:backend/app/tests/test_metadata.py:test_load_sidecar_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_metadata.py",
+      "target": "function:backend/app/tests/test_metadata.py:test_ui_block_from_metadata",
+      "type": "contains"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/schemas.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/service.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/service.py",
+      "target": "file:backend/app/game/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/service.py",
+      "target": "file:backend/app/rag/index.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/service.py",
+      "target": "file:backend/app/rag/metadata.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/game/service.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/game/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/game/service.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/rag/index.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/rag/ingest.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/rag/query.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/main.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/convert.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/index.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/index.py",
+      "target": "file:backend/app/rag/metadata.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/index.py",
+      "target": "file:backend/app/rag/profile.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/index.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/ingest.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/ingest.py",
+      "target": "file:backend/app/rag/convert.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/ingest.py",
+      "target": "file:backend/app/rag/metadata.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/ingest.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/metadata.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/profile.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/query.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/query.py",
+      "target": "file:backend/app/rag/index.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/query.py",
+      "target": "file:backend/app/rag/metadata.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/query.py",
+      "target": "file:backend/app/rag/profile.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/rag/query.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "file:backend/app/main.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_document_upload.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_domain_profile.py",
+      "target": "file:backend/app/rag/profile.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "file:backend/app/main.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_game.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "file:backend/app/rag/index.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_index.py",
+      "target": "file:backend/app/rag/profile.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_ingest.py",
+      "target": "file:backend/app/rag/ingest.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_metadata.py",
+      "target": "file:backend/app/rag/metadata.py",
+      "type": "imports"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_uses_retriever_without_llm",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_uses_profile_candidate_top_k",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_builds_tenant_metadata_filters",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "function:backend/app/tests/test_rag_retrieve.py:test_retrieve_reranks_specific_date_and_conference_context",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "function:backend/app/tests/test_rag_retrieve.py:test_rerank_has_no_hardcoded_august_2007_boost",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "class:backend/app/tests/test_rag_retrieve.py:_FakeSourceNode",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "class:backend/app/tests/test_rag_retrieve.py:_FakeNode",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/api.ts",
+      "target": "function:frontend/src/api.ts:getWorld",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/api.ts",
+      "target": "function:frontend/src/api.ts:uploadDocument",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/api.ts",
+      "target": "function:frontend/src/api.ts:queryRag",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/api.ts",
+      "target": "function:frontend/src/api.ts:interact",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:App",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:SessionGate",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:CharacterSwitcher",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:InteractionPanel",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:ChatModal",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:buildChatMessage",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:upsertChatMessage",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:loadChatThreads",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:saveChatThreads",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:buildThreadTitle",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:formatChatDate",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:createLocalId",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:loadGameSession",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:saveGameSession",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:isValidUserName",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:buildChatScopeKey",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:buildChatScope",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:GameStage",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:Sprite",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/App.tsx",
+      "target": "function:frontend/src/App.tsx:directionFromKey",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/characters.ts",
+      "target": "function:frontend/src/characters.ts:walkSprite",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/characters.ts",
+      "target": "function:frontend/src/characters.ts:getCharacter",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "function:frontend/src/gameLogic.ts:movePosition",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "function:frontend/src/gameLogic.ts:findNearestTarget",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "function:frontend/src/gameLogic.ts:portalToTarget",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "function:frontend/src/gameLogic.ts:shelfToTarget",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "function:frontend/src/gameLogic.ts:clamp",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:isWindows",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:venvPythonPath",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:versionTuple",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:isCompatiblePython",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:runOrThrow",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:capture",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:findPython",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:ensureVenv",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:ensureInstalled",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/bin/rag-pixels-mcp.js",
+      "target": "function:mcp/bin/rag-pixels-mcp.js:main",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/client.py",
+      "target": "function:mcp/src/rag_pixels_mcp/client.py:request_json",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/client.py",
+      "target": "function:mcp/src/rag_pixels_mcp/client.py:upload_file",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/config.py",
+      "target": "function:mcp/src/rag_pixels_mcp/config.py:auth_headers",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:_clean_filters",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:health_check",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:list_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:get_document",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:rag_query",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:rag_retrieve",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:upload_document",
+      "type": "contains"
+    },
+    {
+      "weight": 1,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "function:mcp/src/rag_pixels_mcp/server.py:clear_documents",
+      "type": "contains"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "file:backend/app/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "file:backend/app/rag/query.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:backend/app/tests/test_rag_retrieve.py",
+      "target": "file:backend/app/rag/schemas.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/api.ts",
+      "target": "file:frontend/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/App.tsx",
+      "target": "file:frontend/src/api.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/App.tsx",
+      "target": "file:frontend/src/characters.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/App.tsx",
+      "target": "file:frontend/src/gameLogic.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/App.tsx",
+      "target": "file:frontend/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/characters.ts",
+      "target": "file:frontend/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/gameLogic.ts",
+      "target": "file:frontend/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:frontend/src/main.tsx",
+      "target": "file:frontend/src/App.tsx",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:mcp/src/rag_pixels_mcp/client.py",
+      "target": "file:mcp/src/rag_pixels_mcp/config.py",
+      "type": "imports"
+    },
+    {
+      "weight": 0.7,
+      "source": "file:mcp/src/rag_pixels_mcp/server.py",
+      "target": "file:mcp/src/rag_pixels_mcp/client.py",
+      "type": "imports"
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:project-docs",
+      "name": "Project Documentation",
+      "description": "Plans, parse notes, setup guides, and asset requirements.",
+      "nodeIds": [
+        "document:AGENTS.md",
+        "document:PHASE_1_PLAN.md",
+        "document:PHASE_2_ASSET_REQUIREMENTS.md",
+        "document:Parse.md"
+      ]
+    },
+    {
+      "id": "layer:backend-api-rag",
+      "name": "Backend API and RAG",
+      "description": "FastAPI endpoints, RAG ingestion, indexing, retrieval, metadata, profiles, and backend tests.",
+      "nodeIds": [
+        "config:backend/.env.example",
+        "document:backend/README.md",
+        "config:backend/pyproject.toml",
+        "file:backend/app/__init__.py",
+        "file:backend/app/config.py",
+        "file:backend/app/game/__init__.py",
+        "file:backend/app/game/schemas.py",
+        "file:backend/app/game/service.py",
+        "file:backend/app/main.py",
+        "file:backend/app/rag/__init__.py",
+        "file:backend/app/rag/convert.py",
+        "file:backend/app/rag/index.py",
+        "file:backend/app/rag/ingest.py",
+        "file:backend/app/rag/metadata.py",
+        "file:backend/app/rag/profile.py",
+        "config:backend/app/rag/profiles/default.yaml",
+        "config:backend/app/rag/profiles/logistics.yaml",
+        "file:backend/app/rag/query.py",
+        "file:backend/app/rag/schemas.py",
+        "file:backend/app/scripts/opencode_go_smoketest.py",
+        "file:backend/app/tests/conftest.py",
+        "file:backend/app/tests/test_document_upload.py",
+        "file:backend/app/tests/test_domain_profile.py",
+        "file:backend/app/tests/test_game.py",
+        "file:backend/app/tests/test_index.py",
+        "file:backend/app/tests/test_ingest.py",
+        "file:backend/app/tests/test_metadata.py",
+        "file:backend/app/tests/test_rag_retrieve.py",
+        "file:backend/bin/ocr-bin",
+        "document:backend/docs/domain-profiles.md"
+      ]
+    },
+    {
+      "id": "layer:pixel-frontend",
+      "name": "Pixel Frontend",
+      "description": "Vite React pixel-library client, game logic, styles, assets, and frontend build configuration.",
+      "nodeIds": [
+        "file:frontend/index.html",
+        "config:frontend/package.json",
+        "config:frontend/tsconfig.json",
+        "file:frontend/public/assets/.DS_Store",
+        "file:frontend/src/api.ts",
+        "file:frontend/src/App.tsx",
+        "file:frontend/src/characters.ts",
+        "file:frontend/src/gameLogic.ts",
+        "file:frontend/src/main.tsx",
+        "file:frontend/src/styles.css",
+        "file:frontend/src/types.ts",
+        "file:frontend/src/vite-env.d.ts",
+        "file:frontend/vite.config.ts"
+      ]
+    },
+    {
+      "id": "layer:mcp-adapter",
+      "name": "MCP Adapter",
+      "description": "Standalone MCP package and client/server forwarding logic for backend HTTP APIs.",
+      "nodeIds": [
+        "config:mcp/.env.example",
+        "document:mcp/README.md",
+        "config:mcp/package.json",
+        "config:mcp/pyproject.toml",
+        "file:mcp/bin/rag-pixels-mcp.js",
+        "file:mcp/src/rag_pixels_mcp/__init__.py",
+        "file:mcp/src/rag_pixels_mcp/client.py",
+        "file:mcp/src/rag_pixels_mcp/config.py",
+        "file:mcp/src/rag_pixels_mcp/server.py"
+      ]
+    },
+    {
+      "id": "layer:workspace-config",
+      "name": "Workspace Configuration",
+      "description": "Repository-level agent and analysis configuration.",
+      "nodeIds": [
+        "file:.understand-anything/.understandignore"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Project Overview",
+      "description": "Start with the project notes to understand the logistics RAG backend and pixel-library workspace metaphor.",
+      "nodeIds": [
+        "document:PHASE_1_PLAN.md",
+        "document:PHASE_2_ASSET_REQUIREMENTS.md",
+        "document:Parse.md"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Backend Application Surface",
+      "description": "Follow the FastAPI entry point and schemas to see the HTTP API, protected writes, RAG endpoints, and game-world routes.",
+      "nodeIds": [
+        "file:backend/app/main.py",
+        "file:backend/app/config.py",
+        "file:backend/app/rag/schemas.py",
+        "file:backend/app/game/schemas.py"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "RAG Ingestion and Indexing",
+      "description": "Review document conversion, ingestion, metadata normalization, profile selection, and vector index construction.",
+      "nodeIds": [
+        "file:backend/app/rag/convert.py",
+        "file:backend/app/rag/ingest.py",
+        "file:backend/app/rag/metadata.py",
+        "file:backend/app/rag/profile.py",
+        "file:backend/app/rag/index.py"
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Retrieval and Game Mapping",
+      "description": "Connect RAG query behavior to the game-world service that turns metadata into rooms, shelves, and interactions.",
+      "nodeIds": [
+        "file:backend/app/rag/query.py",
+        "file:backend/app/game/service.py",
+        "config:backend/app/rag/profiles/logistics.yaml"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "Playable Frontend",
+      "description": "Inspect the React app, API client, character options, movement logic, shared types, and styles that make the first screen playable.",
+      "nodeIds": [
+        "file:frontend/src/App.tsx",
+        "file:frontend/src/api.ts",
+        "file:frontend/src/gameLogic.ts",
+        "file:frontend/src/characters.ts",
+        "file:frontend/src/types.ts",
+        "file:frontend/src/styles.css"
+      ]
+    },
+    {
+      "order": 6,
+      "title": "MCP Forwarder",
+      "description": "Understand how the standalone MCP package exposes backend capabilities without duplicating business logic.",
+      "nodeIds": [
+        "file:mcp/src/rag_pixels_mcp/server.py",
+        "file:mcp/src/rag_pixels_mcp/client.py",
+        "file:mcp/src/rag_pixels_mcp/config.py",
+        "document:mcp/README.md"
+      ]
+    },
+    {
+      "order": 7,
+      "title": "Behavioral Safety Net",
+      "description": "Use the backend tests to understand expected contracts for upload, ingestion, retrieval, metadata filtering, profiles, and game interactions.",
+      "nodeIds": [
+        "file:backend/app/tests/test_document_upload.py",
+        "file:backend/app/tests/test_ingest.py",
+        "file:backend/app/tests/test_rag_retrieve.py",
+        "file:backend/app/tests/test_game.py",
+        "file:backend/app/tests/test_metadata.py"
+      ]
+    }
+  ]
+}

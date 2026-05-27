@@ -1,0 +1,3271 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "95cfe9bc0b24663c07390809b30b7f6b1c32074b",
+  "generatedAt": "2026-05-25T11:01:55.576Z",
+  "files": {
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "93e3d105231692cdbb7f4ad63ab58e48815c9c2ce3b3847659887ea82a3b362d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "d11e6faec29e2424b1803ed21ae1759993959df2eaaea8f3655ff5f836c30152",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 191,
+      "hasStructuralAnalysis": true
+    },
+    "backend/.env.example": {
+      "filePath": "backend/.env.example",
+      "contentHash": "c3e9145e8256e8a58b2f69785534355105bed0739dbeace2cff12e223e980147",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/__init__.py": {
+      "filePath": "backend/app/__init__.py",
+      "contentHash": "5e7a2c4c925766c4386c6cb852888ccaa7dc5cf93722b0d9f1699658f3829f51",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/config.py": {
+      "filePath": "backend/app/config.py",
+      "contentHash": "870cd981e14bd341379c03ad68bbf69980723509fc25e2a5ae925ee138009106",
+      "functions": [
+        {
+          "name": "get_settings",
+          "params": [],
+          "returnType": "Settings",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "Settings",
+          "methods": [
+            "__init__"
+          ],
+          "properties": [
+            "app_name",
+            "app_env",
+            "documents_dir",
+            "index_dir",
+            "rag_pixels_api_key",
+            "rag_llm_provider",
+            "rag_embedding_provider",
+            "rag_domain_profile",
+            "rag_profiles_dir",
+            "similarity_top_k",
+            "rag_parse_provider",
+            "openai_api_key",
+            "openai_model",
+            "openai_embedding_model",
+            "huggingface_embedding_model",
+            "llama_cloud_api_key",
+            "llamaparse_tier",
+            "llamaparse_version",
+            "llamaparse_timeout_seconds",
+            "macos_pdf_ocr_binary_path",
+            "anthropic_api_key",
+            "anthropic_model",
+            "opencode_api_key",
+            "opencode_base_url",
+            "opencode_model"
+          ],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "functools",
+          "specifiers": [
+            "lru_cache"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pydantic",
+          "specifiers": [
+            "Field"
+          ]
+        },
+        {
+          "source": "pydantic_settings",
+          "specifiers": [
+            "BaseSettings",
+            "SettingsConfigDict"
+          ]
+        }
+      ],
+      "exports": [
+        "Settings",
+        "get_settings"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/game/__init__.py": {
+      "filePath": "backend/app/game/__init__.py",
+      "contentHash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/game/schemas.py": {
+      "filePath": "backend/app/game/schemas.py",
+      "contentHash": "fe2c15b598fb50416243f1c8b0913469cfeaccfa211885ad9303dd452071a148",
+      "functions": [],
+      "classes": [
+        {
+          "name": "Position",
+          "methods": [],
+          "properties": [
+            "x",
+            "y"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "LibraryPortal",
+          "methods": [],
+          "properties": [
+            "portal_id",
+            "label",
+            "business_flow",
+            "position",
+            "document_count"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "Bookshelf",
+          "methods": [],
+          "properties": [
+            "shelf_id",
+            "label",
+            "doc_id",
+            "doc_type",
+            "portal_id",
+            "position",
+            "document"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "GameWorldResponse",
+          "methods": [],
+          "properties": [
+            "world_id",
+            "name",
+            "width",
+            "height",
+            "tile_size",
+            "spawn",
+            "portals",
+            "shelves"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "GameInteractionRequest",
+          "methods": [],
+          "properties": [
+            "target_type",
+            "target_id",
+            "question"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "GameInteractionResponse",
+          "methods": [],
+          "properties": [
+            "interaction_id",
+            "target_type",
+            "title",
+            "message",
+            "document",
+            "related_documents"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Literal"
+          ]
+        },
+        {
+          "source": "pydantic",
+          "specifiers": [
+            "BaseModel",
+            "Field"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "DocumentDetail",
+            "DocumentSummary"
+          ]
+        }
+      ],
+      "exports": [
+        "Position",
+        "LibraryPortal",
+        "Bookshelf",
+        "GameWorldResponse",
+        "GameInteractionRequest",
+        "GameInteractionResponse"
+      ],
+      "totalLines": 55,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/game/service.py": {
+      "filePath": "backend/app/game/service.py",
+      "contentHash": "1f5519542d6400aac6693cd5d41eef4e58c9704fe392cc094a7d509b75b03abd",
+      "functions": [
+        {
+          "name": "_source_path_for_metadata",
+          "params": [
+            "metadata_path"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_group_documents_by_flow",
+          "params": [
+            "documents"
+          ],
+          "returnType": "dict[str, list[DocumentSummary]]",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_flow_for_doc_type",
+          "params": [
+            "doc_type"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "_label_for_flow",
+          "params": [
+            "flow_id"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [
+        {
+          "name": "GameService",
+          "methods": [
+            "__init__",
+            "get_world",
+            "get_document",
+            "interact",
+            "_load_document_summaries",
+            "_load_document_metadata"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 114
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid4"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.game.schemas",
+          "specifiers": [
+            "Bookshelf",
+            "GameInteractionResponse",
+            "GameWorldResponse",
+            "LibraryPortal",
+            "Position"
+          ]
+        },
+        {
+          "source": "app.rag.index",
+          "specifiers": [
+            "RagIndexService"
+          ]
+        },
+        {
+          "source": "app.rag.metadata",
+          "specifiers": [
+            "detail_from_metadata",
+            "summary_from_metadata"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "DocumentDetail",
+            "DocumentSummary"
+          ]
+        }
+      ],
+      "exports": [
+        "GameService",
+        "_source_path_for_metadata",
+        "_group_documents_by_flow",
+        "_flow_for_doc_type",
+        "_label_for_flow"
+      ],
+      "totalLines": 172,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/main.py": {
+      "filePath": "backend/app/main.py",
+      "contentHash": "937651b23dc65bcf39d429a9966c1893c8cbc4391471f4fe0e235cf570c38660",
+      "functions": [
+        {
+          "name": "health",
+          "params": [],
+          "returnType": "HealthResponse",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "require_write_api_key",
+          "params": [
+            "authorization"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "ingest_documents",
+          "params": [],
+          "returnType": "IngestResponse",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "upload_document",
+          "params": [
+            "_",
+            "file",
+            "doc_id",
+            "doc_type",
+            "title",
+            "tenant_id",
+            "market",
+            "country",
+            "domain",
+            "module",
+            "business_flow",
+            "room_id",
+            "shelf_id",
+            "shipment_id",
+            "customer",
+            "carrier",
+            "warehouse",
+            "route",
+            "date",
+            "source_type",
+            "overwrite",
+            "reindex"
+          ],
+          "returnType": "DocumentUploadResponse",
+          "exported": true,
+          "lineCount": 69
+        },
+        {
+          "name": "clear_document_index",
+          "params": [],
+          "returnType": "ClearIndexResponse",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "clear_documents",
+          "params": [
+            "_"
+          ],
+          "returnType": "ClearDocumentsResponse",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "list_documents",
+          "params": [],
+          "returnType": "DocumentListResponse",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "get_document",
+          "params": [
+            "doc_id"
+          ],
+          "returnType": "DocumentDetail",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "query_rag",
+          "params": [
+            "request"
+          ],
+          "returnType": "QueryResponse",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "retrieve_rag",
+          "params": [
+            "request"
+          ],
+          "returnType": "RetrieveResponse",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "get_game_world",
+          "params": [],
+          "returnType": "GameWorldResponse",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "interact_with_game_target",
+          "params": [
+            "request"
+          ],
+          "returnType": "GameInteractionResponse",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "secrets",
+          "specifiers": [
+            "secrets"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Annotated"
+          ]
+        },
+        {
+          "source": "fastapi",
+          "specifiers": [
+            "Depends",
+            "FastAPI",
+            "File",
+            "Form",
+            "Header",
+            "HTTPException",
+            "UploadFile",
+            "status"
+          ]
+        },
+        {
+          "source": "fastapi.middleware.cors",
+          "specifiers": [
+            "CORSMiddleware"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "get_settings"
+          ]
+        },
+        {
+          "source": "app.game.schemas",
+          "specifiers": [
+            "GameInteractionRequest",
+            "GameInteractionResponse",
+            "GameWorldResponse"
+          ]
+        },
+        {
+          "source": "app.game.service",
+          "specifiers": [
+            "GameService"
+          ]
+        },
+        {
+          "source": "app.rag.index",
+          "specifiers": [
+            "RagIndexService"
+          ]
+        },
+        {
+          "source": "app.rag.ingest",
+          "specifiers": [
+            "RagIngestService"
+          ]
+        },
+        {
+          "source": "app.rag.query",
+          "specifiers": [
+            "RagQueryService"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "ClearDocumentsResponse",
+            "ClearIndexResponse",
+            "DocumentDetail",
+            "DocumentListResponse",
+            "DocumentUploadResponse",
+            "HealthResponse",
+            "IngestResponse",
+            "QueryRequest",
+            "QueryResponse",
+            "RetrieveResponse"
+          ]
+        }
+      ],
+      "exports": [
+        "health",
+        "require_write_api_key",
+        "ingest_documents",
+        "upload_document",
+        "clear_document_index",
+        "clear_documents",
+        "list_documents",
+        "get_document",
+        "query_rag",
+        "retrieve_rag",
+        "get_game_world",
+        "interact_with_game_target"
+      ],
+      "totalLines": 214,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/__init__.py": {
+      "filePath": "backend/app/rag/__init__.py",
+      "contentHash": "e16262a2cb1a48520c3f7454870cbfa8a194096c559e0b042d7408b7a6109a54",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/convert.py": {
+      "filePath": "backend/app/rag/convert.py",
+      "contentHash": "159455e3b6043b5afabaf7fe93c1ddcb1bb27565d5a1da912b21a4685aec7a84",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ConversionResult",
+          "methods": [],
+          "properties": [
+            "markdown",
+            "method"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "MarkdownConversionService",
+          "methods": [
+            "__init__",
+            "conversion_method",
+            "convert",
+            "_convert_with_markitdown",
+            "_convert_with_macos_pdf_ocr",
+            "_macos_pdf_ocr_command",
+            "_convert_with_llamaparse",
+            "_extract_llamaparse_markdown",
+            "_extract_llamaparse_text",
+            "_should_try_llamaparse",
+            "_llamaparse_fallback_method",
+            "_llamaparse_expansions",
+            "_decode_text",
+            "_with_title"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 289
+        }
+      ],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "TemporaryDirectory"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "markitdown",
+          "specifiers": [
+            "MarkItDown"
+          ]
+        }
+      ],
+      "exports": [
+        "ConversionResult",
+        "MarkdownConversionService"
+      ],
+      "totalLines": 305,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/index.py": {
+      "filePath": "backend/app/rag/index.py",
+      "contentHash": "ad4d49fd4aa6d47994b2802defb52090839603e3423694bbb3b51eab6ccc390e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "RagIndexService",
+          "methods": [
+            "__init__",
+            "build_and_persist",
+            "load",
+            "list_documents",
+            "get_document",
+            "clear",
+            "_configure_llama_index",
+            "_embedding_provider",
+            "_huggingface_embedding_kwargs",
+            "_registry_path",
+            "_write_registry",
+            "_read_registry",
+            "_read_source_metadata",
+            "_resolve_source_path"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 209
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "perf_counter"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.metadata",
+          "specifiers": [
+            "REGISTRY_FILENAME",
+            "detail_from_metadata",
+            "load_sidecar_metadata",
+            "summary_from_metadata"
+          ]
+        },
+        {
+          "source": "app.rag.profile",
+          "specifiers": [
+            "DomainProfile",
+            "DomainProfileService"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "DocumentDetail",
+            "DocumentSummary"
+          ]
+        }
+      ],
+      "exports": [
+        "RagIndexService"
+      ],
+      "totalLines": 230,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/ingest.py": {
+      "filePath": "backend/app/rag/ingest.py",
+      "contentHash": "10a8f815fc0664c7d22a8a7324311300490d64e1625aae9ee50490dbb131aef1",
+      "functions": [],
+      "classes": [
+        {
+          "name": "RagIngestService",
+          "methods": [
+            "__init__",
+            "load_documents",
+            "clear_source_documents",
+            "save_uploaded_document",
+            "_read_document_text",
+            "_safe_document_stem",
+            "_ensure_canonical_document",
+            "_resolve_raw_document_path",
+            "_existing_document_paths",
+            "_remove_existing_document_paths",
+            "_write_sidecar",
+            "_utc_now"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 226
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.convert",
+          "specifiers": [
+            "MarkdownConversionService"
+          ]
+        },
+        {
+          "source": "app.rag.metadata",
+          "specifiers": [
+            "load_sidecar_metadata",
+            "metadata_to_llama"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "DocumentDetail",
+            "DocumentMetadata"
+          ]
+        }
+      ],
+      "exports": [
+        "RagIngestService"
+      ],
+      "totalLines": 238,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/metadata.py": {
+      "filePath": "backend/app/rag/metadata.py",
+      "contentHash": "ddff9a77adf39a46db62ac26452e946da7547657cf09a42b56c8aa7f64f3779a",
+      "functions": [
+        {
+          "name": "load_sidecar_metadata",
+          "params": [
+            "document_path"
+          ],
+          "returnType": "DocumentMetadata",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "metadata_to_llama",
+          "params": [
+            "metadata"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "summary_from_metadata",
+          "params": [
+            "metadata"
+          ],
+          "returnType": "DocumentSummary",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "detail_from_metadata",
+          "params": [
+            "metadata"
+          ],
+          "returnType": "DocumentDetail",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "ui_block_from_metadata",
+          "params": [
+            "metadata"
+          ],
+          "returnType": "UiDataBlock",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "_category_for_doc_type",
+          "params": [
+            "doc_type"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "DocumentDetail",
+            "DocumentMetadata",
+            "DocumentSummary",
+            "UiDataBlock"
+          ]
+        }
+      ],
+      "exports": [
+        "load_sidecar_metadata",
+        "metadata_to_llama",
+        "summary_from_metadata",
+        "detail_from_metadata",
+        "ui_block_from_metadata",
+        "_category_for_doc_type"
+      ],
+      "totalLines": 95,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/profile.py": {
+      "filePath": "backend/app/rag/profile.py",
+      "contentHash": "04fa92935d75b1c0fbada62134148aa0e88c3d57fbd85024db6395ccffb6f5a1",
+      "functions": [
+        {
+          "name": "load_domain_profile",
+          "params": [
+            "profile_id",
+            "profiles_dir"
+          ],
+          "returnType": "DomainProfile",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "expand_query_with_glossary",
+          "params": [
+            "query",
+            "glossary"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "classes": [
+        {
+          "name": "EmbeddingProfile",
+          "methods": [],
+          "properties": [
+            "provider",
+            "huggingface_model",
+            "use_e5_instructions"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "RerankProfile",
+          "methods": [],
+          "properties": [
+            "lexical_enabled",
+            "token_overlap_weight",
+            "phrase_hit_weight",
+            "numeric_token_weight",
+            "max_phrase_size",
+            "min_phrase_size"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "RetrievalProfile",
+          "methods": [
+            "candidate_must_cover_final_top_k"
+          ],
+          "properties": [
+            "similarity_top_k",
+            "candidate_top_k",
+            "rerank"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "MetadataProfile",
+          "methods": [],
+          "properties": [
+            "primary_ids",
+            "recommended_filters"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "DomainProfile",
+          "methods": [],
+          "properties": [
+            "id",
+            "display_name",
+            "embedding",
+            "retrieval",
+            "metadata",
+            "glossary",
+            "stopwords"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "DomainProfileService",
+          "methods": [
+            "__init__",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "imports": [
+        {
+          "source": "functools",
+          "specifiers": [
+            "lru_cache"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "yaml",
+          "specifiers": [
+            "yaml"
+          ]
+        },
+        {
+          "source": "pydantic",
+          "specifiers": [
+            "BaseModel",
+            "Field",
+            "ValidationError",
+            "field_validator"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        }
+      ],
+      "exports": [
+        "EmbeddingProfile",
+        "RerankProfile",
+        "RetrievalProfile",
+        "MetadataProfile",
+        "DomainProfile",
+        "DomainProfileService",
+        "load_domain_profile",
+        "expand_query_with_glossary"
+      ],
+      "totalLines": 106,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/profiles/default.yaml": {
+      "filePath": "backend/app/rag/profiles/default.yaml",
+      "contentHash": "2b05d21493df42737e2fcaad6cee6d9665072ff873174172f3af11ed7c9f87c9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/profiles/logistics.yaml": {
+      "filePath": "backend/app/rag/profiles/logistics.yaml",
+      "contentHash": "7fd1b3ddf3e2ea30e9553d36c9380035e487bdf5190a4804b21be610f70637bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/query.py": {
+      "filePath": "backend/app/rag/query.py",
+      "contentHash": "de25697f9ce0186dffe3f686e314aeaf23689f563bd7430ebe058fae9948fe19",
+      "functions": [],
+      "classes": [
+        {
+          "name": "RagQueryService",
+          "methods": [
+            "__init__",
+            "query",
+            "retrieve",
+            "_build_filters",
+            "_rerank_nodes",
+            "_lexical_score",
+            "_phrases",
+            "_tokens",
+            "_normalize_for_search",
+            "_ui_blocks_from_sources",
+            "_source_from_node"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 187
+        }
+      ],
+      "imports": [
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "perf_counter"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "unicodedata",
+          "specifiers": [
+            "category",
+            "normalize"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.index",
+          "specifiers": [
+            "RagIndexService"
+          ]
+        },
+        {
+          "source": "app.rag.metadata",
+          "specifiers": [
+            "ui_block_from_metadata"
+          ]
+        },
+        {
+          "source": "app.rag.profile",
+          "specifiers": [
+            "DomainProfileService",
+            "expand_query_with_glossary"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "QueryRequest",
+            "QueryResponse",
+            "RetrieveResponse",
+            "SourceReference"
+          ]
+        }
+      ],
+      "exports": [
+        "RagQueryService"
+      ],
+      "totalLines": 208,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/rag/schemas.py": {
+      "filePath": "backend/app/rag/schemas.py",
+      "contentHash": "5e1dd43b1cd645a8d00d07d2b5c05d9b0faad32a04f09ae98d24a545ea131b74",
+      "functions": [],
+      "classes": [
+        {
+          "name": "HealthResponse",
+          "methods": [],
+          "properties": [
+            "status"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "DocumentMetadata",
+          "methods": [],
+          "properties": [
+            "doc_id",
+            "doc_type",
+            "title",
+            "tenant_id",
+            "market",
+            "country",
+            "domain",
+            "module",
+            "business_flow",
+            "room_id",
+            "shelf_id",
+            "shipment_id",
+            "customer",
+            "carrier",
+            "warehouse",
+            "route",
+            "date",
+            "source_type",
+            "source_format",
+            "canonical_format",
+            "raw_path",
+            "converted_path",
+            "conversion_status",
+            "conversion_error",
+            "conversion_method",
+            "updated_at",
+            "source_path"
+          ],
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "DocumentSummary",
+          "methods": [],
+          "properties": [
+            "doc_id",
+            "doc_type",
+            "title",
+            "tenant_id",
+            "market",
+            "country",
+            "domain",
+            "module",
+            "business_flow",
+            "room_id",
+            "shelf_id",
+            "shipment_id",
+            "customer",
+            "carrier",
+            "warehouse",
+            "route"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "DocumentDetail",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "DocumentListResponse",
+          "methods": [],
+          "properties": [
+            "documents"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "IngestResponse",
+          "methods": [],
+          "properties": [
+            "ingested_documents",
+            "index_persisted"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "DocumentUploadResponse",
+          "methods": [],
+          "properties": [
+            "document",
+            "index_persisted",
+            "ingested_documents"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "ClearDocumentsResponse",
+          "methods": [],
+          "properties": [
+            "documents_removed",
+            "metadata_removed",
+            "index_cleared"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "ClearIndexResponse",
+          "methods": [],
+          "properties": [
+            "index_cleared"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "QueryFilters",
+          "methods": [],
+          "properties": [
+            "doc_id",
+            "doc_type",
+            "tenant_id",
+            "market",
+            "country",
+            "domain",
+            "module",
+            "business_flow",
+            "room_id",
+            "shipment_id",
+            "customer",
+            "carrier",
+            "warehouse",
+            "route",
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "QueryRequest",
+          "methods": [],
+          "properties": [
+            "question",
+            "filters"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "SourceReference",
+          "methods": [],
+          "properties": [
+            "doc_id",
+            "doc_type",
+            "title",
+            "snippet",
+            "score",
+            "metadata"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "UiDataBlock",
+          "methods": [],
+          "properties": [
+            "block_id",
+            "block_type",
+            "label",
+            "category",
+            "metadata"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "QueryResponse",
+          "methods": [],
+          "properties": [
+            "answer",
+            "sources",
+            "ui_blocks"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "RetrieveResponse",
+          "methods": [],
+          "properties": [
+            "query",
+            "matches",
+            "ui_blocks"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "pydantic",
+          "specifiers": [
+            "BaseModel",
+            "Field"
+          ]
+        }
+      ],
+      "exports": [
+        "HealthResponse",
+        "DocumentMetadata",
+        "DocumentSummary",
+        "DocumentDetail",
+        "DocumentListResponse",
+        "IngestResponse",
+        "DocumentUploadResponse",
+        "ClearDocumentsResponse",
+        "ClearIndexResponse",
+        "QueryFilters",
+        "QueryRequest",
+        "SourceReference",
+        "UiDataBlock",
+        "QueryResponse",
+        "RetrieveResponse"
+      ],
+      "totalLines": 138,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/scripts/opencode_go_smoketest.py": {
+      "filePath": "backend/app/scripts/opencode_go_smoketest.py",
+      "contentHash": "acaf08225be5be840af5f35a4b2c3f4646d848b390574a6edce767afb154dcb3",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 41
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "llama_index.core",
+          "specifiers": [
+            "LlamaSettings"
+          ]
+        },
+        {
+          "source": "llama_index.core.llms",
+          "specifiers": [
+            "ChatMessage"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/conftest.py": {
+      "filePath": "backend/app/tests/conftest.py",
+      "contentHash": "762ffd3dace48d189c5a8c6463bfcb97f9b64ac4d9c6785cabfc824e67cd1673",
+      "functions": [
+        {
+          "name": "default_to_local_parser",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        }
+      ],
+      "exports": [
+        "default_to_local_parser"
+      ],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_document_upload.py": {
+      "filePath": "backend/app/tests/test_document_upload.py",
+      "contentHash": "ff15ca597f1f34d328d0b9d57d6c3c78a8bbc6620df6ebe8c73155edc8cabc40",
+      "functions": [
+        {
+          "name": "test_upload_document_endpoint_requires_api_key",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "test_upload_document_endpoint_writes_document_and_metadata",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 71
+        },
+        {
+          "name": "test_upload_document_endpoint_rejects_duplicate_doc_id",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "test_upload_document_endpoint_stops_on_conversion_error",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "test_upload_pdf_document_endpoint_writes_markdown_canonical",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 40
+        },
+        {
+          "name": "test_upload_document_uses_llamaparse_when_configured",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 45
+        },
+        {
+          "name": "test_upload_document_falls_back_to_markitdown_when_llamaparse_fails",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 56
+        },
+        {
+          "name": "test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "test_upload_document_fails_when_llamaparse_and_markitdown_fail",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "test_fast_llamaparse_tier_requests_text_expansion_only",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "test_document_endpoints_read_uploaded_metadata_without_reindex",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 37
+        },
+        {
+          "name": "test_clear_documents_endpoint_counts_logical_documents",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "test_clear_documents_endpoint_requires_api_key",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 29
+        },
+        {
+          "name": "_docx_bytes",
+          "params": [
+            "paragraphs"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_pdf_bytes",
+          "params": [
+            "text"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "_install_fake_llama_cloud",
+          "params": [
+            "monkeypatch",
+            "parse_result",
+            "parse_error",
+            "expected_tier",
+            "expected_expand"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 36
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "types",
+          "specifiers": [
+            "ModuleType",
+            "SimpleNamespace"
+          ]
+        },
+        {
+          "source": "fastapi.testclient",
+          "specifiers": [
+            "TestClient"
+          ]
+        },
+        {
+          "source": "docx",
+          "specifiers": [
+            "Document"
+          ]
+        },
+        {
+          "source": "app.main",
+          "specifiers": [
+            "main"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        }
+      ],
+      "exports": [
+        "test_upload_document_endpoint_requires_api_key",
+        "test_upload_document_endpoint_writes_document_and_metadata",
+        "test_upload_document_endpoint_rejects_duplicate_doc_id",
+        "test_upload_document_endpoint_stops_on_conversion_error",
+        "test_upload_pdf_document_endpoint_writes_markdown_canonical",
+        "test_upload_document_uses_llamaparse_when_configured",
+        "test_upload_document_falls_back_to_markitdown_when_llamaparse_fails",
+        "test_upload_pdf_document_falls_back_to_macos_pdf_ocr_when_llamaparse_fails",
+        "test_upload_pdf_document_falls_back_to_markitdown_when_macos_pdf_ocr_unavailable",
+        "test_upload_document_fails_when_llamaparse_and_markitdown_fail",
+        "test_fast_llamaparse_tier_requests_text_expansion_only",
+        "test_document_endpoints_read_uploaded_metadata_without_reindex",
+        "test_clear_documents_endpoint_counts_logical_documents",
+        "test_clear_documents_endpoint_requires_api_key",
+        "test_protected_document_endpoints_fail_when_backend_api_key_is_not_configured",
+        "_docx_bytes",
+        "_pdf_bytes",
+        "_install_fake_llama_cloud"
+      ],
+      "totalLines": 726,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_domain_profile.py": {
+      "filePath": "backend/app/tests/test_domain_profile.py",
+      "contentHash": "c66095f216faeb52ee4a7a37ccd0835a15bf594ac1aba24962ca32702e6bba56",
+      "functions": [
+        {
+          "name": "test_loads_default_profile",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_loads_logistics_profile",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "test_unknown_profile_falls_back_to_default",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "test_invalid_profile_fails_fast",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.profile",
+          "specifiers": [
+            "DomainProfileService"
+          ]
+        }
+      ],
+      "exports": [
+        "test_loads_default_profile",
+        "test_loads_logistics_profile",
+        "test_unknown_profile_falls_back_to_default",
+        "test_invalid_profile_fails_fast"
+      ],
+      "totalLines": 74,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_game.py": {
+      "filePath": "backend/app/tests/test_game.py",
+      "contentHash": "bd0e75ada3939185a40872de988370d1fa49f91489e0c7315b8257c247e4d5a2",
+      "functions": [
+        {
+          "name": "test_game_world_builds_from_document_metadata",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "test_game_session_routes_are_client_owned",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_bookshelf_interaction_returns_document_detail",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "_write_document_fixture",
+          "params": [
+            "document_dir"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 29
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "fastapi.testclient",
+          "specifiers": [
+            "TestClient"
+          ]
+        },
+        {
+          "source": "app.main",
+          "specifiers": [
+            "main"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        }
+      ],
+      "exports": [
+        "test_game_world_builds_from_document_metadata",
+        "test_game_session_routes_are_client_owned",
+        "test_bookshelf_interaction_returns_document_detail",
+        "_write_document_fixture"
+      ],
+      "totalLines": 90,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_index.py": {
+      "filePath": "backend/app/tests/test_index.py",
+      "contentHash": "838b54c1af466cbd067003180683d0b20b26be5093a5b0e5d8d282f13df3f033",
+      "functions": [
+        {
+          "name": "test_huggingface_e5_embeddings_use_required_instructions",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_huggingface_e5_instructions_can_be_disabled_by_profile",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "test_huggingface_non_e5_embeddings_do_not_get_e5_instructions",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.index",
+          "specifiers": [
+            "RagIndexService"
+          ]
+        },
+        {
+          "source": "app.rag.profile",
+          "specifiers": [
+            "DomainProfileService"
+          ]
+        }
+      ],
+      "exports": [
+        "test_huggingface_e5_embeddings_use_required_instructions",
+        "test_huggingface_e5_instructions_can_be_disabled_by_profile",
+        "test_huggingface_non_e5_embeddings_do_not_get_e5_instructions"
+      ],
+      "totalLines": 65,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_ingest.py": {
+      "filePath": "backend/app/tests/test_ingest.py",
+      "contentHash": "faa6d1140d76c982418a058ee57a741a866b7730013ee6669177ca64b9c96e44",
+      "functions": [
+        {
+          "name": "test_load_sample_documents",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "test_load_docx_document",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "test_clear_source_documents_removes_supported_files_and_metadata",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "_write_docx",
+          "params": [
+            "path",
+            "paragraphs"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "docx",
+          "specifiers": [
+            "Document"
+          ]
+        },
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.ingest",
+          "specifiers": [
+            "RagIngestService"
+          ]
+        }
+      ],
+      "exports": [
+        "test_load_sample_documents",
+        "test_load_docx_document",
+        "test_clear_source_documents_removes_supported_files_and_metadata",
+        "_write_docx"
+      ],
+      "totalLines": 92,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_metadata.py": {
+      "filePath": "backend/app/tests/test_metadata.py",
+      "contentHash": "83bf907b8cef6aa3af9bb7260a00f1e3d6883792ca4d80f66ef647b558929959",
+      "functions": [
+        {
+          "name": "test_load_sidecar_metadata",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "test_ui_block_from_metadata",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "app.rag.metadata",
+          "specifiers": [
+            "load_sidecar_metadata",
+            "ui_block_from_metadata"
+          ]
+        }
+      ],
+      "exports": [
+        "test_load_sidecar_metadata",
+        "test_ui_block_from_metadata"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "backend/app/tests/test_rag_retrieve.py": {
+      "filePath": "backend/app/tests/test_rag_retrieve.py",
+      "contentHash": "3a89e60f9e8a7bcd64a2968018435420b630c8c50a23118f5f8323c47b219048",
+      "functions": [
+        {
+          "name": "test_retrieve_uses_retriever_without_llm",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "test_retrieve_uses_profile_candidate_top_k",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 53
+        },
+        {
+          "name": "test_retrieve_builds_tenant_metadata_filters",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "test_retrieve_reranks_specific_date_and_conference_context",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_rerank_has_no_hardcoded_august_2007_boost",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [
+        {
+          "name": "_FakeSourceNode",
+          "methods": [
+            "__init__"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "_FakeNode",
+          "methods": [
+            "__init__",
+            "get_content"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "imports": [
+        {
+          "source": "app.config",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "app.rag.query",
+          "specifiers": [
+            "RagQueryService"
+          ]
+        },
+        {
+          "source": "app.rag.schemas",
+          "specifiers": [
+            "QueryRequest"
+          ]
+        }
+      ],
+      "exports": [
+        "test_retrieve_uses_retriever_without_llm",
+        "test_retrieve_uses_profile_candidate_top_k",
+        "test_retrieve_builds_tenant_metadata_filters",
+        "test_retrieve_reranks_specific_date_and_conference_context",
+        "test_rerank_has_no_hardcoded_august_2007_boost",
+        "_FakeSourceNode",
+        "_FakeNode"
+      ],
+      "totalLines": 200,
+      "hasStructuralAnalysis": true
+    },
+    "backend/bin/ocr-bin": {
+      "filePath": "backend/bin/ocr-bin",
+      "contentHash": "a690a664d12e944d978e4c5c1c6370d6e6d06e927e73c055ac7e79ae0f3d93e1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 114,
+      "hasStructuralAnalysis": false
+    },
+    "backend/docs/domain-profiles.md": {
+      "filePath": "backend/docs/domain-profiles.md",
+      "contentHash": "51ad9b9c941f44a654c8dc2cc56dd40cd3b8b5ac9837718922667dfaa4af2d36",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 131,
+      "hasStructuralAnalysis": true
+    },
+    "backend/pyproject.toml": {
+      "filePath": "backend/pyproject.toml",
+      "contentHash": "295735422bca6b1a41804dda7975137f459c9094ebec237333434eafd66c2eaf",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "backend/README.md": {
+      "filePath": "backend/README.md",
+      "contentHash": "3a5b8ebfdff3a45f9652504a3c3ab7fe19ded2360c055662072911abc0074c23",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 242,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/index.html": {
+      "filePath": "frontend/index.html",
+      "contentHash": "e954027494365895f3d5737976b2800a4b50a423bc165c552370ea644a0d3e19",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "frontend/package.json": {
+      "filePath": "frontend/package.json",
+      "contentHash": "89a3363a6437105234b52cbc8fbaf07d819041881f9892e5a83ab83d918b184e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/public/assets/.DS_Store": {
+      "filePath": "frontend/public/assets/.DS_Store",
+      "contentHash": "0c24c3b616cf0400a5df0df38859ca2e621efac61617b630951a8de2b00a8d79",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "frontend/src/api.ts": {
+      "filePath": "frontend/src/api.ts",
+      "contentHash": "d2619b7ddfbc9e2b34d63600656298c2af0d6f31d233a39377a0c9283bf355e7",
+      "functions": [
+        {
+          "name": "getWorld",
+          "params": [],
+          "returnType": "Promise<GameWorld>",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "uploadDocument",
+          "params": [
+            "input"
+          ],
+          "returnType": "Promise<DocumentUploadResponse>",
+          "exported": true,
+          "lineCount": 58
+        },
+        {
+          "name": "queryRag",
+          "params": [
+            "input"
+          ],
+          "returnType": "Promise<QueryResponse>",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "interact",
+          "params": [
+            "input"
+          ],
+          "returnType": "Promise<InteractionResponse>",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "axios",
+          "specifiers": [
+            "axios"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "DocumentUploadResponse",
+            "GameWorld",
+            "InteractionResponse",
+            "QueryFilters",
+            "QueryResponse"
+          ]
+        }
+      ],
+      "exports": [
+        "getWorld",
+        "uploadDocument",
+        "queryRag",
+        "interact"
+      ],
+      "totalLines": 118,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/App.tsx": {
+      "filePath": "frontend/src/App.tsx",
+      "contentHash": "12b817226488c8f74f29252fe7b60ba8978fa3416363146caff94c4a80427f10",
+      "functions": [
+        {
+          "name": "App",
+          "params": [],
+          "exported": false,
+          "lineCount": 287
+        },
+        {
+          "name": "SessionGate",
+          "params": [
+            "{\n  characters,\n  onSubmit,\n}"
+          ],
+          "exported": false,
+          "lineCount": 51
+        },
+        {
+          "name": "CharacterSwitcher",
+          "params": [
+            "{\n  characters,\n  activeCharacterId,\n  onChange,\n}"
+          ],
+          "exported": false,
+          "lineCount": 28
+        },
+        {
+          "name": "InteractionPanel",
+          "params": [
+            "{\n  nearestTarget,\n  activeTarget,\n  interaction,\n  world,\n  onInteract,\n}"
+          ],
+          "exported": false,
+          "lineCount": 60
+        },
+        {
+          "name": "ChatModal",
+          "params": [
+            "{\n  scope,\n  onAsk,\n  onClose,\n}"
+          ],
+          "exported": false,
+          "lineCount": 215
+        },
+        {
+          "name": "buildChatMessage",
+          "params": [
+            "input"
+          ],
+          "returnType": "ChatMessage",
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "upsertChatMessage",
+          "params": [
+            "{\n  threads,\n  activeThreadId,\n  scope,\n  message,\n}"
+          ],
+          "returnType": "{ threads: StoredChatThread[]; activeThreadId: string }",
+          "exported": false,
+          "lineCount": 42
+        },
+        {
+          "name": "loadChatThreads",
+          "params": [
+            "scopeKey"
+          ],
+          "returnType": "StoredChatThread[]",
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "saveChatThreads",
+          "params": [
+            "scopeKey",
+            "scopedThreads"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "buildThreadTitle",
+          "params": [
+            "question"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "formatChatDate",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "createLocalId",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "loadGameSession",
+          "params": [],
+          "returnType": "GameSession | null",
+          "exported": false,
+          "lineCount": 23
+        },
+        {
+          "name": "saveGameSession",
+          "params": [
+            "session"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "isValidUserName",
+          "params": [
+            "userName"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "buildChatScopeKey",
+          "params": [
+            "filters"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "buildChatScope",
+          "params": [
+            "{\n  interaction,\n  activeTarget,\n  world,\n}"
+          ],
+          "returnType": "ChatScope | null",
+          "exported": false,
+          "lineCount": 36
+        },
+        {
+          "name": "GameStage",
+          "params": [
+            "{\n  world,\n  session,\n  position,\n  direction,\n  frame,\n  nearestTarget,\n  onTargetClick,\n}"
+          ],
+          "exported": false,
+          "lineCount": 82
+        },
+        {
+          "name": "Sprite",
+          "params": [
+            "{\n  character,\n  direction,\n  frame,\n  compact = false,\n}"
+          ],
+          "exported": false,
+          "lineCount": 32
+        },
+        {
+          "name": "directionFromKey",
+          "params": [
+            "key"
+          ],
+          "returnType": "Direction | null",
+          "exported": false,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "FormEvent",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "./api",
+          "specifiers": [
+            "getWorld",
+            "interact",
+            "queryRag"
+          ]
+        },
+        {
+          "source": "./characters",
+          "specifiers": [
+            "CHARACTERS",
+            "getCharacter"
+          ]
+        },
+        {
+          "source": "./gameLogic",
+          "specifiers": [
+            "findNearestTarget",
+            "movePosition"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "Direction",
+            "GameCharacter",
+            "GameSession",
+            "GameWorld",
+            "InteractionResponse",
+            "InteractableTarget",
+            "Position",
+            "QueryFilters",
+            "QueryResponse"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 1024,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/characters.ts": {
+      "filePath": "frontend/src/characters.ts",
+      "contentHash": "bfb946fc76785e65e87863a8204524de8bf30018f5a74db11a630095a9bcfc48",
+      "functions": [
+        {
+          "name": "walkSprite",
+          "params": [
+            "imageUrl"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "getCharacter",
+          "params": [
+            "characterId"
+          ],
+          "returnType": "GameCharacter | null",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./types",
+          "specifiers": [
+            "GameCharacter",
+            "SpriteAnimation"
+          ]
+        }
+      ],
+      "exports": [
+        "CHARACTERS",
+        "getCharacter"
+      ],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/gameLogic.ts": {
+      "filePath": "frontend/src/gameLogic.ts",
+      "contentHash": "0e1d042b29641cc6e8f84144bd1b7c00d769e91d5e33d9b86924a9e4aed3d820",
+      "functions": [
+        {
+          "name": "movePosition",
+          "params": [
+            "position",
+            "direction",
+            "world"
+          ],
+          "returnType": "Position",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "findNearestTarget",
+          "params": [
+            "position",
+            "world"
+          ],
+          "returnType": "InteractableTarget | null",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "portalToTarget",
+          "params": [
+            "portal"
+          ],
+          "returnType": "InteractableTarget",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "shelfToTarget",
+          "params": [
+            "shelf"
+          ],
+          "returnType": "InteractableTarget",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "clamp",
+          "params": [
+            "value",
+            "min",
+            "max"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./types",
+          "specifiers": [
+            "Bookshelf",
+            "Direction",
+            "GameWorld",
+            "InteractableTarget",
+            "LibraryPortal",
+            "Position"
+          ]
+        }
+      ],
+      "exports": [
+        "movePosition",
+        "findNearestTarget"
+      ],
+      "totalLines": 72,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/main.tsx": {
+      "filePath": "frontend/src/main.tsx",
+      "contentHash": "e07d1e1a4ad807b961838d79ff6015a3cd8eb78136ad6608f41dfe529fb8368c",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "StrictMode"
+          ]
+        },
+        {
+          "source": "react-dom/client",
+          "specifiers": [
+            "createRoot"
+          ]
+        },
+        {
+          "source": "./App",
+          "specifiers": [
+            "App"
+          ]
+        },
+        {
+          "source": "./styles.css",
+          "specifiers": []
+        }
+      ],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/styles.css": {
+      "filePath": "frontend/src/styles.css",
+      "contentHash": "b0a08122f5eded631ae75d3b522442c1c7cebe11b7c801dcaa15251d5d92997a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 784,
+      "hasStructuralAnalysis": false
+    },
+    "frontend/src/types.ts": {
+      "filePath": "frontend/src/types.ts",
+      "contentHash": "e5c92214011dc9af390cf1d4137c7601d56cadbcc9ed2366dcd598c56b08fc90",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 170,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/src/vite-env.d.ts": {
+      "filePath": "frontend/src/vite-env.d.ts",
+      "contentHash": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/tsconfig.json": {
+      "filePath": "frontend/tsconfig.json",
+      "contentHash": "cbbe15f907fd4c91076f006581d9b6fba0b5d5de5c49e3eac5e3c586b2145047",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "frontend/vite.config.ts": {
+      "filePath": "frontend/vite.config.ts",
+      "contentHash": "1c4e76ad371dad9daaa97fa37c711d05b2207a355858e86af051883f25f4cc2e",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@vitejs/plugin-react",
+          "specifiers": [
+            "react"
+          ]
+        },
+        {
+          "source": "vite",
+          "specifiers": [
+            "defineConfig"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/.env.example": {
+      "filePath": "mcp/.env.example",
+      "contentHash": "56a7e66e922270d7f068cafff0e81f842e2725c363f333f7f415a6f390b22985",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/bin/rag-pixels-mcp.js": {
+      "filePath": "mcp/bin/rag-pixels-mcp.js",
+      "contentHash": "44e7b86b71c775c5b229f42e37b7870dedfbce5817aaa19c210cd933a76839c3",
+      "functions": [
+        {
+          "name": "isWindows",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "venvPythonPath",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "versionTuple",
+          "params": [
+            "versionText"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "isCompatiblePython",
+          "params": [
+            "versionText"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "runOrThrow",
+          "params": [
+            "command",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "capture",
+          "params": [
+            "command",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "findPython",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "ensureVenv",
+          "params": [
+            "basePython"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "ensureInstalled",
+          "params": [],
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 31
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 147,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/package.json": {
+      "filePath": "mcp/package.json",
+      "contentHash": "896d2a94cfaaa6e8f0ec14c202a1323f82494a61d7fdaad2ad134bb005b50c39",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/pyproject.toml": {
+      "filePath": "mcp/pyproject.toml",
+      "contentHash": "08210a311b46600df168a1b9812ef96c3c15a56bfdc284409cede059a000c336",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/README.md": {
+      "filePath": "mcp/README.md",
+      "contentHash": "3e01870e69049207cc649db682fb6ef28f2de2a29a1923e1e9c0c56467eacb89",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 110,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/src/rag_pixels_mcp/__init__.py": {
+      "filePath": "mcp/src/rag_pixels_mcp/__init__.py",
+      "contentHash": "263644d76f7c15eb02db9296e0b5b69764e65d1a6b2efb2bd5a6c260756cd3fd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/src/rag_pixels_mcp/client.py": {
+      "filePath": "mcp/src/rag_pixels_mcp/client.py",
+      "contentHash": "4b70217327699037d42f0a9b83acbcb6d5016a21f88b7cb0f6280f3ab9569d0e",
+      "functions": [
+        {
+          "name": "request_json",
+          "params": [
+            "method",
+            "path",
+            "json_body",
+            "timeout"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "upload_file",
+          "params": [
+            "path",
+            "form_data",
+            "timeout"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "httpx",
+          "specifiers": [
+            "httpx"
+          ]
+        },
+        {
+          "source": "rag_pixels_mcp.config",
+          "specifiers": [
+            "api_base_url",
+            "auth_headers"
+          ]
+        }
+      ],
+      "exports": [
+        "request_json",
+        "upload_file"
+      ],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/src/rag_pixels_mcp/config.py": {
+      "filePath": "mcp/src/rag_pixels_mcp/config.py",
+      "contentHash": "562d96090ece85b58d44e820c0237e470ba9655a05dcd721ee30a552a37837df",
+      "functions": [
+        {
+          "name": "api_base_url",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "auth_headers",
+          "params": [],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "dotenv",
+          "specifiers": [
+            "load_dotenv"
+          ]
+        }
+      ],
+      "exports": [
+        "api_base_url",
+        "auth_headers"
+      ],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "mcp/src/rag_pixels_mcp/server.py": {
+      "filePath": "mcp/src/rag_pixels_mcp/server.py",
+      "contentHash": "e959af4ef6a28895dbeba2c65d0c29387de762d519e838550b5c0abf2fc308a0",
+      "functions": [
+        {
+          "name": "_clean_filters",
+          "params": [
+            "filters"
+          ],
+          "returnType": "dict[str, str] | None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "health_check",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "list_documents",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "get_document",
+          "params": [
+            "doc_id"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "rag_query",
+          "params": [
+            "question",
+            "filters"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "rag_retrieve",
+          "params": [
+            "query",
+            "filters"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "upload_document",
+          "params": [
+            "file_path",
+            "doc_id",
+            "doc_type",
+            "title",
+            "tenant_id",
+            "market",
+            "country",
+            "domain",
+            "module",
+            "business_flow",
+            "room_id",
+            "shelf_id",
+            "shipment_id",
+            "customer",
+            "carrier",
+            "warehouse",
+            "route",
+            "date",
+            "source_type",
+            "overwrite",
+            "reindex"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 55
+        },
+        {
+          "name": "clear_documents",
+          "params": [
+            "confirm"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "mcp.server.fastmcp",
+          "specifiers": [
+            "FastMCP"
+          ]
+        },
+        {
+          "source": "rag_pixels_mcp.client",
+          "specifiers": [
+            "request_json",
+            "upload_file"
+          ]
+        }
+      ],
+      "exports": [
+        "_clean_filters",
+        "health_check",
+        "list_documents",
+        "get_document",
+        "rag_query",
+        "rag_retrieve",
+        "upload_document",
+        "clear_documents",
+        "main"
+      ],
+      "totalLines": 146,
+      "hasStructuralAnalysis": true
+    },
+    "Parse.md": {
+      "filePath": "Parse.md",
+      "contentHash": "d7e71f81063e3e41661a602327a5b6e680fd0b95652050d5850759ce434d8520",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 87,
+      "hasStructuralAnalysis": true
+    },
+    "PHASE_1_PLAN.md": {
+      "filePath": "PHASE_1_PLAN.md",
+      "contentHash": "c01b11f7b90378987a24691566f537fe47550cdea30ef314baf09596b4589eb3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 506,
+      "hasStructuralAnalysis": true
+    },
+    "PHASE_2_ASSET_REQUIREMENTS.md": {
+      "filePath": "PHASE_2_ASSET_REQUIREMENTS.md",
+      "contentHash": "ad71f59ad4885b33154c74943aa11c2c7a4c2b4cb7df9d3056b1bb3fa6dd9b96",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

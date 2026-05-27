@@ -1,0 +1,49 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'document:AGENTS.md' has no edges",
+    "Node 'document:PHASE_1_PLAN.md' has no edges",
+    "Node 'document:PHASE_2_ASSET_REQUIREMENTS.md' has no edges",
+    "Node 'document:Parse.md' has no edges",
+    "Node 'config:backend/.env.example' has no edges",
+    "Node 'document:backend/README.md' has no edges",
+    "Node 'config:backend/pyproject.toml' has no edges",
+    "Node 'file:frontend/index.html' has no edges",
+    "Node 'config:frontend/package.json' has no edges",
+    "Node 'config:frontend/tsconfig.json' has no edges",
+    "Node 'config:mcp/.env.example' has no edges",
+    "Node 'document:mcp/README.md' has no edges",
+    "Node 'config:mcp/package.json' has no edges",
+    "Node 'config:mcp/pyproject.toml' has no edges",
+    "Node 'file:.understand-anything/.understandignore' has no edges",
+    "Node 'file:backend/app/__init__.py' has no edges",
+    "Node 'file:backend/app/game/__init__.py' has no edges",
+    "Node 'file:backend/app/rag/__init__.py' has no edges",
+    "Node 'config:backend/app/rag/profiles/default.yaml' has no edges",
+    "Node 'config:backend/app/rag/profiles/logistics.yaml' has no edges",
+    "Node 'file:backend/bin/ocr-bin' has no edges",
+    "Node 'document:backend/docs/domain-profiles.md' has no edges",
+    "Node 'file:frontend/public/assets/.DS_Store' has no edges",
+    "Node 'file:frontend/src/styles.css' has no edges",
+    "Node 'file:frontend/src/vite-env.d.ts' has no edges",
+    "Node 'file:frontend/vite.config.ts' has no edges",
+    "Node 'file:mcp/src/rag_pixels_mcp/__init__.py' has no edges"
+  ],
+  "stats": {
+    "totalNodes": 205,
+    "totalEdges": 202,
+    "totalLayers": 5,
+    "tourSteps": 7,
+    "nodeTypes": {
+      "document": 7,
+      "config": 9,
+      "file": 41,
+      "class": 36,
+      "function": 112
+    },
+    "edgeTypes": {
+      "contains": 148,
+      "imports": 54
+    }
+  }
+}
